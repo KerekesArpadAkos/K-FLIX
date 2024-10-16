@@ -1,0 +1,48 @@
+{
+  "name": "com.domain.app.AIFLIX",
+  "description": "AIFLIX",
+  "type": "module",
+  "scripts": {
+    "prepare": "husky install",
+    "dev": "vite",
+    "build": "vite build"
+  },
+  "dependencies": {
+    "@lightningjs/sdk": "^5.5.4",
+    "@lightningjs/ui-components": "^2.23.3",
+    "@reduxjs/toolkit": "^2.2.8",
+    "lodash.throttle": "^4.1.1",
+    "react-redux": "^9.1.2",
+    "redux": "^5.0.1"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.7.2",
+    "@babel/preset-env": "^7.25.7",
+    "@types/jest": "^29.5.13",
+    "@types/lodash.throttle": "^4.1.9",
+    "@types/node": "^22.7.5",
+    "@typescript-eslint/eslint-plugin": "^5.32.0",
+    "@typescript-eslint/parser": "^5.32.0",
+    "@vitejs/plugin-legacy": "^5.4.2",
+    "babel-eslint": "^10.0.3",
+    "eslint": "^8.21.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "husky": "^8.0.1",
+    "lint-staged": "^15.2.10",
+    "prettier": "^2.7.1",
+    "terser": "^5.34.1",
+    "typescript": "^5.6.3",
+    "vite": "^5.4.8"
+  },
+  "lint-staged": {
+    "*.js": [
+      "eslint --fix",
+      "git add"
+    ],
+    "*.ts": [
+      "eslint --fix",
+      "git add"
+    ]
+  }
+}

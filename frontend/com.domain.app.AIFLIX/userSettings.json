@@ -1,0 +1,35 @@
+{
+    "featureControl": {
+        "hasSidebar": true
+    },
+    "playerConfig": {
+        "license": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmxzIjpbIjovL2RldmVsb3BtZW50LjNzcy50diJdLCJ0eXBlIjoiV2ViIiwia2lkIjozMzcyLCJpbHYiOmZhbHNlfQ.TK2PCfGZ4cda6Dh2YqBpOknel6MhGU7iv2YNCrFOgMlxnPDoY9jSkV4djYBwSi8USVrs7_O_kMvUxmHFvMYXc_Di2rIv6i9Q9qKwYcJOq-tMoDQ8tDBcV-kMqhByA1LH2hIf8eC_c5-K_CxuFrc53xtyzh6RiuvQPQityIq_uzaAloQbeBwfVYe7AAhaAo86mdPe6vaoSJ8KnuxsOxe1_E3_5FE63ZwwOXtm_g5wORGiWIuwAaINyj5T26fnI0UCA0Y1wrLymcnkAXmS59e-eGvEF4SYD78Y19roYqW61lFX3fWn0uR8H3NtDKahBtYtz7wOAUZ8HoVyJlrAAhJt-Q",
+        "startOverThreshold": null,
+        "hideControlsAfter": 5
+    },
+    "theme": {
+        "increasedTopMargin" : false,
+        "scrollableBackgroundImage": false,
+        "primaryColor": "0XFF0066FF",
+        "backgroundColor": "0XFF000000",
+        "foregroundColor": "0XFF1A1A1A",
+        "bodyColor": "0XFFEEEEEE",
+        "blackColor": "0XFF000000",
+        "whiteColor": "0XFFFFFFFF",
+        "errorColor": "0XFFFF3333",
+        "successColor": "0XFF44BB44",
+        "warningColor": "0XFFFFBB00",
+        "backgroundImage": "",
+        "logo": ""
+    },
+    "stripeSize": 100,
+    "collectionPageSize": 40,
+    "collectionPageThreshold": 4,
+    "startOverThreshold": 3,
+    "zappingWait": 400,
+    "contentPageSize": 3,
+    "contentPageThreshold": 2,
+    "contentPageIdleThreshold": 45,
+    "defaultChannelId": "24280",
+    "castlabsLicense": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmxzIjpbIjovL2RldmVsb3BtZW50LjNzcy50diJdLCJ0eXBlIjoiV2ViIiwia2lkIjozMzcyLCJpbHYiOmZhbHNlfQ.TK2PCfGZ4cda6Dh2YqBpOknel6MhGU7iv2YNCrFOgMlxnPDoY9jSkV4djYBwSi8USVrs7_O_kMvUxmHFvMYXc_Di2rIv6i9Q9qKwYcJOq-tMoDQ8tDBcV-kMqhByA1LH2hIf8eC_c5-K_CxuFrc53xtyzh6RiuvQPQityIq_uzaAloQbeBwfVYe7AAhaAo86mdPe6vaoSJ8KnuxsOxe1_E3_5FE63ZwwOXtm_g5wORGiWIuwAaINyj5T26fnI0UCA0Y1wrLymcnkAXmS59e-eGvEF4SYD78Y19roYqW61lFX3fWn0uR8H3NtDKahBtYtz7wOAUZ8HoVyJlrAAhJt-Q"
+}
