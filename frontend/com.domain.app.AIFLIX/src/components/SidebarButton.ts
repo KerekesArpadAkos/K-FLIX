@@ -118,14 +118,16 @@ export class SidebarButton
       rect: true,
       w: 285,     
       h: this.h,  
-      color: COLORS.GREY_DARK, 
-
       Text: {
         y: 42,
         x:190,
+        text: {
+          textColor: COLORS.GREEN_FOCUS,
+        }
       },
       Image: {
         x:35,
+        color: COLORS.GREEN_FOCUS,
       },
     });
   }

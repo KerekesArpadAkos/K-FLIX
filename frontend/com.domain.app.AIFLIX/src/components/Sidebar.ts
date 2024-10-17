@@ -2,7 +2,6 @@ import { Lightning, Router, Utils } from "@lightningjs/sdk";
 import { COLORS } from "../../static/constants/Colors";
 import { SCREEN_SIZES } from "../../static/constants/ScreenSizes";
 import { SidebarButton } from "./SidebarButton";
-import {VerticalList} from "../components/VerticalList"
 
 const homeIconFontSize = 70;
 const settingsIconFontSize = 50;
@@ -19,6 +18,8 @@ interface SidebarTemplateSpec extends Lightning.Component.TemplateSpec {
   MoviesButton: typeof SidebarButton;
   SeriesButton: typeof SidebarButton;
   SettingsButton: typeof SidebarButton;
+  ProfileButton: typeof SidebarButton;
+  Image: object;
 }
 
 export class Sidebar
@@ -83,7 +84,23 @@ export class Sidebar
         textY: 34,
         zIndex: 4,
       },
-    
+      ProfileButton: {
+        type: SidebarButton,
+        fontSize: SCREEN_SIZES.DEFAULT_BTN_FONT_SIZE,
+        src: Utils.asset("images/guest.png"),
+        x: 35,
+        y: 65,
+        textX: 144,
+        textY: 34,
+        zIndex: 4,
+      },
+      Image:{
+        src: Utils.asset("images/AI.png"),
+        x: 35,
+        y: 967,
+        w: 70,
+        h: 70,
+      }
     };
   }
 
@@ -105,6 +122,14 @@ export class Sidebar
 
   get SeriesButton() {  
     return this.getByRef("SeriesButton");
+  }
+
+  get ProfileButton() {  
+    return this.getByRef("ProfileButton");
+  }
+
+  get Image() {  
+    return this.getByRef("Image");
   }
 
   override _getFocused() {
@@ -261,16 +286,7 @@ export class Sidebar
   }
 
   override _focus() {
-   
-    // const homeButtonAnimation = this.createButtonAnimationForFocus(this.HomeButton);
-    // const settingsButtonAnimation = this.createButtonAnimationForFocus(this.SettingsButton);
-    // const searchButtonAnimation = this.createButtonAnimationForFocus(this.SearchButton);
-
     this.focusPatch();
-
-    // settingsButtonAnimation?.start();
-    // searchButtonAnimation?.start();
-    // homeButtonAnimation?.start();
   }
 
   createButtonAnimationForUnfocus(button: Lightning.Component | undefined) {
@@ -375,7 +391,25 @@ export class Sidebar
       backgroundColor: COLORS.TRANSPARENT,
       alpha: 1,
       zIndex: 4,
-    })
+    });
+    this.ProfileButton?.patch({
+      src: Utils.asset("images/guest.png"),
+      h: SCREEN_SIZES.SIDEBAR_ICON_H,
+      w: SCREEN_SIZES.SIDEBAR_ICON_W,
+      buttonText: "",
+      fontSize: SCREEN_SIZES.DEFAULT_BTN_FONT_SIZE,
+      textY: defaultTextY,
+      textColor: COLORS.GREY_LIGHT,
+      iconColor: COLORS.GREY_LIGHT,
+      backgroundColor: COLORS.TRANSPARENT,
+      alpha: 1,
+      zIndex: 4,
+    });
+    this.Image?.patch({
+      src: Utils.asset("images/AI.png"),
+      h: 70,
+      w:70
+    });
   }
 
   focusPatch() {
@@ -428,6 +462,20 @@ export class Sidebar
       fontSize: SCREEN_SIZES.DEFAULT_BTN_FONT_SIZE,
       zIndex: 4,
       alpha: 1,
+    });
+    this.ProfileButton?.patch({
+      src: Utils.asset("images/guest.png"),
+      h: 100,
+      buttonText: "Guest", // get the name if he/she is logged in
+      w: SCREEN_SIZES.SIDEBAR_WIDTH_OPEN,
+      fontSize: SCREEN_SIZES.DEFAULT_BTN_FONT_SIZE,
+      zIndex: 4,
+      alpha: 1,
+    });
+    this.Image?.patch({
+      src: Utils.asset("images/logoName.png"),
+      h: 70,
+      w:215
     });
   }
 }

@@ -23,7 +23,7 @@ const app = Launch(App, {
     27: 'Exit',
   },
 }, {
-  showFps: true,
+  // showFps: true,
   inspector: true,
   // "showVersion": true,
 });
