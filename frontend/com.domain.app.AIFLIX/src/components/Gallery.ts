@@ -1,11 +1,10 @@
 import { Lightning } from "@lightningjs/sdk";
 import { UtilityButton } from "./UtilityButton";
 import { SCREEN_SIZES } from "../../static/constants/ScreenSizes";
-import { COLOURS } from "../../static/constants/Colours";
+import { COLORS } from "../../static/constants/Colors";
 import MovieDetailsOverlay from "./DetailsOverlay";
 import { MovieDetailsExtended } from "../utils/interfaces/items/itemsInterface";
 import { getAverageARGBFromUrl } from "../utils";
-import lng from "@lightningjs/sdk/src/Lightning";
 import Router from "@lightningjs/sdk/src/Router";
 
 interface GalleryTemplateSpec extends Lightning.Component.TemplateSpec {
@@ -60,13 +59,13 @@ export class Gallery
       h: SCREEN_SIZES.HEIGHT / 2,
       rect: true,
       zIndex: 0,
-      color: COLOURS.RAISIN_BLACK,
+      color: COLORS.RAISIN_BLACK,
       Gallery: {
         Mask: {
           w: SCREEN_SIZES.WIDTH,
           h: SCREEN_SIZES.HEIGHT,
           rect: true,
-          color: COLOURS.RAISIN_BLACK,
+          color: COLORS.RAISIN_BLACK,
           shader: { type: Lightning.shaders.FadeOut, fade: [0, 1520, 0, 0] },
           zIndex: 1,
         },
@@ -108,7 +107,7 @@ export class Gallery
             text: {
               fontSize: 64,
               fontStyle: "bold",
-              textColor: COLOURS.WHITE,
+              textColor: COLORS.WHITE,
             },
           },
           Description: {
@@ -116,7 +115,7 @@ export class Gallery
             text: {
               fontSize: 16,
               lineHeight: 20,
-              textColor: COLOURS.WHITE,
+              textColor: COLORS.WHITE,
             },
           },
           Buttons: {

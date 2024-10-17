@@ -1,5 +1,5 @@
 import { Lightning, Router, Utils } from "@lightningjs/sdk";
-import { COLOURS } from "../../static/constants/Colours";
+import { COLORS } from "../../static/constants/Colors";
 import { SCREEN_SIZES } from "../../static/constants/ScreenSizes";
 import { SidebarButton } from "./SidebarButton";
 
@@ -27,7 +27,7 @@ export class Sidebar
       w: SCREEN_SIZES.SIDEBAR_WIDTH_CLOSED,
       h: SCREEN_SIZES.HEIGHT,
       rect: true,
-      color: COLOURS.BLACK_OPACITY_70,
+      color: COLORS.BLACK_OPACITY_70,
       shader: { type: Lightning.shaders.FadeOut, right: 0 },
       zIndex: 2,
       HomeButton: {
@@ -41,8 +41,8 @@ export class Sidebar
         textX: (parentWidth) => parentWidth / 2,
         textY: homeIconTextY,
         buttonText: "",
-        textColor: COLOURS.ORANGE,
-        iconColor: COLOURS.ORANGE,
+        textColor: COLORS.GREY_LIGHT,
+        iconColor: COLORS.GREY_LIGHT,
         zIndex: 4,
       },
       SettingsButton: {
@@ -56,8 +56,8 @@ export class Sidebar
         textX: (parentWidth) => parentWidth / 2,
         textY: settingsIconTextY,
         buttonText: "",
-        textColor: COLOURS.ORANGE,
-        iconColor: COLOURS.ORANGE,
+        textColor: COLORS.GREY_LIGHT,
+        iconColor: COLORS.GREY_LIGHT,
         zIndex: 4,
       },
       SearchButton: {
@@ -71,8 +71,8 @@ export class Sidebar
         textX: (parentWidth) => parentWidth / 2,
         textY: defaultTextY,
         buttonText: "",
-        textColor: COLOURS.ORANGE,
-        iconColor: COLOURS.ORANGE,
+        textColor: COLORS.GREY_LIGHT,
+        iconColor: COLORS.GREY_LIGHT,
         zIndex: 4,
       },
     };
@@ -236,7 +236,7 @@ export class Sidebar
 
     focusAnimation.on("progress", (index: number) => {
       this.patch({
-        color: COLOURS.BLACK_OPACITY_70,
+        color: COLORS.BLACK_OPACITY_70,
         shader: {
           type: Lightning.shaders.FadeOut,
           right: index * SCREEN_SIZES.SIDEBAR_FADE_OUT,
@@ -301,7 +301,7 @@ export class Sidebar
 
     unfocusAnimation.on("progress", (index: number) => {
       this.patch({
-        color: COLOURS.BLACK_OPACITY_70,
+        color: COLORS.BLACK_OPACITY_70,
         shader: {
           type: Lightning.shaders.FadeOut,
           right: (1 - index) * SCREEN_SIZES.SIDEBAR_FADE_OUT,
@@ -326,7 +326,7 @@ export class Sidebar
     console.log("Unfocusing sidebar");
     this.patch({
       w: SCREEN_SIZES.SIDEBAR_WIDTH_CLOSED,
-      color: COLOURS.BLACK_OPACITY_70,
+      color: COLORS.BLACK_OPACITY_70,
     });
     this.HomeButton?.patch({
       src: Utils.asset("images/home.png"),
@@ -335,9 +335,9 @@ export class Sidebar
       buttonText: "",
       fontSize: homeIconFontSize,
       textY: homeIconTextY,
-      textColor: COLOURS.ORANGE,
-      iconColor: COLOURS.ORANGE,
-      backgroundColor: COLOURS.TRANSPARENT,
+      textColor: COLORS.GREY_LIGHT,
+      iconColor: COLORS.GREY_LIGHT,
+      backgroundColor: COLORS.TRANSPARENT,
       alpha: 1,
       zIndex: 4,
     });
@@ -348,9 +348,9 @@ export class Sidebar
       buttonText: "",
       fontSize: settingsIconFontSize,
       textY: settingsIconTextY,
-      textColor: COLOURS.ORANGE,
-      iconColor: COLOURS.ORANGE,
-      backgroundColor: COLOURS.TRANSPARENT,
+      textColor: COLORS.GREY_LIGHT,
+      iconColor: COLORS.GREY_LIGHT,
+      backgroundColor: COLORS.TRANSPARENT,
       alpha: 1,
       zIndex: 4,
     });
@@ -361,9 +361,9 @@ export class Sidebar
       buttonText: "",
       fontSize: SCREEN_SIZES.DEFAULT_BTN_FONT_SIZE,
       textY: defaultTextY,
-      textColor: COLOURS.ORANGE,
-      iconColor: COLOURS.ORANGE,
-      backgroundColor: COLOURS.TRANSPARENT,
+      textColor: COLORS.GREY_LIGHT,
+      iconColor: COLORS.GREY_LIGHT,
+      backgroundColor: COLORS.TRANSPARENT,
       alpha: 1,
       zIndex: 4,
     });
@@ -372,7 +372,7 @@ export class Sidebar
   focusPatch() {
     this.patch({
       w: SCREEN_SIZES.SIDEBAR_WIDTH_OPEN,
-      color: COLOURS.BLACK_OPACITY_70,
+      color: COLORS.BLACK_OPACITY_70,
     });
     this.HomeButton?.patch({
       src: Utils.asset("images/home.png"),
@@ -381,9 +381,9 @@ export class Sidebar
       w: SCREEN_SIZES.SIDEBAR_WIDTH_OPEN,
       fontSize: SCREEN_SIZES.DEFAULT_BTN_FONT_SIZE,
       textY: defaultTextY,
-      textColor: COLOURS.ORANGE,
-      iconColor: COLOURS.ORANGE,
-      backgroundColor: COLOURS.TRANSPARENT,
+      textColor: COLORS.GREY_LIGHT,
+      iconColor: COLORS.GREY_LIGHT,
+      backgroundColor: COLORS.TRANSPARENT,
       zIndex: 4,
       alpha: 1,
     });
@@ -394,9 +394,9 @@ export class Sidebar
       w: SCREEN_SIZES.SIDEBAR_WIDTH_OPEN,
       fontSize: SCREEN_SIZES.DEFAULT_BTN_FONT_SIZE,
       textY: defaultTextY,
-      textColor: COLOURS.ORANGE,
-      iconColor: COLOURS.ORANGE,
-      backgroundColor: COLOURS.TRANSPARENT,
+      textColor: COLORS.GREY_LIGHT,
+      iconColor: COLORS.GREY_LIGHT,
+      backgroundColor: COLORS.TRANSPARENT,
       zIndex: 4,
       alpha: 1,
     });
@@ -407,9 +407,9 @@ export class Sidebar
       w: SCREEN_SIZES.SIDEBAR_WIDTH_OPEN,
       fontSize: SCREEN_SIZES.DEFAULT_BTN_FONT_SIZE,
       textY: defaultTextY,
-      textColor: COLOURS.ORANGE,
-      iconColor: COLOURS.ORANGE,
-      backgroundColor: COLOURS.TRANSPARENT,
+      textColor: COLORS.GREY_LIGHT,
+      iconColor: COLORS.GREY_LIGHT,
+      backgroundColor: COLORS.TRANSPARENT,
       zIndex: 4,
       alpha: 1,
     });

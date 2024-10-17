@@ -1,5 +1,5 @@
 import { Lightning, Utils } from "@lightningjs/sdk";
-import { COLOURS } from "../../static/constants/Colours";
+import { COLORS } from "../../static/constants/Colors";
 
 interface ButtonTemplateSpec extends Lightning.Component.TemplateSpec {
   Image: object;
@@ -28,7 +28,7 @@ export class SidebarButton
       w: 500,
       h: 70,
       rect: true,
-      color: COLOURS.WHITE,
+      color: COLORS.WHITE,
       zIndex: 2,
       Image: {
         x: this.bindProp("imageX"),
@@ -114,40 +114,40 @@ export class SidebarButton
 
   override _focus() {
     this.patch({
-      color: COLOURS.TRANSPARENT,
+      color: COLORS.TRANSPARENT,
       shader: {
         type: Lightning.shaders.RoundedRectangle,
         radius: 0,
         stroke: 1,
-        strokeColor: COLOURS.BLACK_OPACITY_70,
+        strokeColor: COLORS.BLACK_OPACITY_70,
       },
       Text: {
         shader: null,
         text: {
-          textColor: COLOURS.WHITE,
+          textColor: COLORS.WHITE,
         },
       },
       Image: {
         y: 1,
-        color: COLOURS.WHITE,
+        color: COLORS.WHITE,
       },
     });
   }
 
   override _unfocus() {
     this.patch({
-      color: COLOURS.TRANSPARENT,
+      color: COLORS.TRANSPARENT,
       shader: null,
       zIndex: 2,
       Text: {
         shader: null,
         text: {
-          textColor: COLOURS.ORANGE,
+          textColor: COLORS.GREY_LIGHT,
         },
       },
       Image: {
         y: 0,
-        color: COLOURS.ORANGE,
+        color: COLORS.GREY_LIGHT,
       },
     });
   }

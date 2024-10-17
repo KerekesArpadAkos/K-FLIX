@@ -1,5 +1,5 @@
 import { Lightning } from "@lightningjs/sdk";
-import { COLOURS } from "../../static/constants/Colours";
+import { COLORS } from "../../static/constants/Colors";
 
 interface ButtonTemplateSpec extends Lightning.Component.TemplateSpec {
   Text: object;
@@ -41,17 +41,17 @@ export class Button
 
   override _focus() {
     this.patch({
-      color: COLOURS.BLACK,
+      color: COLORS.BLACK,
       shader: {
         type: Lightning.shaders.RoundedRectangle,
         radius: 4,
         stroke: 2,
-        strokeColor: COLOURS.ORANGE,
+        strokeColor: COLORS.GREEN_FOCUS,
       },
       Text: {
         shader: null,
         text: {
-          textColor: COLOURS.ORANGE,
+          textColor: COLORS.GREEN_FOCUS,
         },
       },
     });
@@ -59,12 +59,12 @@ export class Button
 
   override _unfocus() {
     this.patch({
-      color: COLOURS.ORANGE,
+      color: COLORS.GREY_LIGHT,
       shader: null,
       Text: {
         shader: null,
         text: {
-          textColor: COLOURS.BLACK,
+          textColor: COLORS.BLACK,
         },
       },
     });
@@ -74,19 +74,19 @@ export class Button
 export class PlayerUIButton extends Button {
   override _focus() {
     this.patch({
-      color: COLOURS.WHITE,
+      color: COLORS.WHITE,
       shader: {
         type: Lightning.shaders.RoundedRectangle,
         radius: 10,
         stroke: 5,
-        strokeColor: COLOURS.ORANGE,
+        strokeColor: COLORS.GREY_LIGHT,
       },
     });
   }
 
   override _unfocus() {
     this.patch({
-      color: COLOURS.WHITE,
+      color: COLORS.WHITE,
       shader: null,
     });
   }

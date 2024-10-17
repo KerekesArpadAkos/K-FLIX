@@ -3,11 +3,10 @@ import SearchInput from "../components/SearchInput";
 import { movieService } from "../utils/service/MovieService";
 import VerticalList from "../components/VerticalList";
 import Carousel from "../components/Carousel";
-import { COLOURS } from "../../static/constants/Colours";
+import { COLORS } from "../../static/constants/Colors";
 import { tvShowService } from "../utils/service/TVShowService";
 import { Sidebar } from "../components/Sidebar";
 import Router from "@lightningjs/sdk/src/Router";
-import { SCREEN_SIZES } from "../../static/constants/ScreenSizes";
 import { Gallery } from "../components/Gallery";
 import { getImageUrl } from "../utils";
 import Card from "../components/Card";
@@ -30,7 +29,7 @@ export default class SearchPage
     return {
       w: 1920,
       h: 1080,
-      color: COLOURS.RAISIN_BLACK,
+      color: COLORS.RAISIN_BLACK,
       rect: true,
       SearchInput: {
         type: SearchInput,

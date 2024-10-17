@@ -1,5 +1,5 @@
 import { Lightning, Utils } from "@lightningjs/sdk";
-import { COLOURS } from "../../static/constants/Colours";
+import { COLORS } from "../../static/constants/Colors";
 import { SCREEN_SIZES } from "../../static/constants/ScreenSizes";
 import { MovieDetailsExtended } from "../utils/interfaces/items/itemsInterface";
 import { Button } from "@lightningjs/ui-components";
@@ -35,14 +35,14 @@ class MovieDetailsOverlay extends Lightning.Component<MovieDetailsOverlayTemplat
       w: SCREEN_SIZES.WIDTH - 150,
       h: SCREEN_SIZES.HEIGHT / 5,
       rect: true,
-      color: COLOURS.TRANSPARENT,
+      color: COLORS.TRANSPARENT,
       zIndex: 5,
       visible: false,
       Card: {
         w: SCREEN_SIZES.WIDTH - 150,
         h: SCREEN_SIZES.HEIGHT / 5 + 30,
         rect: true,
-        color: COLOURS.BLACK_OPACITY_05,
+        color: COLORS.BLACK_OPACITY_05,
         zIndex: 4,
         transitions: {
           visible: { duration: 0.5, timingFunction: "ease-in-out" },

@@ -1,7 +1,7 @@
 import { Lightning } from "@lightningjs/sdk";
 import { Text } from "./Text";
 import Router from "@lightningjs/sdk/src/Router";
-import { COLOURS } from "../../static/constants/Colours";
+import { COLORS } from "../../static/constants/Colors";
 import eventBus from "./EventBus";
 
 interface UtilityButtonTemplateSpec extends Lightning.Component.TemplateSpec {
@@ -28,12 +28,12 @@ export class UtilityButton
       w: 200,
       h: 50,
       rect: true,
-      color: COLOURS.BLACK_OPACITY_70,
+      color: COLORS.BLACK_OPACITY_70,
       shader: {
         type: Lightning.shaders.RoundedRectangle,
         radius: 5,
         stroke: 2,
-        strokeColor: COLOURS.ORANGE,
+        strokeColor: COLORS.GREY_LIGHT,
       },
       Label: {
         type: Text,
@@ -44,7 +44,7 @@ export class UtilityButton
           fontSize: 28,
           fontStyle: "bold",
           textAlign: "center",
-          textColor: COLOURS.ORANGE,
+          textColor: COLORS.GREY_LIGHT,
         },
       },
     };
@@ -83,10 +83,10 @@ export class UtilityButton
 
   override _focus() {
     this.patch({
-      color: COLOURS.ORANGE,
+      color: COLORS.GREY_LIGHT,
       Label: {
         text: {
-          textColor: COLOURS.RAISIN_BLACK,
+          textColor: COLORS.RAISIN_BLACK,
         },
       },
     });
@@ -94,10 +94,10 @@ export class UtilityButton
 
   override _unfocus() {
     this.patch({
-      color: COLOURS.RAISIN_BLACK,
+      color: COLORS.RAISIN_BLACK,
       Label: {
         text: {
-          textColor: COLOURS.ORANGE,
+          textColor: COLORS.GREY_LIGHT,
         },
       },
     });

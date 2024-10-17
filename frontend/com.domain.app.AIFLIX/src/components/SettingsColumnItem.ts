@@ -1,5 +1,5 @@
 import { Lightning } from "@lightningjs/sdk";
-import { COLOURS } from "../../static/constants/Colours";
+import { COLORS } from "../../static/constants/Colors";
 import eventBus from "./EventBus";
 
 interface SettingsColumnItemTemplateSpec extends Lightning.Component.TemplateSpec {
@@ -21,7 +21,7 @@ export default class SettingsColumnItem
       shader: {
         type: Lightning.shaders.Outline,
         width: 2,
-        color: COLOURS.GREY,
+        color: COLORS.GREY_LIGHT,
       },
       Label: {
         x: 140,
@@ -51,7 +51,7 @@ export default class SettingsColumnItem
   override _focus() {
     this.patch({
       shader: {
-        color: COLOURS.ORANGE,
+        color: COLORS.GREY_LIGHT,
       },
     });
   }
@@ -59,7 +59,7 @@ export default class SettingsColumnItem
   override _unfocus() {
     this.patch({
       shader: {
-        color: COLOURS.GREY,
+        color: COLORS.GREY_LIGHT,
       },
     });
   }
@@ -71,7 +71,7 @@ export default class SettingsColumnItem
       if (option.item?.ref === "18") {
         option.patch({
           Label: {
-            text: { textColor: COLOURS.ORANGE },
+            text: { textColor: COLORS.GREY_LIGHT },
           },
         });
       }
@@ -86,7 +86,7 @@ export default class SettingsColumnItem
       if (option.item?.ref === "18") {
         option.patch({
           Label: {
-            text: { textColor: COLOURS.WHITE },
+            text: { textColor: COLORS.WHITE },
           },
         });
       }
@@ -101,7 +101,7 @@ export default class SettingsColumnItem
       if (option.item?.ref === "OFF") {
         option.patch({
           Label: {
-            text: { textColor: COLOURS.WHITE },
+            text: { textColor: COLORS.WHITE },
           },
         });
       }
@@ -111,7 +111,7 @@ export default class SettingsColumnItem
   changeColorToOrange() {
     this.patch({
       Label: {
-        text: { textColor: COLOURS.ORANGE },
+        text: { textColor: COLORS.GREY_LIGHT },
       },
     });
   }

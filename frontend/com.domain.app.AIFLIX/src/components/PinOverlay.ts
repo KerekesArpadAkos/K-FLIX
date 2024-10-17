@@ -1,5 +1,5 @@
 import { Lightning, Router } from "@lightningjs/sdk";
-import { COLOURS } from "../../static/constants/Colours";
+import { COLORS } from "../../static/constants/Colors";
 import { SCREEN_SIZES } from "../../static/constants/ScreenSizes";
 import BlackBox from "./BlackBox";
 import Keyboard from "./KeyBoard";
@@ -49,12 +49,12 @@ export class PinOverlay extends Lightning.Component<PinOverlayTemplateSpec> {
       w: SCREEN_SIZES.WIDTH,
       h: SCREEN_SIZES.HEIGHT,
       rect: true,
-      color: COLOURS.BLACK,
+      color: COLORS.BLACK,
       PinOverlay: {
         w: 800,
         h: 500,
         rect: true,
-        color: COLOURS.GREY,
+        color: COLORS.GREY_LIGHT,
         mountX: 0.5,
         mountY: 0.5,
         x: 960,
@@ -156,7 +156,7 @@ export class PinOverlay extends Lightning.Component<PinOverlayTemplateSpec> {
         _highlightText() {
           const pinOverlayText = this.PinOverlay?.tag("Text");
           if (pinOverlayText && pinOverlayText.text) {
-            pinOverlayText.text.textColor = COLOURS.ORANGE;
+            pinOverlayText.text.textColor = COLORS.GREY_LIGHT;
           }
         }
 
@@ -206,14 +206,14 @@ export class PinOverlay extends Lightning.Component<PinOverlayTemplateSpec> {
         override _focus() {
           const pinOverlayText = this.PinOverlay?.tag("Text");
           if (pinOverlayText && pinOverlayText.text) {
-            pinOverlayText.text.textColor = COLOURS.ORANGE;
+            pinOverlayText.text.textColor = COLORS.GREY_LIGHT;
           }
         }
 
         override _handleDown() {
           const pinOverlayText = this.PinOverlay?.tag("Text");
           if (pinOverlayText && pinOverlayText.text) {
-            pinOverlayText.text.textColor = COLOURS.WHITE;
+            pinOverlayText.text.textColor = COLORS.WHITE;
           }
           this._setState("KeyboardFocus");
         }

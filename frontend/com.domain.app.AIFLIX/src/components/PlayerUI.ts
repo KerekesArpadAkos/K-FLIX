@@ -1,5 +1,5 @@
 import { Lightning, Utils } from "@lightningjs/sdk";
-import { COLOURS } from "../../static/constants/Colours";
+import { COLORS } from "../../static/constants/Colors";
 import { SCREEN_SIZES } from "../../static/constants/ScreenSizes";
 import { Player } from "./Player";
 import { PlayerUIButton } from "./Button";
@@ -39,9 +39,9 @@ export class PlayerUI
   playIconShowing = false;
 
   private playerInstance?: Player;
-  private progressBarInterval?: number;
+  private progressBarInterval?: ReturnType<typeof setInterval>;
 
-  private hideUITimerID?: number;
+  private hideUITimerID?: ReturnType<typeof setTimeout>;
   private readonly hideUIDelay = 5000;
 
   // animations for show
@@ -72,7 +72,7 @@ export class PlayerUI
     return {
       Background: {
         rect: true,
-        color: COLOURS.BLACK,
+        color: COLORS.BLACK,
         w: SCREEN_SIZES.WIDTH,
         h: SCREEN_SIZES.HEIGHT,
         alpha: 0.5,

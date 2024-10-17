@@ -1,5 +1,5 @@
 import { Lightning, Router } from "@lightningjs/sdk";
-import { COLOURS } from "../../static/constants/Colours";
+import { COLORS } from "../../static/constants/Colors";
 import { SCREEN_SIZES } from "../../static/constants/ScreenSizes";
 import { Player } from "../components/Player";
 import { PlayerUI } from "../components/PlayerUI";
@@ -40,7 +40,7 @@ export class PlayerPage
       Background: {
         w: SCREEN_SIZES.WIDTH,
         h: SCREEN_SIZES.HEIGHT,
-        color: COLOURS.BLACK,
+        color: COLORS.BLACK,
         zIndex: 0,
       },
       Player: {

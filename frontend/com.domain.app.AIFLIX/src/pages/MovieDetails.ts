@@ -1,6 +1,6 @@
 import { Lightning } from "@lightningjs/sdk";
 import { SCREEN_SIZES } from "../../static/constants/ScreenSizes";
-import { COLOURS } from "../../static/constants/Colours";
+import { COLORS } from "../../static/constants/Colors";
 import { Gallery } from "../components/Gallery";
 import { movieService } from "../utils/service/MovieService";
 import VerticalList from "../components/VerticalList";
@@ -33,7 +33,7 @@ export class MovieDetails
     return {
       w: SCREEN_SIZES.WIDTH,
       h: SCREEN_SIZES.HEIGHT,
-      color: COLOURS.RAISIN_BLACK,
+      color: COLORS.RAISIN_BLACK,
       rect: true,
       text: {},
       Gallery: {
@@ -231,6 +231,7 @@ export class MovieDetails
         src: `https://image.tmdb.org/t/p/w${
           92 || 154 || 185 || 342 || 500 || 780 || "original"
         }${actor.profile_path}`,
+        //src: `https://image.tmdb.org/t/p/w185${actor.profile_path}`,
         id: actor.id,
         name: actor.name,
       },
