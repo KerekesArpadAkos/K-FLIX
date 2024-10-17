@@ -63,7 +63,7 @@ export class PlayerPage
   }
 
   get PlayerUI() {
-    return this.tag("PlayerUI");
+    return this.getByRef("PlayerUI");
   }
 
   private getRandomURLIndex(): number {
@@ -100,7 +100,7 @@ export class PlayerPage
   }
 
   get Player() {
-    return this.tag("Player");
+    return this.getByRef("Player");
   }
 
   static override _states() {

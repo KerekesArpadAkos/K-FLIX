@@ -69,23 +69,23 @@ export class MovieDetails
   }
 
   get Gallery() {
-    return this.tag("Gallery") as Gallery;
+    return this.getByRef("Gallery") as Gallery;
   }
 
   get CastList() {
-    return this.tag("CastList");
+    return this.getByRef("CastList");
   }
 
   get VerticalList() {
-    return this.tag("VerticalList") as VerticalList;
+    return this.getByRef("VerticalList") as VerticalList;
   }
 
   get DetailsOverlay() {
-    return this.tag("DetailsOverlay") as MovieDetailsOverlay;
+    return this.getByRef("DetailsOverlay") as MovieDetailsOverlay;
   }
 
   get PinOverlay() {
-    return this.tag("PinOverlay") as PinOverlay;
+    return this.getByRef("PinOverlay") as PinOverlay;
   }
 
   override set params(param: { id: string; isMovie: boolean }) {

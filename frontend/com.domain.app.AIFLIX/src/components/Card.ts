@@ -109,7 +109,7 @@ export class Card extends Lightning.Component<CardTemplateSpec> {
   }
 
   get Background() {
-    return this.tag("Background");
+    return this.getByRef("Background");
   }
 
   set props(props: CardProps) {
@@ -130,7 +130,7 @@ export class Card extends Lightning.Component<CardTemplateSpec> {
       src: src,
     };
 
-    const card = this.tag("Card");
+    const card = this.getByRef("Card");
 
     card!.on("txError", () => {
       this.showPlaceholder();

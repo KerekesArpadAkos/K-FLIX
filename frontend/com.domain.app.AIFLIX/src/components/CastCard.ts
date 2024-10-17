@@ -96,7 +96,7 @@ export class CastCard extends Lightning.Component<CastCardTemplateSpec> {
   }
 
   get CastCard() {
-    return this.tag("CastCard");
+    return this.getByRef("CastCard");
   }
 
   get Label() {
@@ -125,7 +125,7 @@ export class CastCard extends Lightning.Component<CastCardTemplateSpec> {
       },
     };
 
-    const castCard = this.tag("CastCard");
+    const castCard = this.getByRef("CastCard");
 
     castCard!.on("txError", () => {
       this.showPlaceholder();

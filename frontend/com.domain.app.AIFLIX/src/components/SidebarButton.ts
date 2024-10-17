@@ -32,8 +32,8 @@ export class SidebarButton
       zIndex: 2,
       Image: {
         x: this.bindProp("imageX"),
-        w: 50,
-        h: 50,
+        w: 70,
+        h: 70,
         src: this.bindProp("src"),
         color: this.bindProp("iconColor"),
       },
@@ -42,7 +42,7 @@ export class SidebarButton
         y: this.bindProp("textY"),
         mount: 0.5,
         text: {
-          text: this.bindProp("buttonText"),
+          text: this.bindProp("SidebarButtonProps"),
           fontSize: this.bindProp("fontSize"),
           textColor: this.bindProp("textColor"),
           textAlign: "center",
@@ -114,25 +114,22 @@ export class SidebarButton
 
   override _focus() {
     this.patch({
-      color: COLORS.TRANSPARENT,
-      shader: {
-        type: Lightning.shaders.RoundedRectangle,
-        radius: 0,
-        stroke: 1,
-        strokeColor: COLORS.BLACK_OPACITY_70,
-      },
+      x:0,
+      rect: true,
+      w: 285,     
+      h: this.h,  
+      color: COLORS.GREY_DARK, 
+
       Text: {
-        shader: null,
-        text: {
-          textColor: COLORS.WHITE,
-        },
+        y: 42,
+        x:190,
       },
       Image: {
-        y: 1,
-        color: COLORS.WHITE,
+        x:35,
       },
     });
   }
+
 
   override _unfocus() {
     this.patch({
@@ -142,12 +139,12 @@ export class SidebarButton
       Text: {
         shader: null,
         text: {
-          textColor: COLORS.GREY_LIGHT,
+          textColor: COLORS.WHITE,
         },
       },
       Image: {
         y: 0,
-        color: COLORS.GREY_LIGHT,
+        color: COLORS.WHITE,
       },
     });
   }

@@ -106,7 +106,7 @@ export default class SettingsPage
   }
 
   get Content() {
-    return this.tag("Content")!;
+    return this.getByRef("Content")!;
   }
 
   get MainColumn() {

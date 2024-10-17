@@ -21,7 +21,7 @@ export class PlaceHolder extends Lightning.Component<PlaceHolderTemplateSpec> {
   }
 
   get PlaceholderSvg() {
-    return this.tag("PlaceholderSvg");
+    return this.getByRef("PlaceholderSvg");
   }
 
   set props(props: PlaceHolderProps) {

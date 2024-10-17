@@ -71,7 +71,7 @@ const boot = (qs: Router.QueryParams): Promise<void> => {
 };
 
 export const routerConfig: Router.Config = {
-  root: "splash",
+  root: "home",
   boot,
   routes,
 };

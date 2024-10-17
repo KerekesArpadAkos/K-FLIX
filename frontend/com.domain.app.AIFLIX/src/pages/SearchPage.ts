@@ -62,15 +62,15 @@ export default class SearchPage
   }
 
   get Sidebar() {
-    return this.tag("Sidebar") as Sidebar;
+    return this.getByRef("Sidebar") as Sidebar;
   }
 
   get SearchInput() {
-    return this.tag("SearchInput") as SearchInput;
+    return this.getByRef("SearchInput") as SearchInput;
   }
 
   get VerticalList() {
-    return this.tag("VerticalList") as VerticalList;
+    return this.getByRef("VerticalList") as VerticalList;
   }
 
   focusList() {
@@ -82,11 +82,11 @@ export default class SearchPage
   }
 
   get Gallery() {
-    return this.tag("Gallery") as Gallery;
+    return this.getByRef("Gallery") as Gallery;
   }
 
   get PinOverlay() {
-    return this.tag("PinOverlay") as PinOverlay;
+    return this.getByRef("PinOverlay") as PinOverlay;
   }
 
   override _init() {
@@ -227,7 +227,7 @@ export default class SearchPage
     return [
       class VerticalList extends this {
         override _getFocused() {
-          return this.tag("VerticalList");
+          return this.getByRef("VerticalList");
         }
         override _handleUp() {
           const currentIndex = this.VerticalList!.getCurrentIndex;
@@ -248,7 +248,7 @@ export default class SearchPage
       },
       class SearchInput extends this {
         override _getFocused() {
-          return this.tag("SearchInput");
+          return this.getByRef("SearchInput");
         }
       },
       class PinOverlayFocus extends this {

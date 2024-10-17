@@ -40,7 +40,7 @@ export class SettingsButton
   }
 
   get Label() {
-    return this.tag("Label")!;
+    return this.getByRef("Label")!;
   }
   override _init() {
     this.Label.patch({ text: { text: this.buttonText } });

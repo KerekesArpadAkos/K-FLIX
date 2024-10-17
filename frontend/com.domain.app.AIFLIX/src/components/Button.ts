@@ -59,12 +59,12 @@ export class Button
 
   override _unfocus() {
     this.patch({
-      color: COLORS.GREY_LIGHT,
+      color: COLORS.GREEN_FOCUS,
       shader: null,
       Text: {
         shader: null,
         text: {
-          textColor: COLORS.BLACK,
+          textColor: COLORS.GREEN_FOCUS,
         },
       },
     });
@@ -86,7 +86,7 @@ export class PlayerUIButton extends Button {
 
   override _unfocus() {
     this.patch({
-      color: COLORS.WHITE,
+      color: COLORS.GREEN_FOCUS,
       shader: null,
     });
   }

@@ -67,7 +67,7 @@ export default class SearchInput
   }
 
   get Content() {
-    return this.tag("Content");
+    return this.getByRef("Content");
   }
 
   get InputField() {

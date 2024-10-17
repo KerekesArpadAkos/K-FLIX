@@ -39,7 +39,7 @@ export default class SettingsColumnItem
   }
 
   get Label() {
-    return this.tag("Label")!;
+    return this.getByRef("Label")!;
   }
 
   override _init() {
