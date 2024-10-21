@@ -1,5 +1,5 @@
 import { Lightning, Router } from "@lightningjs/sdk";
-import { COLOURS } from "../../static/constants/Colours";
+import { COLORS } from "../../static/constants/Colors";
 import { SCREEN_SIZES } from "../../static/constants/ScreenSizes";
 import BlackBox from "./BlackBox";
 import Keyboard from "./KeyBoard";
@@ -49,12 +49,12 @@ export class PinOverlay extends Lightning.Component<PinOverlayTemplateSpec> {
       w: SCREEN_SIZES.WIDTH,
       h: SCREEN_SIZES.HEIGHT,
       rect: true,
-      color: COLOURS.BLACK,
+      color: COLORS.BLACK,
       PinOverlay: {
         w: 800,
         h: 500,
         rect: true,
-        color: COLOURS.GREY,
+        color: COLORS.GREY_LIGHT,
         mountX: 0.5,
         mountY: 0.5,
         x: 960,
@@ -137,11 +137,11 @@ export class PinOverlay extends Lightning.Component<PinOverlayTemplateSpec> {
   }
 
   get PinOverlay() {
-    return this.tag("PinOverlay");
+    return this.getByRef("PinOverlay");
   }
 
   get KeyBoard() {
-    return this.tag("Keyboard");
+    return this.getByRef("Keyboard");
   }
 
   static override _states() {
@@ -156,7 +156,7 @@ export class PinOverlay extends Lightning.Component<PinOverlayTemplateSpec> {
         _highlightText() {
           const pinOverlayText = this.PinOverlay?.tag("Text");
           if (pinOverlayText && pinOverlayText.text) {
-            pinOverlayText.text.textColor = COLOURS.ORANGE;
+            pinOverlayText.text.textColor = COLORS.GREY_LIGHT;
           }
         }
 
@@ -206,14 +206,14 @@ export class PinOverlay extends Lightning.Component<PinOverlayTemplateSpec> {
         override _focus() {
           const pinOverlayText = this.PinOverlay?.tag("Text");
           if (pinOverlayText && pinOverlayText.text) {
-            pinOverlayText.text.textColor = COLOURS.ORANGE;
+            pinOverlayText.text.textColor = COLORS.GREY_LIGHT;
           }
         }
 
         override _handleDown() {
           const pinOverlayText = this.PinOverlay?.tag("Text");
           if (pinOverlayText && pinOverlayText.text) {
-            pinOverlayText.text.textColor = COLOURS.WHITE;
+            pinOverlayText.text.textColor = COLORS.WHITE;
           }
           this._setState("KeyboardFocus");
         }
@@ -276,7 +276,7 @@ export class PinOverlay extends Lightning.Component<PinOverlayTemplateSpec> {
               this.signal("focusSettingsPageParconButton", this);
             } else {
               this.attemptsLeft--;
-              this.tag("PinOverlay.Attempts")?.patch({
+              this.getByRef("PinOverlay.Attempts")?.patch({
                 text: {
                   text: `Attempts left: ${this.attemptsLeft}`,
                   fontSize: 48,
@@ -378,7 +378,7 @@ export class PinOverlay extends Lightning.Component<PinOverlayTemplateSpec> {
 
   updatePromptText(text: PromptStates) {
     this.promptText = text;
-    this.tag("PinOverlay.Text")?.patch({
+    this.getByRef("PinOverlay.Text")?.patch({
       text: { text: this.promptText },
     });
   }
@@ -422,7 +422,7 @@ export class PinOverlay extends Lightning.Component<PinOverlayTemplateSpec> {
     this.currentPinIndex = 0;
     this.attemptsLeft = 3;
     this.updatePinBoxes();
-    this.tag("PinOverlay.Attempts")?.patch({
+    this.getByRef("PinOverlay.Attempts")?.patch({
       text: { text: `Attempts left: ${this.attemptsLeft}`, fontSize: 48 },
     });
   }
@@ -431,7 +431,7 @@ export class PinOverlay extends Lightning.Component<PinOverlayTemplateSpec> {
     if (this.currentPinIndex < 4) {
       this.pin[this.currentPinIndex] = digit;
       const pinKey = `PinOverlay.Overlay.Pin${this.currentPinIndex}` as PinKeys;
-      const pinBox = this.tag(pinKey);
+      const pinBox = this.getByRef(pinKey);
       pinBox?.patch({ text: { text: digit } });
       this.currentPinIndex++;
       this.updateFocus();
@@ -443,7 +443,7 @@ export class PinOverlay extends Lightning.Component<PinOverlayTemplateSpec> {
       this.currentPinIndex--;
       this.pin[this.currentPinIndex] = "";
       const pinKey = `PinOverlay.Overlay.Pin${this.currentPinIndex}` as PinKeys;
-      const pinBox = this.tag(pinKey);
+      const pinBox = this.getByRef(pinKey);
       pinBox?.patch({ text: { text: "" } });
       this.updateFocus();
     }
@@ -452,7 +452,7 @@ export class PinOverlay extends Lightning.Component<PinOverlayTemplateSpec> {
   updateFocus() {
     for (let i = 0; i < 4; i++) {
       const pinKey = `PinOverlay.Overlay.Pin${i}` as PinKeys;
-      this.tag(pinKey)?.patch({
+      this.getByRef(pinKey)?.patch({
         color: i === this.currentPinIndex ? 0xffffffff : 0xff333333,
       });
     }
@@ -461,7 +461,7 @@ export class PinOverlay extends Lightning.Component<PinOverlayTemplateSpec> {
   updatePinBoxes() {
     for (let i = 0; i < 4; i++) {
       const pinKey = `PinOverlay.Overlay.Pin${i}` as PinKeys;
-      this.tag(pinKey)?.patch({ text: { text: "" } });
+      this.getByRef(pinKey)?.patch({ text: { text: "" } });
     }
   }
 
@@ -480,7 +480,7 @@ export class PinOverlay extends Lightning.Component<PinOverlayTemplateSpec> {
         }
       } else {
         this.attemptsLeft--;
-        this.tag("PinOverlay.Attempts")?.patch({
+        this.getByRef("PinOverlay.Attempts")?.patch({
           text: { text: `Attempts left: ${this.attemptsLeft}`, fontSize: 48 },
         });
 

@@ -23,6 +23,6 @@ export class Text
   }
 
   get Text() {
-    return this.tag("Text")!;
+    return this.getByRef("Text")!;
   }
 }

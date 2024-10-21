@@ -1,5 +1,5 @@
 import { Lightning, Utils } from "@lightningjs/sdk";
-import { COLOURS } from "../../static/constants/Colours";
+import { COLORS } from "../../static/constants/Colors";
 import { SCREEN_SIZES } from "../../static/constants/ScreenSizes";
 import { Input } from "@lightningjs/ui-components";
 
@@ -24,12 +24,12 @@ export default class SearchInput
       rect: true,
       w: 350,
       h: 60,
-      color: COLOURS.GREY,
+      color: COLORS.GREY_LIGHT,
       shader: {
         type: Lightning.shaders.RoundedRectangle,
         radius: 15,
         stroke: 2,
-        strokeColor: COLOURS.WHITE,
+        strokeColor: COLORS.WHITE,
       },
       Content: {
         SearchImage: {
@@ -54,7 +54,7 @@ export default class SearchInput
           text: {
             text: "Search...",
             fontSize: 44,
-            textColor: COLOURS.WHITE,
+            textColor: COLORS.WHITE,
           },
           shader: {
             type: Lightning.shaders.RoundedRectangle,
@@ -67,7 +67,7 @@ export default class SearchInput
   }
 
   get Content() {
-    return this.tag("Content");
+    return this.getByRef("Content");
   }
 
   get InputField() {
@@ -114,7 +114,7 @@ export default class SearchInput
       smooth: { x: [SCREEN_SIZES.WIDTH * 0.5, { duration: 0.2 }] },
     });
     this.InputField?.patch({
-      color: COLOURS.WHITE,
+      color: COLORS.WHITE,
     });
   }
 
@@ -123,7 +123,7 @@ export default class SearchInput
       smooth: { x: [SCREEN_SIZES.WIDTH + 120, { duration: 0.2 }] },
     });
     this.InputField?.patch({
-      color: COLOURS.GREEN,
+      color: COLORS.GREEN_FOCUS,
     });
   }
 }

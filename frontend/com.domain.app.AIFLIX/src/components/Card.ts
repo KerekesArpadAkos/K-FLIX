@@ -1,7 +1,7 @@
 import { Lightning, Utils } from "@lightningjs/sdk";
 import Router from "@lightningjs/sdk/src/Router";
 import eventBus from "./EventBus";
-import { COLOURS } from "../../static/constants/Colours";
+import { COLORS } from "../../static/constants/Colors";
 import PlaceHolder from "./PlaceHolder";
 
 interface CardTemplateSpec extends Lightning.Component.TemplateSpec {
@@ -44,7 +44,7 @@ export class Card extends Lightning.Component<CardTemplateSpec> {
           type: Lightning.shaders.RoundedRectangle,
           radius: 20,
           stroke: 0,
-          strokeColor: COLOURS.ORANGE,
+          strokeColor: COLORS.GREY_LIGHT,
         },
         transitions: {
           scale: { duration: 0.3 },
@@ -58,7 +58,7 @@ export class Card extends Lightning.Component<CardTemplateSpec> {
         x: -210,
         zIndex: 0,
         rect: true,
-        color: COLOURS.TRANSPARENT,
+        color: COLORS.TRANSPARENT,
         shader: {
           type: Lightning.shaders.RoundedRectangle,
           radius: 20,
@@ -109,7 +109,7 @@ export class Card extends Lightning.Component<CardTemplateSpec> {
   }
 
   get Background() {
-    return this.tag("Background");
+    return this.getByRef("Background");
   }
 
   set props(props: CardProps) {
@@ -130,7 +130,7 @@ export class Card extends Lightning.Component<CardTemplateSpec> {
       src: src,
     };
 
-    const card = this.tag("Card");
+    const card = this.getByRef("Card");
 
     card!.on("txError", () => {
       this.showPlaceholder();
@@ -140,7 +140,7 @@ export class Card extends Lightning.Component<CardTemplateSpec> {
 
     if (isTop) {
       this.Background?.patch({
-        color: COLOURS.WHITE,
+        color: COLORS.WHITE,
         alpha: 0.9,
         texture: {
           src: Utils.asset("images/numbers/" + this.topIndex + ".png"),
@@ -179,7 +179,7 @@ export class Card extends Lightning.Component<CardTemplateSpec> {
     this.patch({
       Card: {
         smooth: { scale: 1.1 },
-        color: COLOURS.WHITE,
+        color: COLORS.WHITE,
         shader: {
           stroke: 6,
         },
@@ -191,7 +191,7 @@ export class Card extends Lightning.Component<CardTemplateSpec> {
     this.patch({
       Card: {
         smooth: { scale: 1 },
-        color: COLOURS.WHITE,
+        color: COLORS.WHITE,
         shader: {
           stroke: 0,
         },

@@ -1,6 +1,6 @@
 import { Lightning } from "@lightningjs/sdk";
 import SettingsColumnItem from "./SettingsColumnItem";
-import { COLOURS } from "../../static/constants/Colours";
+import { COLORS } from "../../static/constants/Colors";
 
 interface SettingsColumnTemplateSpec extends Lightning.Component.TemplateSpec {
   ListItem: typeof SettingsColumnItem;
@@ -55,7 +55,7 @@ export class SettingsColumn
         child.patch({
           Label: {
             text: {
-              textColor: COLOURS.WHITE,
+              textColor: COLORS.WHITE,
             },
           },
         });

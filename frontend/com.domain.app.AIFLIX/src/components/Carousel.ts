@@ -59,7 +59,7 @@ export class Carousel extends Lightning.Component<CarouselTemplateSpec> {
   }
 
   get List(): ListComponentType {
-    return this.tag("List") as ListComponentType;
+    return this.getByRef("List") as ListComponentType;
   }
 
   set isMovie(isMovie: boolean) {

@@ -1,5 +1,5 @@
 import { Lightning, Utils } from "@lightningjs/sdk";
-import { COLOURS } from "../../static/constants/Colours";
+import { COLORS } from "../../static/constants/Colors";
 import { PlaceHolder } from "./PlaceHolder";
 
 interface CastCardTemplateSpec extends Lightning.Component.TemplateSpec {
@@ -29,7 +29,7 @@ export class CastCard extends Lightning.Component<CastCardTemplateSpec> {
       w: imageWith + 10,
       h: imageHeight + 20,
       rect: true,
-      color: COLOURS.BLACK_OPACITY_70,
+      color: COLORS.BLACK_OPACITY_70,
       zIndex: 20,
       shader: {
         type: Lightning.shaders.RoundedRectangle,
@@ -68,7 +68,7 @@ export class CastCard extends Lightning.Component<CastCardTemplateSpec> {
           text: {
             fontSize: 16,
             textAlign: "center",
-            textColor: COLOURS.WHITE,
+            textColor: COLORS.WHITE,
           },
         },
         PlaceholderSvg: {
@@ -96,7 +96,7 @@ export class CastCard extends Lightning.Component<CastCardTemplateSpec> {
   }
 
   get CastCard() {
-    return this.tag("CastCard");
+    return this.getByRef("CastCard");
   }
 
   get Label() {
@@ -125,7 +125,7 @@ export class CastCard extends Lightning.Component<CastCardTemplateSpec> {
       },
     };
 
-    const castCard = this.tag("CastCard");
+    const castCard = this.getByRef("CastCard");
 
     castCard!.on("txError", () => {
       this.showPlaceholder();

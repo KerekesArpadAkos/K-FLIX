@@ -1,5 +1,5 @@
 import { Lightning, Utils } from "@lightningjs/sdk";
-import { COLOURS } from "../../static/constants/Colours";
+import { COLORS } from "../../static/constants/Colors";
 
 interface ButtonTemplateSpec extends Lightning.Component.TemplateSpec {
   Image: object;
@@ -28,12 +28,12 @@ export class SidebarButton
       w: 500,
       h: 70,
       rect: true,
-      color: COLOURS.WHITE,
+      color: COLORS.WHITE,
       zIndex: 2,
       Image: {
         x: this.bindProp("imageX"),
-        w: 50,
-        h: 50,
+        w: 70,
+        h: 70,
         src: this.bindProp("src"),
         color: this.bindProp("iconColor"),
       },
@@ -42,7 +42,7 @@ export class SidebarButton
         y: this.bindProp("textY"),
         mount: 0.5,
         text: {
-          text: this.bindProp("buttonText"),
+          text: this.bindProp("SidebarButtonProps"),
           fontSize: this.bindProp("fontSize"),
           textColor: this.bindProp("textColor"),
           textAlign: "center",
@@ -114,40 +114,39 @@ export class SidebarButton
 
   override _focus() {
     this.patch({
-      color: COLOURS.TRANSPARENT,
-      shader: {
-        type: Lightning.shaders.RoundedRectangle,
-        radius: 0,
-        stroke: 1,
-        strokeColor: COLOURS.BLACK_OPACITY_70,
-      },
+      x:0,
+      rect: true,
+      w: 285,     
+      h: this.h,  
       Text: {
-        shader: null,
+        y: 42,
+        x:190,
         text: {
-          textColor: COLOURS.WHITE,
-        },
+          textColor: COLORS.GREEN_FOCUS,
+        }
       },
       Image: {
-        y: 1,
-        color: COLOURS.WHITE,
+        x:35,
+        color: COLORS.GREEN_FOCUS,
       },
     });
   }
 
+
   override _unfocus() {
     this.patch({
-      color: COLOURS.TRANSPARENT,
+      color: COLORS.TRANSPARENT,
       shader: null,
       zIndex: 2,
       Text: {
         shader: null,
         text: {
-          textColor: COLOURS.ORANGE,
+          textColor: COLORS.WHITE,
         },
       },
       Image: {
         y: 0,
-        color: COLOURS.ORANGE,
+        color: COLORS.WHITE,
       },
     });
   }

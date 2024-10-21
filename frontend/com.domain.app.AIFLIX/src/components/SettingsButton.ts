@@ -1,5 +1,5 @@
 import { Lightning } from "@lightningjs/sdk";
-import { COLOURS } from "../../static/constants/Colours";
+import { COLORS } from "../../static/constants/Colors";
 interface SettingsButtonTemplateSpec extends Lightning.Component.TemplateSpec {
   Label: typeof Text;
 }
@@ -20,7 +20,7 @@ export class SettingsButton
         type: Lightning.shaders.RoundedRectangle,
         radius: 15,
         stroke: 2,
-        strokeColor: COLOURS.GREY,
+        strokeColor: COLORS.GREY_LIGHT,
       },
       Label: {
         x: 180,
@@ -40,7 +40,7 @@ export class SettingsButton
   }
 
   get Label() {
-    return this.tag("Label")!;
+    return this.getByRef("Label")!;
   }
   override _init() {
     this.Label.patch({ text: { text: this.buttonText } });
@@ -55,14 +55,14 @@ export class SettingsButton
     }
     this.patch({
       shader: {
-        strokeColor: COLOURS.WHITE,
+        strokeColor: COLORS.WHITE,
       },
     });
   }
   override _unfocus() {
     this.patch({
       shader: {
-        strokeColor: COLOURS.GREY,
+        strokeColor: COLORS.GREY_LIGHT,
       },
     });
   }

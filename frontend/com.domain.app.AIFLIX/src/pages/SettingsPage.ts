@@ -2,7 +2,7 @@ import { Lightning, Router } from "@lightningjs/sdk";
 import { SettingsColumn } from "../components/SettingsColumn";
 import { SettingsButton } from "../components/SettingsButton";
 import { SCREEN_SIZES } from "../../static/constants/ScreenSizes";
-import { COLOURS } from "../../static/constants/Colours";
+import { COLORS } from "../../static/constants/Colors";
 import { PARCON_OPTIONS, LANGUAGE_OPTIONS } from "../../static/constants/SettingsOptions";
 import eventBus from "../components/EventBus";
 import PinOverlay from "../components/PinOverlay";
@@ -35,7 +35,7 @@ export default class SettingsPage
     return {
       w: SCREEN_SIZES.WIDTH,
       h: SCREEN_SIZES.HEIGHT,
-      color: COLOURS.BLACK,
+      color: COLORS.BLACK,
       rect: true,
       Content: {
         MainColumn: {
@@ -91,7 +91,7 @@ export default class SettingsPage
           w: 1,
           h: SCREEN_SIZES.HEIGHT,
           rect: true,
-          color: COLOURS.GREY,
+          color: COLORS.GREY_LIGHT,
           zIndex: 1,
         },
         PinOverlay: {
@@ -106,7 +106,7 @@ export default class SettingsPage
   }
 
   get Content() {
-    return this.tag("Content")!;
+    return this.getByRef("Content")!;
   }
 
   get MainColumn() {
@@ -174,7 +174,7 @@ export default class SettingsPage
         this.LanguageOptions.children[langIndex]?.patch({
           Label: {
             text: {
-              textColor: COLOURS.ORANGE,
+              textColor: COLORS.GREY_LIGHT,
             },
           },
         });
@@ -189,7 +189,7 @@ export default class SettingsPage
         this.ParconOptions.children[parconIndex]?.patch({
           Label: {
             text: {
-              textColor: COLOURS.ORANGE,
+              textColor: COLORS.GREY_LIGHT,
             },
           },
         });

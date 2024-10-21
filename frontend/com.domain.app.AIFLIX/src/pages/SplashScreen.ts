@@ -61,7 +61,7 @@ export class SplashScreen extends Lightning.Component {
   }
 
   get Logo() {
-    return this.tag("Logo");
+    return this.getByRef("Logo");
   }
 
   get Thunder() {

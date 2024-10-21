@@ -59,15 +59,15 @@ export class Home
   }
 
   get PinOverlay() {
-    return this.tag("PinOverlay") as PinOverlay;
+    return this.getByRef("PinOverlay") as PinOverlay;
   }
 
   get Gallery() {
-    return this.tag("Gallery") as Gallery;
+    return this.getByRef("Gallery") as Gallery;
   }
 
   get VerticalList() {
-    return this.tag("VerticalList") as VerticalList;
+    return this.getByRef("VerticalList") as VerticalList;
   }
 
   override async _init() {

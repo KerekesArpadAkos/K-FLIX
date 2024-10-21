@@ -8,6 +8,7 @@
   },
   "platformSettings": {
     "path": "./static",
-    "log": true
-  }
+    "log": true,
+    "inscpector": true
+    }
 }

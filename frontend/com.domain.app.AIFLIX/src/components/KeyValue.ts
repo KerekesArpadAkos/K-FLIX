@@ -1,5 +1,5 @@
 import { Lightning } from "@lightningjs/sdk";
-import { COLOURS } from "../../static/constants/Colours";
+import { COLORS } from "../../static/constants/Colors";
 import PlaceHolder from "./PlaceHolder";
 import { SCREEN_SIZES } from "../../static/constants/ScreenSizes";
 
@@ -57,14 +57,14 @@ export class KeyValue extends Lightning.Component<CardTemplateSpec> {
           justifyContent: "space-between",
           alignItems: "center",
         },
-        color: COLOURS.TRANSPARENT,
+        color: COLORS.TRANSPARENT,
         Key: {
           text: {
             text: "Key",
             fontSize: 25,
             fontStyle: "bold",
             textAlign: "left",
-            textColor: COLOURS.WHITE,
+            textColor: COLORS.WHITE,
           },
         },
         Value: {
@@ -73,7 +73,7 @@ export class KeyValue extends Lightning.Component<CardTemplateSpec> {
             fontSize: 25,
             fontStyle: "bold",
             textAlign: "right",
-            textColor: COLOURS.WHITE,
+            textColor: COLORS.WHITE,
           },
         },
       },

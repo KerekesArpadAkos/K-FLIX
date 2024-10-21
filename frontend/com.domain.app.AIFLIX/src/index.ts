@@ -2,11 +2,11 @@ import { Launch } from '@lightningjs/sdk';
 import { App } from './App';
 
 
-const tag = document.createElement('script');
-tag.src = './devtools/lightning-inspect.js';
-tag.onload = () => console.log('Inspector script loaded successfully');
-tag.onerror = () => console.error('Failed to load inspector script');
-document.body.appendChild(tag);
+// const tag = document.createElement('script');
+// tag.src = './devtools/lightning-inspect.js';
+// tag.onload = () => console.log('Inspector script loaded successfully');
+// tag.onerror = () => console.error('Failed to load inspector script');
+// document.body.appendChild(tag);
 
 
 const app = Launch(App, {
@@ -22,7 +22,11 @@ const app = Launch(App, {
     8: 'Back',
     27: 'Exit',
   },
-}, {});
+}, {
+  // showFps: true,
+  inspector: true,
+  // "showVersion": true,
+});
 
 const canvas = app.stage.getCanvas();
 document.body.appendChild(canvas);

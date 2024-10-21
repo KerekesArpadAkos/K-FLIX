@@ -1,5 +1,5 @@
 import { Lightning, Utils } from "@lightningjs/sdk";
-import { COLOURS } from "../../static/constants/Colours";
+import { COLORS } from "../../static/constants/Colors";
 import { SCREEN_SIZES } from "../../static/constants/ScreenSizes";
 import { Player } from "./Player";
 import { PlayerUIButton } from "./Button";
@@ -39,9 +39,9 @@ export class PlayerUI
   playIconShowing = false;
 
   private playerInstance?: Player;
-  private progressBarInterval?: number;
+  private progressBarInterval?: ReturnType<typeof setInterval>;
 
-  private hideUITimerID?: number;
+  private hideUITimerID?: ReturnType<typeof setTimeout>;
   private readonly hideUIDelay = 5000;
 
   // animations for show
@@ -72,7 +72,7 @@ export class PlayerUI
     return {
       Background: {
         rect: true,
-        color: COLOURS.BLACK,
+        color: COLORS.BLACK,
         w: SCREEN_SIZES.WIDTH,
         h: SCREEN_SIZES.HEIGHT,
         alpha: 0.5,
@@ -193,55 +193,55 @@ export class PlayerUI
   }
 
   get PreviousButton() {
-    return this.tag("PlayBackButtons.PreviousButton");
+    return this.getByRef("PlayBackButtons.PreviousButton");
   }
 
   get BkwSkipButton() {
-    return this.tag("PlayBackButtons.BkwSkipButton");
+    return this.getByRef("PlayBackButtons.BkwSkipButton");
   }
 
   get PlayButton() {
-    return this.tag("PlayBackButtons.PlayButton");
+    return this.getByRef("PlayBackButtons.PlayButton");
   }
 
   get FwdSkipButton() {
-    return this.tag("PlayBackButtons.FwdSkipButton");
+    return this.getByRef("PlayBackButtons.FwdSkipButton");
   }
 
   get NextButton() {
-    return this.tag("PlayBackButtons.NextButton");
+    return this.getByRef("PlayBackButtons.NextButton");
   }
 
   get Background() {
-    return this.tag("Background");
+    return this.getByRef("Background");
   }
 
   get Title() {
-    return this.tag("TitleWrapper.Title");
+    return this.getByRef("TitleWrapper.Title");
   }
 
   get ProgressBar() {
-    return this.tag("ProgressBar");
+    return this.getByRef("ProgressBar");
   }
 
   get Troth() {
-    return this.tag("ProgressBar.Troth");
+    return this.getByRef("ProgressBar.Troth");
   }
 
   get Runtime() {
-    return this.tag("Runtime");
+    return this.getByRef("Runtime");
   }
 
   get CurrentTime() {
-    return this.tag("CurrentTime");
+    return this.getByRef("CurrentTime");
   }
 
   get Release() {
-    return this.tag("TitleWrapper.Release");
+    return this.getByRef("TitleWrapper.Release");
   }
 
   get TitleWrapper() {
-    return this.tag("TitleWrapper");
+    return this.getByRef("TitleWrapper");
   }
 
   private convertMinutesToHMS(minutes: number): string {

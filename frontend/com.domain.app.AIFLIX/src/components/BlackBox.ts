@@ -25,7 +25,7 @@ class BlackBox extends Lightning.Component {
   }
 
   override set text(value: any) {
-    this.tag("Text").text = value;
+    this.getByRef("Text").text = value;
   }
 }
 

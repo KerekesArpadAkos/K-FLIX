@@ -1,6 +1,6 @@
 import { Lightning } from "@lightningjs/sdk";
 import { Button } from "./Button";
-import { COLOURS } from "../../static/constants/Colours";
+import { COLORS } from "../../static/constants/Colors";
 
 class Keyboard extends Lightning.Component {
   _rowIndex = 0;
@@ -16,7 +16,7 @@ class Keyboard extends Lightning.Component {
       w: 330,
       h: 350,
       rect: true,
-      color: COLOURS.GREY,
+      color: COLORS.GREY_LIGHT,
       flex: {
         direction: "column" as const,
         alignItems: "center" as const,

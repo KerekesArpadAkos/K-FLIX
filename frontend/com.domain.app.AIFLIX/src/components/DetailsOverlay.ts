@@ -1,5 +1,5 @@
 import { Lightning, Utils } from "@lightningjs/sdk";
-import { COLOURS } from "../../static/constants/Colours";
+import { COLORS } from "../../static/constants/Colors";
 import { SCREEN_SIZES } from "../../static/constants/ScreenSizes";
 import { MovieDetailsExtended } from "../utils/interfaces/items/itemsInterface";
 import { Button } from "@lightningjs/ui-components";
@@ -35,14 +35,14 @@ class MovieDetailsOverlay extends Lightning.Component<MovieDetailsOverlayTemplat
       w: SCREEN_SIZES.WIDTH - 150,
       h: SCREEN_SIZES.HEIGHT / 5,
       rect: true,
-      color: COLOURS.TRANSPARENT,
+      color: COLORS.TRANSPARENT,
       zIndex: 5,
       visible: false,
       Card: {
         w: SCREEN_SIZES.WIDTH - 150,
         h: SCREEN_SIZES.HEIGHT / 5 + 30,
         rect: true,
-        color: COLOURS.BLACK_OPACITY_05,
+        color: COLORS.BLACK_OPACITY_05,
         zIndex: 4,
         transitions: {
           visible: { duration: 0.5, timingFunction: "ease-in-out" },
@@ -87,17 +87,17 @@ class MovieDetailsOverlay extends Lightning.Component<MovieDetailsOverlayTemplat
   }
 
   get LeftList() {
-    return this.tag("Card.LeftInfo.List") as ListComponentType;
+    return this.getByRef("Card.LeftInfo.List") as ListComponentType;
   }
 
   get RightList() {
-    return this.tag("Card.RightInfo.List") as ListComponentType;
+    return this.getByRef("Card.RightInfo.List") as ListComponentType;
   }
 
   showDetails(movie: MovieDetailsExtended | null) {
     if (movie) {
-      const leftInfoList = this.tag("Card.LeftInfo.List") as Lightning.components.ListComponent;
-      const rightInfoList = this.tag("Card.RightInfo.List") as Lightning.components.ListComponent;
+      const leftInfoList = this.getByRef("Card.LeftInfo.List") as Lightning.components.ListComponent;
+      const rightInfoList = this.getByRef("Card.RightInfo.List") as Lightning.components.ListComponent;
 
       leftInfoList.items = [];
       rightInfoList.items = [];
@@ -181,8 +181,8 @@ class MovieDetailsOverlay extends Lightning.Component<MovieDetailsOverlayTemplat
       visible: false,
     });
 
-    const leftInfoList = this.tag("Card.LeftInfo.List") as Lightning.components.ListComponent;
-    const rightInfoList = this.tag("Card.RightInfo.List") as Lightning.components.ListComponent;
+    const leftInfoList = this.getByRef("Card.LeftInfo.List") as Lightning.components.ListComponent;
+    const rightInfoList = this.getByRef("Card.RightInfo.List") as Lightning.components.ListComponent;
 
     leftInfoList.items = [];
     rightInfoList.items = [];
@@ -190,21 +190,21 @@ class MovieDetailsOverlay extends Lightning.Component<MovieDetailsOverlayTemplat
 
   override _init() {
     this._setState("Hidden");
-    this.tag("Card.CloseButton")?.on("click", () => {
+    this.getByRef("Card.CloseButton")?.on("click", () => {
       this.hideDetails();
     });
   }
 
   override _focus() {
-    this.tag("Card.CloseButton")?.setSmooth("alpha", 1);
+    this.getByRef("Card.CloseButton")?.setSmooth("alpha", 1);
   }
 
   get Card() {
-    return this.tag("Card");
+    return this.getByRef("Card");
   }
 
   get CloseButton() {
-    return this.tag("Card.CloseButton");
+    return this.getByRef("Card.CloseButton");
   }
 }
 

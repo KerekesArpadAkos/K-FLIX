@@ -75,7 +75,7 @@ export class VerticalList extends Lightning.Component<VerticalListTemplateSpec> 
   }
 
   get List() {
-    return this.tag("List") as Lightning.components.ListComponent;
+    return this.getByRef("List") as Lightning.components.ListComponent;
   }
 
   set setCurrentIndex(index: number) {
