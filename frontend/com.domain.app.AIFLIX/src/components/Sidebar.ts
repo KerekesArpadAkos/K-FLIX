@@ -232,6 +232,10 @@ export class Sidebar
         override _handleLeft() {
           return;
         }
+
+        override _handleEnter() {
+          Router.navigate("movies");
+        }
       },
         class SeriesButton extends this {
           override _getFocused() {
@@ -248,6 +252,10 @@ export class Sidebar
   
           override _handleLeft() {
             return;
+          }
+
+          override _handleEnter() {
+            Router.navigate("series");
           }
       } 
     ];
