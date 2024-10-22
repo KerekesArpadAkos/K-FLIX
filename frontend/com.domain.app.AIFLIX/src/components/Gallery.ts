@@ -84,7 +84,7 @@ export class Gallery
         },
         Details: {
           zIndex: 2,
-          x: -70,
+          x: -45,
           y: 0,
           w: SCREEN_SIZES.WIDTH,
           h: SCREEN_SIZES.HEIGHT / 2.2,
@@ -98,7 +98,7 @@ export class Gallery
             margin: 100,
           },
           TitleLogo: {
-            x: 100,
+            x: 0,
             y: -20,
             texture: {},
             scale: 1,
@@ -113,7 +113,7 @@ export class Gallery
           Description: {
             w: 800,
             text: {
-              fontSize: 16,
+              fontSize: 20,
               lineHeight: 20,
               textColor: COLORS.WHITE,
             },

@@ -45,7 +45,7 @@ export class Carousel extends Lightning.Component<CarouselTemplateSpec> {
         clipping: true,
         items: [],
         flex: {
-          paddingLeft: 30,
+          paddingLeft: 55,
           flexDirection: "row",
         },
       },
@@ -120,6 +120,7 @@ export class Carousel extends Lightning.Component<CarouselTemplateSpec> {
 
     this.patch({
       Title: {
+        x:55,
         text: { text: title },
       },
     });
