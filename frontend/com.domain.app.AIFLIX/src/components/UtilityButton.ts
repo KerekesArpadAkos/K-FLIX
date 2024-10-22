@@ -83,7 +83,7 @@ export class UtilityButton
 
   override _focus() {
     this.patch({
-      color: COLORS.GREY_LIGHT,
+      color: COLORS.GREEN_FOCUS,
       Label: {
         text: {
           textColor: COLORS.RAISIN_BLACK,
