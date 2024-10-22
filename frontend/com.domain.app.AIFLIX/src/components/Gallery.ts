@@ -214,8 +214,6 @@ export class Gallery
         },
       });
     } else {
-      console.log("isHomePage", logoTitle);
-
       this.setScaledLogo(logoTitle, 700, 300, title);
     }
 
@@ -302,10 +300,6 @@ export class Gallery
           },
         },
       });
-
-      console.log(
-        `Logo loaded successfully. Width: ${logoWidth}, Height: ${logoHeight}, Scale: ${scale}`
-      );
     };
 
     img.onerror = (event) => {
@@ -329,7 +323,6 @@ export class Gallery
     };
 
     img.src = logoUrl;
-    console.log(`Attempting to load logo URL: ${logoUrl}`);
   }
 
   async displayAverageColor(url: string) {

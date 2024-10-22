@@ -223,7 +223,6 @@ export class PinOverlay extends Lightning.Component<PinOverlayTemplateSpec> {
             const enteredPin = this.pin.join("");
             const storedPin = localStorage.getItem("password");
 
-            console.log(storedPin, enteredPin);
 
             if (!storedPin) {
               localStorage.setItem("password", enteredPin);
@@ -310,7 +309,7 @@ export class PinOverlay extends Lightning.Component<PinOverlayTemplateSpec> {
               }
             }
           } else {
-            console.log("PIN must be 4 digits long");
+            console.warn("PIN must be 4 digits long");
           }
         }
 
@@ -494,7 +493,7 @@ export class PinOverlay extends Lightning.Component<PinOverlayTemplateSpec> {
         }
       }
     } else {
-      console.log("PIN must be 4 digits long");
+      console.warn("PIN must be 4 digits long");
     }
   }
 

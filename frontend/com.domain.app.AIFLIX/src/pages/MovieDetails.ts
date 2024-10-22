@@ -108,7 +108,6 @@ export class MovieDetails
     await this.loadData();
   }
   hidePinOverlay() {
-    console.log("hidePinOverlay");
 
     this.PinOverlay.patch({
       visible: false,
@@ -125,7 +124,6 @@ export class MovieDetails
   }
 
   showPinOverlay(event: CustomEvent) {
-    console.log("showPinOverlay");
 
     this.PinOverlay.patch({
       visible: true,
@@ -206,7 +204,6 @@ export class MovieDetails
 
   async getCast() {
     const cast = await movieService.getMovieCredits(this._id);
-    console.log("cast", cast);
     if (cast) {
       const items = cast.map((actor, i) => ({
         type: CastCard,

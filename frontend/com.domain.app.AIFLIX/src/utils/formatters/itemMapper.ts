@@ -21,7 +21,6 @@ export function convertItemsToCards(items: Item[] = []): CardItem[] {
   });
 }
 export function convertItemToGallery(items: Item): GalleryItem {
-  console.log("items", items);
   const { poster_path, profile_path, title, name, overview, id } = items;
 
   return {

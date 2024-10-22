@@ -111,7 +111,6 @@ export default class SearchPage
   }
 
   hidePinOverlay() {
-    console.log("hide from home");
 
     this.PinOverlay.patch({
       visible: false,
