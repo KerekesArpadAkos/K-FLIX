@@ -24,11 +24,9 @@ export class SidebarButton
 > {
   return {
     Image: {
-      x: this.bindProp("imageX"),
       w: 70,
       h: 70,
       src: this.bindProp("src"),
-      color: this.bindProp("iconColor"),
     },
     Text: {
       mountY: 0.5,

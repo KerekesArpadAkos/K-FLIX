@@ -149,6 +149,7 @@ export class Sidebar
 
         override _handleEnter() {
           Router.navigate("home");
+          Router.focusPage();
         }
       },
       class SettingsButton extends this {
@@ -170,6 +171,7 @@ export class Sidebar
 
         override _handleEnter() {
           Router.navigate("settings");
+          Router.focusPage();
         }
       },
       class SearchButton extends this {
@@ -191,6 +193,7 @@ export class Sidebar
 
         override _handleEnter() {
           Router.navigate("search");
+          Router.focusPage();
         }
       },
       class MoviesButton extends this {
@@ -212,6 +215,7 @@ export class Sidebar
 
         override _handleEnter() {
           Router.navigate("movies");
+          Router.focusPage();
         }
       },
         class SeriesButton extends this {
@@ -233,6 +237,7 @@ export class Sidebar
 
           override _handleEnter() {
             Router.navigate("series");
+            Router.focusPage();
           }
       } 
     ];
