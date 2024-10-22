@@ -193,55 +193,55 @@ export class PlayerUI
   }
 
   get PreviousButton() {
-    return this.getByRef("PlayBackButtons.PreviousButton");
+    return this.tag("PlayBackButtons.PreviousButton");
   }
 
   get BkwSkipButton() {
-    return this.getByRef("PlayBackButtons.BkwSkipButton");
+    return this.tag("PlayBackButtons.BkwSkipButton");
   }
 
   get PlayButton() {
-    return this.getByRef("PlayBackButtons.PlayButton");
+    return this.tag("PlayBackButtons.PlayButton");
   }
 
   get FwdSkipButton() {
-    return this.getByRef("PlayBackButtons.FwdSkipButton");
+    return this.tag("PlayBackButtons.FwdSkipButton");
   }
 
   get NextButton() {
-    return this.getByRef("PlayBackButtons.NextButton");
+    return this.tag("PlayBackButtons.NextButton");
   }
 
   get Background() {
-    return this.getByRef("Background");
+    return this.tag("Background");
   }
 
   get Title() {
-    return this.getByRef("TitleWrapper.Title");
+    return this.tag("TitleWrapper.Title");
   }
 
   get ProgressBar() {
-    return this.getByRef("ProgressBar");
+    return this.tag("ProgressBar");
   }
 
   get Troth() {
-    return this.getByRef("ProgressBar.Troth");
+    return this.tag("ProgressBar.Troth");
   }
 
   get Runtime() {
-    return this.getByRef("Runtime");
+    return this.tag("Runtime");
   }
 
   get CurrentTime() {
-    return this.getByRef("CurrentTime");
+    return this.tag("CurrentTime");
   }
 
   get Release() {
-    return this.getByRef("TitleWrapper.Release");
+    return this.tag("TitleWrapper.Release");
   }
 
   get TitleWrapper() {
-    return this.getByRef("TitleWrapper");
+    return this.tag("TitleWrapper");
   }
 
   private convertMinutesToHMS(minutes: number): string {
