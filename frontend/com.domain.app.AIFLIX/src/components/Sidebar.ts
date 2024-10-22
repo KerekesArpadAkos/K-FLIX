@@ -28,7 +28,6 @@ export class Sidebar
       HomeButton: {
         type: SidebarButton,
         fontSize: SCREEN_SIZES.DEFAULT_BTN_FONT_SIZE,
-        src: Utils.asset("images/home.png"),
         x: 35,
         y: 390,
         zIndex: 4,
@@ -36,7 +35,6 @@ export class Sidebar
       SettingsButton: {
         type: SidebarButton,
         fontSize: SCREEN_SIZES.DEFAULT_BTN_FONT_SIZE,
-        src: Utils.asset("images/settings.png"),
         x: 35,
         y: 699,
         textX: 196,
@@ -45,7 +43,6 @@ export class Sidebar
       SearchButton: {
         type: SidebarButton,
         fontSize: SCREEN_SIZES.DEFAULT_BTN_FONT_SIZE,
-        src: Utils.asset("images/search.png"),
         x: 35,
         y: 287,
         zIndex: 4,
@@ -53,7 +50,6 @@ export class Sidebar
       MoviesButton: {
         type: SidebarButton,
         fontSize: SCREEN_SIZES.DEFAULT_BTN_FONT_SIZE,
-        src: Utils.asset("images/movies.png"),
         x: 35,
         y: 493,
         zIndex: 4,
@@ -61,7 +57,6 @@ export class Sidebar
       SeriesButton: {
         type: SidebarButton,
         fontSize: SCREEN_SIZES.DEFAULT_BTN_FONT_SIZE,
-        src: Utils.asset("images/series.png"),
         x: 35,
         y: 596,
         zIndex: 4,
@@ -69,12 +64,12 @@ export class Sidebar
       ProfileButton: {
         type: SidebarButton,
         fontSize: SCREEN_SIZES.DEFAULT_BTN_FONT_SIZE,
-        src: Utils.asset("images/guest.png"),
         x: 35,
         y: 65,
         zIndex: 4,
         textX:111,
         textY:42,
+        src: Utils.asset("images/guest.png"),
       },
       Image:{
         src: Utils.asset("images/AI.png"),
@@ -251,40 +246,32 @@ export class Sidebar
       color: COLORS.BLACK,
     });
     this.HomeButton?.patch({
-      src: Utils.asset("images/home.png"),
       buttonText: "Home",
       zIndex: 4,
       alpha: 1,
     });
     this.SettingsButton?.patch({
-      src: Utils.asset("images/settings.png"),
       buttonText: "Settings",
       zIndex: 4,
       alpha: 1,
     });
     this.MoviesButton?.patch({
-      src: Utils.asset("images/movies.png"),
       buttonText: "Movies",
       zIndex: 4,
       alpha: 1,
     });
     this.SeriesButton?.patch({
-      src: Utils.asset("images/series.png"),
       buttonText: "Series",
       zIndex: 4,
       alpha: 1,
     });
     this.SearchButton?.patch({
-      src: Utils.asset("images/search.png"),
       buttonText: "Search",
       zIndex: 4,
       alpha: 1,
     });
     this.ProfileButton?.patch({
-      src: Utils.asset("images/guest.png"),
       buttonText: "Guest", // get the name if he/she is logged in
-      zIndex: 4,
-      alpha: 1,
     });
     this.Image?.patch({
       src: Utils.asset("images/logoName.png"),
@@ -340,10 +327,6 @@ export class Sidebar
       buttonText: "",
     });
     this.ProfileButton?.patch({
-      src: Utils.asset("images/guest.png"),
-      backgroundColor: COLORS.TRANSPARENT,
-      alpha: 1,
-      zIndex: 4,
       buttonText: "",
     });
     this.Image?.patch({
