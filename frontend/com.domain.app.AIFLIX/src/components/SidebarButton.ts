@@ -12,8 +12,6 @@ interface SidebarButtonProps {
   textY: number | ((parentHeight: number) => number);
   fontSize: number;
   backgroundColor: number;
-  iconColor: number;
-  textColor: number;
   src: string;
 }
 
@@ -22,80 +20,27 @@ export class SidebarButton
   implements Lightning.Component.ImplementTemplateSpec<ButtonTemplateSpec>
 {
   static override _template(): Lightning.Component.Template<
-    ButtonTemplateSpec & SidebarButtonProps
-  > {
-    return {
-      w: 500,
+  ButtonTemplateSpec & SidebarButtonProps
+> {
+  return {
+    Image: {
+      x: this.bindProp("imageX"),
+      w: 70,
       h: 70,
-      rect: true,
-      color: COLORS.WHITE,
-      zIndex: 2,
-      Image: {
-        x: this.bindProp("imageX"),
-        w: 70,
-        h: 70,
-        src: this.bindProp("src"),
-        color: this.bindProp("iconColor"),
+      src: this.bindProp("src"),
+      color: this.bindProp("iconColor"),
+    },
+    Text: {
+      mountY: 0.5,
+      text: {
+        text: this.bindProp("buttonText"),
+        fontSize: this.bindProp("fontSize"),
+        textColor: this.bindProp("textColor"),
+        fontStyle: "bold",
       },
-      Text: {
-        x: this.bindProp("textX"),
-        y: this.bindProp("textY"),
-        mount: 0.5,
-        text: {
-          text: this.bindProp("SidebarButtonProps"),
-          fontSize: this.bindProp("fontSize"),
-          textColor: this.bindProp("textColor"),
-          textAlign: "center",
-          fontStyle: "bold",
-        },
-      },
-    };
-  }
-
-  set iconColor(color: number) {
-    this.patch({
-      Image: {
-        color,
-      },
-    });
-  }
-
-  set buttonText(text: string) {
-    this.patch({
-      Text: {
-        text: {
-          text,
-        },
-      },
-    });
-  }
-
-  set fontSize(size: number) {
-    this.patch({
-      Text: {
-        text: {
-          fontSize: size,
-        },
-      },
-    });
-  }
-
-  set textColor(color: number) {
-    this.patch({
-      Text: {
-        text: {
-          textColor: color,
-        },
-      },
-    });
-  }
-
-  set backgroundColor(color: number) {
-    this.patch({
-      color,
-    });
-  }
-
+    },
+  };
+}
   set textX(value: number | ((parentWidth: number) => number)) {
     this.patch({
       Text: {
@@ -120,7 +65,7 @@ export class SidebarButton
       h: this.h,  
       Text: {
         y: 42,
-        x:190,
+        x:146,
         text: {
           textColor: COLORS.GREEN_FOCUS,
         }
