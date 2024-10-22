@@ -84,7 +84,7 @@ export class Gallery
         },
         Details: {
           zIndex: 2,
-          x: -70,
+          x: -45,
           y: 0,
           w: SCREEN_SIZES.WIDTH,
           h: SCREEN_SIZES.HEIGHT / 2.2,
@@ -98,7 +98,7 @@ export class Gallery
             margin: 100,
           },
           TitleLogo: {
-            x: 100,
+            x: 0,
             y: -20,
             texture: {},
             scale: 1,
@@ -113,7 +113,7 @@ export class Gallery
           Description: {
             w: 800,
             text: {
-              fontSize: 16,
+              fontSize: 20,
               lineHeight: 20,
               textColor: COLORS.WHITE,
             },
@@ -214,8 +214,6 @@ export class Gallery
         },
       });
     } else {
-      console.log("isHomePage", logoTitle);
-
       this.setScaledLogo(logoTitle, 700, 300, title);
     }
 
@@ -302,10 +300,6 @@ export class Gallery
           },
         },
       });
-
-      console.log(
-        `Logo loaded successfully. Width: ${logoWidth}, Height: ${logoHeight}, Scale: ${scale}`
-      );
     };
 
     img.onerror = (event) => {
@@ -329,7 +323,6 @@ export class Gallery
     };
 
     img.src = logoUrl;
-    console.log(`Attempting to load logo URL: ${logoUrl}`);
   }
 
   async displayAverageColor(url: string) {

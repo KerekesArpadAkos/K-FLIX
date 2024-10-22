@@ -87,17 +87,17 @@ class MovieDetailsOverlay extends Lightning.Component<MovieDetailsOverlayTemplat
   }
 
   get LeftList() {
-    return this.getByRef("Card.LeftInfo.List") as ListComponentType;
+    return this.tag("Card.LeftInfo.List") as ListComponentType;
   }
 
   get RightList() {
-    return this.getByRef("Card.RightInfo.List") as ListComponentType;
+    return this.tag("Card.RightInfo.List") as ListComponentType;
   }
 
   showDetails(movie: MovieDetailsExtended | null) {
     if (movie) {
-      const leftInfoList = this.getByRef("Card.LeftInfo.List") as Lightning.components.ListComponent;
-      const rightInfoList = this.getByRef("Card.RightInfo.List") as Lightning.components.ListComponent;
+      const leftInfoList = this.tag("Card.LeftInfo.List") as Lightning.components.ListComponent;
+      const rightInfoList = this.tag("Card.RightInfo.List") as Lightning.components.ListComponent;
 
       leftInfoList.items = [];
       rightInfoList.items = [];
@@ -181,8 +181,8 @@ class MovieDetailsOverlay extends Lightning.Component<MovieDetailsOverlayTemplat
       visible: false,
     });
 
-    const leftInfoList = this.getByRef("Card.LeftInfo.List") as Lightning.components.ListComponent;
-    const rightInfoList = this.getByRef("Card.RightInfo.List") as Lightning.components.ListComponent;
+    const leftInfoList = this.tag("Card.LeftInfo.List") as Lightning.components.ListComponent;
+    const rightInfoList = this.tag("Card.RightInfo.List") as Lightning.components.ListComponent;
 
     leftInfoList.items = [];
     rightInfoList.items = [];
@@ -190,21 +190,21 @@ class MovieDetailsOverlay extends Lightning.Component<MovieDetailsOverlayTemplat
 
   override _init() {
     this._setState("Hidden");
-    this.getByRef("Card.CloseButton")?.on("click", () => {
+    this.tag("Card.CloseButton")?.on("click", () => {
       this.hideDetails();
     });
   }
 
   override _focus() {
-    this.getByRef("Card.CloseButton")?.setSmooth("alpha", 1);
+    this.tag("Card.CloseButton")?.setSmooth("alpha", 1);
   }
 
   get Card() {
-    return this.getByRef("Card");
+    return this.tag("Card");
   }
 
   get CloseButton() {
-    return this.getByRef("Card.CloseButton");
+    return this.tag("Card.CloseButton");
   }
 }
 

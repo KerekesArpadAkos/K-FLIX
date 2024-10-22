@@ -70,16 +70,51 @@ export class Home
     return this.getByRef("VerticalList") as VerticalList;
   }
 
-  override async _init() {
-    eventBus.on("showPinOverlay", (event: CustomEvent) =>
-      this.showPinOverlay(event)
-    );
+  override _firstEnable() {
+    // Setup event listeners once
+    eventBus.on("showPinOverlay", this.showPinOverlay.bind(this));
     eventBus.on("pinCorrect", this.hidePinOverlay.bind(this));
     eventBus.on("accessDenied", this.handleAccessDenied.bind(this));
-    eventBus.on(
-      "setStateOnDetailButton",
-      this.setStateOnDetailButton.bind(this)
-    );
+    eventBus.on("setStateOnDetailButton", this.setStateOnDetailButton.bind(this));
+  }
+
+  // Runs every time the component is enabled (visible and attached)
+  override async _enable() {
+    setTimeout(() => {
+      this.checkRoute();
+  }, 50);
+    Router.focusPage(); // Make sure the page is focused properly
+  }
+
+
+  override _init() {
+    this.addGallery();
+  }
+
+  // Runs every time the component is activated (enabled and in focus)
+  override _active() {
+    this._setState("Gallery");
+  }
+
+  async checkRoute() {
+    const activeHash = Router.getActiveHash();
+
+    if (activeHash === "home") {
+      
+      const carousels = await this.createHomeCarousels();
+      this.VerticalList.loadItems(carousels);
+    } else if (activeHash === "series") {
+      const carousels = await this.createTvShowCarousels();
+      this.VerticalList.loadItems(carousels);
+    } else if (activeHash === "movies") {
+      const carousels = await this.createMovieCarousels();
+      this.VerticalList.loadItems(carousels);
+    } else {
+      console.error("Unknown route:", activeHash);
+    }
+  }
+
+  async addGallery(){
     const popularMovieDetails = await movieService.getMostPopularMovieDetails();
 
     const logoTitle = await movieService.getMovieImages(
@@ -97,7 +132,6 @@ export class Home
       popularMovieDetails?.id || 0
     );
 
-    console.log("logo title" + logoTitle?.file_path);
 
     this.Gallery.props = {
       logoTitle: getImageUrl(
@@ -115,19 +149,75 @@ export class Home
       adult: popularMovieDetails?.adult || false,
       isCentered: false,
     };
-
-    const carousels = await this.createCarousels();
-
-    this.VerticalList.loadItems(carousels);
-
-    // this._setState("Gallery");
   }
 
-  override _active() {
-    this._setState("Gallery");
-  }
 
-  async createCarousels() {
+  // async createCarousels() {
+  //   const carousels = [];
+
+  //   // const carouselPopularMovies = new Carousel(this.stage);
+  //   // carouselPopularMovies.props = {
+  //   //   title: "Most Popular Movies",
+  //   //   isMovie: true,
+  //   //   isTop: false,
+  //   //   getItems: async () => {
+  //   //     return await movieService.getMostPopularMoviesCards();
+  //   //   },
+  //   // };
+  //   // carousels.push(carouselPopularMovies);
+
+  //   // const carouselTopRatedMovies = new Carousel(this.stage);
+  //   // carouselTopRatedMovies.props = {
+  //   //   title: "Top Rated Movies",
+  //   //   isMovie: true,
+  //   //   isTop: true,
+  //   //   getItems: async () => {
+  //   //     return await movieService.getTopRatedMovieCards();
+  //   //   },
+  //   // };
+  //   // carousels.push(carouselTopRatedMovies);
+
+  //   // const carouselPopularTVShows = new Carousel(this.stage);
+  //   // carouselPopularTVShows.props = {
+  //   //   title: "Most Popular TV Shows",
+  //   //   isMovie: false,
+  //   //   isTop: false,
+  //   //   getItems: async () => {
+  //   //     return await tvShowService.getMostPopularTVShowsCards();
+  //   //   },
+  //   // };
+  //   // carousels.push(carouselPopularTVShows);
+
+  //   const carouselTopRatedTVShows = new Carousel(this.stage);
+  //   carouselTopRatedTVShows.props = {
+  //     title: "Top Rated TV Shows",
+  //     isMovie: false,
+  //     isTop: true,
+  //     getItems: async () => {
+  //       return await tvShowService.getTopRatedTVCards();
+  //     },
+  //   };
+  //   carousels.push(carouselTopRatedTVShows);
+
+  //   // const genres = await movieService.getMovieGenres();
+  //   // if (genres) {
+  //   //   for (const genre of genres) {
+  //   //     const carouselGenre = new Carousel(this.stage);
+  //   //     carouselGenre.props = {
+  //   //       title: genre.name,
+  //   //       isMovie: true,
+  //   //       isTop: false,
+  //   //       getItems: async () => {
+  //   //         return await movieService.getMoviesByGenre(genre.id);
+  //   //       },
+  //   //     };
+  //   //     carousels.push(carouselGenre);
+  //   //   }
+  //   // }
+
+  //   return carousels;
+  // }
+  async createHomeCarousels() {
     const carousels = [];
 
     const carouselPopularMovies = new Carousel(this.stage);
@@ -193,10 +283,79 @@ export class Home
     return carousels;
   }
 
-  override async _enable() {
-    await this.handleLoadGallery();
-    Router.focusPage();
+  async createMovieCarousels() {
+    const carousels = [];
+
+    const carouselPopularMovies = new Carousel(this.stage);
+    carouselPopularMovies.props = {
+      title: "Most Popular Movies",
+      isMovie: true,
+      isTop: false,
+      getItems: async () => {
+        return await movieService.getMostPopularMoviesCards();
+      },
+    };
+    carousels.push(carouselPopularMovies);
+
+    const carouselTopRatedMovies = new Carousel(this.stage);
+    carouselTopRatedMovies.props = {
+      title: "Top Rated Movies",
+      isMovie: true,
+      isTop: true,
+      getItems: async () => {
+        return await movieService.getTopRatedMovieCards();
+      },
+    };
+    carousels.push(carouselTopRatedMovies);
+
+    const genres = await movieService.getMovieGenres();
+    if (genres) {
+      for (const genre of genres) {
+        const carouselGenre = new Carousel(this.stage);
+        carouselGenre.props = {
+          title: genre.name,
+          isMovie: true,
+          isTop: false,
+          getItems: async () => {
+            return await movieService.getMoviesByGenre(genre.id);
+          },
+        };
+        carousels.push(carouselGenre);
+      }
+    }
+
+    return carousels;
   }
+
+  async createTvShowCarousels() {
+    const carousels = [];
+
+    const carouselPopularTVShows = new Carousel(this.stage);
+    carouselPopularTVShows.props = {
+      title: "Most Popular TV Shows",
+      isMovie: false,
+      isTop: false,
+      getItems: async () => {
+        return await tvShowService.getMostPopularTVShowsCards();
+      },
+    };
+    carousels.push(carouselPopularTVShows);
+
+    const carouselTopRatedTVShows = new Carousel(this.stage);
+    carouselTopRatedTVShows.props = {
+      title: "Top Rated TV Shows",
+      isMovie: false,
+      isTop: true,
+      getItems: async () => {
+        return await tvShowService.getTopRatedTVCards();
+      },
+    };
+    carousels.push(carouselTopRatedTVShows)
+
+    return carousels;
+  }
+
+
 
   async $onFocusGallery(data: Card) {
     const logoTitle = data.isMovieCard
@@ -246,7 +405,6 @@ export class Home
   }
 
   hidePinOverlay() {
-    console.log("hide from home");
 
     this.PinOverlay.patch({
       visible: false,
@@ -342,7 +500,6 @@ export class Home
             this.VerticalList.setCurrentIndex = currentIndex - 1;
             this.VerticalList.List.setIndex(currentIndex);
           } else {
-            console.log("No more items to go up");
             this._setState("Gallery");
           }
         }

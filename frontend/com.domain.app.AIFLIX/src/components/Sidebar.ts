@@ -3,15 +3,6 @@ import { COLORS } from "../../static/constants/Colors";
 import { SCREEN_SIZES } from "../../static/constants/ScreenSizes";
 import { SidebarButton } from "./SidebarButton";
 
-const homeIconFontSize = 70;
-const settingsIconFontSize = 50;
-
-const homeIconTextY = 25;
-const settingsIconTextY = 30;
-const defaultTextY = 34;
-
-const defaultAnimationDuration = 0.8;
-
 interface SidebarTemplateSpec extends Lightning.Component.TemplateSpec {
   SearchButton: typeof SidebarButton;
   HomeButton: typeof SidebarButton;
@@ -37,62 +28,48 @@ export class Sidebar
       HomeButton: {
         type: SidebarButton,
         fontSize: SCREEN_SIZES.DEFAULT_BTN_FONT_SIZE,
-        src: Utils.asset("images/home.png"),
         x: 35,
         y: 390,
-        textX: 144,
-        textY: 34,
         zIndex: 4,
       },
       SettingsButton: {
         type: SidebarButton,
         fontSize: SCREEN_SIZES.DEFAULT_BTN_FONT_SIZE,
-        src: Utils.asset("images/settings.png"),
         x: 35,
         y: 699,
-        textX: 144,
-        textY: 34,
+        textX: 196,
         zIndex: 4,
       },
       SearchButton: {
         type: SidebarButton,
         fontSize: SCREEN_SIZES.DEFAULT_BTN_FONT_SIZE,
-        src: Utils.asset("images/search.png"),
         x: 35,
         y: 287,
-        textX: 144,
-        textY: 34,
         zIndex: 4,
       },
       MoviesButton: {
         type: SidebarButton,
         fontSize: SCREEN_SIZES.DEFAULT_BTN_FONT_SIZE,
-        src: Utils.asset("images/movies.png"),
         x: 35,
         y: 493,
-        textX: 144,
-        textY: 34,
         zIndex: 4,
       },
       SeriesButton: {
         type: SidebarButton,
         fontSize: SCREEN_SIZES.DEFAULT_BTN_FONT_SIZE,
-        src: Utils.asset("images/series.png"),
         x: 35,
         y: 596,
-        textX: 144,
-        textY: 34,
         zIndex: 4,
       },
       ProfileButton: {
         type: SidebarButton,
         fontSize: SCREEN_SIZES.DEFAULT_BTN_FONT_SIZE,
-        src: Utils.asset("images/guest.png"),
         x: 35,
         y: 65,
-        textX: 144,
-        textY: 34,
         zIndex: 4,
+        textX:111,
+        textY:42,
+        src: Utils.asset("images/guest.png"),
       },
       Image:{
         src: Utils.asset("images/AI.png"),
@@ -171,7 +148,8 @@ export class Sidebar
         }
 
         override _handleEnter() {
-          Router.navigate("Home");
+          Router.navigate("home");
+          Router.focusPage();
         }
       },
       class SettingsButton extends this {
@@ -193,6 +171,7 @@ export class Sidebar
 
         override _handleEnter() {
           Router.navigate("settings");
+          Router.focusPage();
         }
       },
       class SearchButton extends this {
@@ -214,6 +193,7 @@ export class Sidebar
 
         override _handleEnter() {
           Router.navigate("search");
+          Router.focusPage();
         }
       },
       class MoviesButton extends this {
@@ -235,6 +215,7 @@ export class Sidebar
 
         override _handleEnter() {
           Router.navigate("movies");
+          Router.focusPage();
         }
       },
         class SeriesButton extends this {
@@ -256,74 +237,54 @@ export class Sidebar
 
           override _handleEnter() {
             Router.navigate("series");
+            Router.focusPage();
           }
       } 
     ];
   }
 
-  createButtonAnimationForFocus(button: Lightning.Component | undefined) {
-    return button?.animation({
-      duration: defaultAnimationDuration,
-      repeat: 0,
-      actions: [
-        {
-          p: "w",
-          v: {
-            0: SCREEN_SIZES.SIDEBAR_WIDTH_CLOSED,
-            1: SCREEN_SIZES.SIDEBAR_WIDTH_CLOSED,
-          },
-        },
-        {
-          p: "textX",
-          v: { 0: -90, 1: 250 },
-        },
-        {
-          p: "imageX",
-          v: { 0: -90, 1: 110 },
-        },
-        {
-          p: "alpha",
-          v: { 0: 0, 1: 1 },
-        },
-        {
-          p: "zIndex",
-          v: { 0: 0, 1: 4 },
-        },
-      ],
-    });
-  }
 
   override _focus() {
-    this.focusPatch();
-  }
-
-  createButtonAnimationForUnfocus(button: Lightning.Component | undefined) {
-    return button?.animation({
-      duration: defaultAnimationDuration,
-      repeat: 0,
-      actions: [
-        {
-          p: "w",
-          v: {
-            0: SCREEN_SIZES.SIDEBAR_WIDTH_OPEN,
-            1: SCREEN_SIZES.SIDEBAR_WIDTH_CLOSED,
-          },
-        },
-        {
-          p: "textX",
-          v: { 0: 250, 1: 40 },
-        },
-        {
-          p: "imageX",
-          v: { 0: 110, 1: 0 },
-        },
-        {
-          p: "alpha",
-          v: { 0: 0, 1: 1 },
-        },
-      ],
+    console.log("Focusing sidebar");
+    this.patch({
+      w: SCREEN_SIZES.SIDEBAR_WIDTH_OPEN,
+      color: COLORS.BLACK,
+    });
+    this.HomeButton?.patch({
+      buttonText: "Home",
+      zIndex: 4,
+      alpha: 1,
+    });
+    this.SettingsButton?.patch({
+      buttonText: "Settings",
+      zIndex: 4,
+      alpha: 1,
+    });
+    this.MoviesButton?.patch({
+      buttonText: "Movies",
+      zIndex: 4,
+      alpha: 1,
+    });
+    this.SeriesButton?.patch({
+      buttonText: "Series",
+      zIndex: 4,
+      alpha: 1,
+    });
+    this.SearchButton?.patch({
+      buttonText: "Search",
+      zIndex: 4,
+      alpha: 1,
+    });
+    this.ProfileButton?.patch({
+      buttonText: "Guest", // get the name if he/she is logged in
+    });
+    this.Image?.patch({
+      src: Utils.asset("images/logoName.png"),
+      h: 70,
+      w:215
     });
   }
+
 
   override _unfocus() {
     this.unfocusPatch();
@@ -337,153 +298,46 @@ export class Sidebar
     });
     this.HomeButton?.patch({
       src: Utils.asset("images/home.png"),
-      h: SCREEN_SIZES.SIDEBAR_ICON_H,
-      w: SCREEN_SIZES.SIDEBAR_ICON_W,
       buttonText: "",
-      fontSize: homeIconFontSize,
-      textY: homeIconTextY,
-      textColor: COLORS.GREY_LIGHT,
-      iconColor: COLORS.GREY_LIGHT,
       backgroundColor: COLORS.TRANSPARENT,
       alpha: 1,
       zIndex: 4,
     });
     this.SettingsButton?.patch({
       src: Utils.asset("images/settings.png"),
-      h: SCREEN_SIZES.SIDEBAR_ICON_H,
-      w: SCREEN_SIZES.SIDEBAR_ICON_W,
       buttonText: "",
-      fontSize: settingsIconFontSize,
-      textY: settingsIconTextY,
-      textColor: COLORS.GREY_LIGHT,
-      iconColor: COLORS.GREY_LIGHT,
       backgroundColor: COLORS.TRANSPARENT,
       alpha: 1,
       zIndex: 4,
     });
     this.SearchButton?.patch({
       src: Utils.asset("images/search.png"),
-      h: SCREEN_SIZES.SIDEBAR_ICON_H,
-      w: SCREEN_SIZES.SIDEBAR_ICON_W,
-      buttonText: "",
-      fontSize: SCREEN_SIZES.DEFAULT_BTN_FONT_SIZE,
-      textY: defaultTextY,
-      textColor: COLORS.GREY_LIGHT,
-      iconColor: COLORS.GREY_LIGHT,
       backgroundColor: COLORS.TRANSPARENT,
       alpha: 1,
       zIndex: 4,
+      buttonText: "",
     });
     this.MoviesButton?.patch({
       src: Utils.asset("images/movies.png"),
-      h: SCREEN_SIZES.SIDEBAR_ICON_H,
-      w: SCREEN_SIZES.SIDEBAR_ICON_W,
-      buttonText: "",
-      fontSize: SCREEN_SIZES.DEFAULT_BTN_FONT_SIZE,
-      textY: defaultTextY,
-      textColor: COLORS.GREY_LIGHT,
-      iconColor: COLORS.GREY_LIGHT,
       backgroundColor: COLORS.TRANSPARENT,
       alpha: 1,
       zIndex: 4,
+      buttonText: "",
     });
     this.SeriesButton?.patch({
       src: Utils.asset("images/series.png"),
-      h: SCREEN_SIZES.SIDEBAR_ICON_H,
-      w: SCREEN_SIZES.SIDEBAR_ICON_W,
-      buttonText: "",
-      fontSize: SCREEN_SIZES.DEFAULT_BTN_FONT_SIZE,
-      textY: defaultTextY,
-      textColor: COLORS.GREY_LIGHT,
-      iconColor: COLORS.GREY_LIGHT,
       backgroundColor: COLORS.TRANSPARENT,
       alpha: 1,
       zIndex: 4,
+      buttonText: "",
     });
     this.ProfileButton?.patch({
-      src: Utils.asset("images/guest.png"),
-      h: SCREEN_SIZES.SIDEBAR_ICON_H,
-      w: SCREEN_SIZES.SIDEBAR_ICON_W,
       buttonText: "",
-      fontSize: SCREEN_SIZES.DEFAULT_BTN_FONT_SIZE,
-      textY: defaultTextY,
-      textColor: COLORS.GREY_LIGHT,
-      iconColor: COLORS.GREY_LIGHT,
-      backgroundColor: COLORS.TRANSPARENT,
-      alpha: 1,
-      zIndex: 4,
     });
     this.Image?.patch({
       src: Utils.asset("images/AI.png"),
       h: 70,
       w:70
-    });
-  }
-
-  focusPatch() {
-    console.log("Focusing sidebar");
-    this.patch({
-      w: SCREEN_SIZES.SIDEBAR_WIDTH_OPEN,
-      color: COLORS.BLACK,
-    });
-    this.HomeButton?.patch({
-      src: Utils.asset("images/home.png"),
-      h: 100,
-      buttonText: "Home",
-      w: SCREEN_SIZES.SIDEBAR_WIDTH_OPEN,
-      fontSize: SCREEN_SIZES.DEFAULT_BTN_FONT_SIZE,
-      zIndex: 4,
-      alpha: 1,
-    });
-    this.SettingsButton?.patch({
-      src: Utils.asset("images/settings.png"),
-      h: 100,
-      buttonText: "Settings",
-      w: SCREEN_SIZES.SIDEBAR_WIDTH_OPEN,
-      fontSize: SCREEN_SIZES.DEFAULT_BTN_FONT_SIZE,
-      zIndex: 4,
-      alpha: 1,
-    });
-    this.MoviesButton?.patch({
-      src: Utils.asset("images/movies.png"),
-      h: 100,
-      buttonText: "Movies",
-      w: SCREEN_SIZES.SIDEBAR_WIDTH_OPEN,
-      fontSize: SCREEN_SIZES.DEFAULT_BTN_FONT_SIZE,
-      zIndex: 4,
-      alpha: 1,
-    });
-    this.SeriesButton?.patch({
-      src: Utils.asset("images/series.png"),
-      h: 100,
-      buttonText: "Series",
-      w: SCREEN_SIZES.SIDEBAR_WIDTH_OPEN,
-      fontSize: SCREEN_SIZES.DEFAULT_BTN_FONT_SIZE,
-      zIndex: 4,
-      alpha: 1,
-    });
-    this.SearchButton?.patch({
-      src: Utils.asset("images/search.png"),
-      h: 100,
-      buttonText: "Search",
-      w: SCREEN_SIZES.SIDEBAR_WIDTH_OPEN,
-      fontSize: SCREEN_SIZES.DEFAULT_BTN_FONT_SIZE,
-      zIndex: 4,
-      alpha: 1,
-    });
-    this.ProfileButton?.patch({
-      src: Utils.asset("images/guest.png"),
-      h: 100,
-      buttonText: "Guest", // get the name if he/she is logged in
-      w: SCREEN_SIZES.SIDEBAR_WIDTH_OPEN,
-      fontSize: SCREEN_SIZES.DEFAULT_BTN_FONT_SIZE,
-      zIndex: 4,
-      alpha: 1,
-    });
-    this.Image?.patch({
-      src: Utils.asset("images/logoName.png"),
-      h: 70,
-      w:215
     });
   }
 }

@@ -44,7 +44,7 @@ export class MovieDetails
         zIndex: 1,
       },
       CastList: {
-        x: 120,
+        x: 145,
         y: 540,
         w: 1920,
         h: 150,
@@ -108,7 +108,6 @@ export class MovieDetails
     await this.loadData();
   }
   hidePinOverlay() {
-    console.log("hidePinOverlay");
 
     this.PinOverlay.patch({
       visible: false,
@@ -125,7 +124,6 @@ export class MovieDetails
   }
 
   showPinOverlay(event: CustomEvent) {
-    console.log("showPinOverlay");
 
     this.PinOverlay.patch({
       visible: true,
@@ -206,7 +204,6 @@ export class MovieDetails
 
   async getCast() {
     const cast = await movieService.getMovieCredits(this._id);
-    console.log("cast", cast);
     if (cast) {
       const items = cast.map((actor, i) => ({
         type: CastCard,
@@ -228,9 +225,7 @@ export class MovieDetails
       type: CastCard,
       x: i * 30,
       props: {
-        src: `https://image.tmdb.org/t/p/w${
-          92 || 154 || 185 || 342 || 500 || 780 || "original"
-        }${actor.profile_path}`,
+        src: `https://image.tmdb.org/t/p/w185${actor.profile_path}`,
         //src: `https://image.tmdb.org/t/p/w185${actor.profile_path}`,
         id: actor.id,
         name: actor.name,

@@ -27,6 +27,16 @@ const routes: Router.Config["routes"] = [
     widgets: ["sidebar"],
   },
   {
+    path: "movies",
+    component: Home as Router.PageConstructor<Router.PageInstance>,
+    widgets: ["sidebar"],
+  },
+  {
+    path: "series",
+    component: Home as Router.PageConstructor<Router.PageInstance>,
+    widgets: ["sidebar"],
+  },
+  {
     path: "movie/:id",
     component:
       MovieDetails as unknown as Router.PageConstructor<Router.PageInstance>,
