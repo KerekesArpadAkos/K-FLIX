@@ -31,7 +31,7 @@ class MovieDetailsOverlay extends Lightning.Component<MovieDetailsOverlayTemplat
   static override _template() {
     return {
       y: SCREEN_SIZES.HEIGHT / 2 - SCREEN_SIZES.HEIGHT / 15,
-      x: 110,
+      x: 158,
       w: SCREEN_SIZES.WIDTH - 150,
       h: SCREEN_SIZES.HEIGHT / 5,
       rect: true,

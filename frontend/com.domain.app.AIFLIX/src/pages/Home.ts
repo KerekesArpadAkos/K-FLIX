@@ -97,7 +97,7 @@ export class Home
   override async _enable() {
     setTimeout(() => {
       this.checkRoute();
-  }, 50);
+  }, 0);
     Router.focusPage(); // Make sure the page is focused properly
   }
 
