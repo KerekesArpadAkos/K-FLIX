@@ -2,9 +2,7 @@ import { Lightning, Router, Utils } from "@lightningjs/sdk";
 import { Gallery } from "../components/Gallery";
 import { movieService } from "../utils/service/MovieService";
 import { SCREEN_SIZES } from "../../static/constants/ScreenSizes";
-import lng from "@lightningjs/sdk/src/Lightning";
 import VerticalList from "../components/VerticalList";
-import { Sidebar } from "../components/Sidebar";
 import { GalleryItem } from "../utils/interfaces/items/itemsInterface";
 import Card from "../components/Card";
 import { getImageUrl } from "../utils";
@@ -13,9 +11,11 @@ import { tvShowService } from "../utils/service/TVShowService";
 import { convertItemToGallery } from "../utils/formatters/itemMapper";
 import PinOverlay from "../components/PinOverlay";
 import eventBus from "../components/EventBus";
+import lng from "@lightningjs/sdk/src/Lightning";
 
 interface HomePageTemplateSpec extends Lightning.Component.TemplateSpec {
-  Sidebar: typeof Sidebar;
+  Image:object;
+  BackgroundImage: object;
   Gallery: typeof Gallery;
   VerticalList: typeof VerticalList;
   PinOverlay: typeof PinOverlay;
@@ -25,20 +25,28 @@ export class Home
   extends Lightning.Component<HomePageTemplateSpec>
   implements Lightning.Component.ImplementTemplateSpec<HomePageTemplateSpec>
 {
-  static override _template() {
+  static override _template(): Lightning.Component.Template<HomePageTemplateSpec> {
     return {
       w: SCREEN_SIZES.WIDTH,
       h: SCREEN_SIZES.HEIGHT,
-      Svg_Background: {
+      Image: {
         w: SCREEN_SIZES.WIDTH,
         h: SCREEN_SIZES.HEIGHT,
-        zIndex: 0,
-        texture: lng.Tools.getSvgTexture(
-          Utils.asset("images/background.svg"),
-          SCREEN_SIZES.WIDTH,
-          SCREEN_SIZES.HEIGHT
-        ),
-      },
+        visible: false, // Initially hidden
+        zIndex: 6,
+        texture: {
+            type: lng.textures.ImageTexture,
+            src: Utils.asset("images/defaultSkeleton.png"),
+        },
+    },
+    BackgroundImage: {
+      zIndex: 5,
+      texture: lng.Tools.getSvgTexture(
+        Utils.asset("images/background.svg"),
+        SCREEN_SIZES.WIDTH,
+        SCREEN_SIZES.HEIGHT
+      ),
+    },
       Gallery: {
         type: Gallery,
       },
@@ -58,6 +66,13 @@ export class Home
     };
   }
 
+  get Image() {
+    return this.getByRef("Image");
+  }
+
+  get BackgroundImage() {
+    return this.getByRef("BackgroundImage");
+  }
   get PinOverlay() {
     return this.getByRef("PinOverlay") as PinOverlay;
   }
@@ -99,8 +114,9 @@ export class Home
   async checkRoute() {
     const activeHash = Router.getActiveHash();
 
+    this.addDefaultSkeletonAnimation();
+
     if (activeHash === "home") {
-      
       const carousels = await this.createHomeCarousels();
       this.VerticalList.loadItems(carousels);
     } else if (activeHash === "series") {
@@ -113,6 +129,41 @@ export class Home
       console.error("Unknown route:", activeHash);
     }
   }
+
+  addDefaultSkeletonAnimation() {
+    const skeleton = this.Image;
+    const backgroundImage = this.BackgroundImage;
+
+    const animationDuration = 1; 
+    const fadeAlphaStart = 0.5;
+    const fadeAlphaEnd = 1;
+    const displayDuration = 1000; 
+
+    if (!skeleton || !backgroundImage) {
+        console.error("loadingImage or BackgroundImage is not found.");
+        return;
+    }
+
+    backgroundImage.patch({ visible: true, alpha: 1 });
+    skeleton.patch({ visible: true, alpha: fadeAlphaStart });
+
+    const pulseAnimation = skeleton.animation({
+        duration: animationDuration,
+        repeat: -1, 
+        actions: [
+            { p: 'alpha', v: { 0: fadeAlphaStart, 0.5: fadeAlphaEnd, 1: fadeAlphaStart } },
+        ],
+    });
+
+    pulseAnimation.start();
+
+    setTimeout(() => {
+        pulseAnimation.stop();
+        skeleton.patch({ visible: false });
+        backgroundImage.patch({ visible: false });
+    }, displayDuration);
+}
+
 
   async addGallery(){
     const popularMovieDetails = await movieService.getMostPopularMovieDetails();
@@ -151,72 +202,6 @@ export class Home
     };
   }
 
-
-  // async createCarousels() {
-  //   const carousels = [];
-
-  //   // const carouselPopularMovies = new Carousel(this.stage);
-  //   // carouselPopularMovies.props = {
-  //   //   title: "Most Popular Movies",
-  //   //   isMovie: true,
-  //   //   isTop: false,
-  //   //   getItems: async () => {
-  //   //     return await movieService.getMostPopularMoviesCards();
-  //   //   },
-  //   // };
-  //   // carousels.push(carouselPopularMovies);
-
-  //   // const carouselTopRatedMovies = new Carousel(this.stage);
-  //   // carouselTopRatedMovies.props = {
-  //   //   title: "Top Rated Movies",
-  //   //   isMovie: true,
-  //   //   isTop: true,
-  //   //   getItems: async () => {
-  //   //     return await movieService.getTopRatedMovieCards();
-  //   //   },
-  //   // };
-  //   // carousels.push(carouselTopRatedMovies);
-
-  //   // const carouselPopularTVShows = new Carousel(this.stage);
-  //   // carouselPopularTVShows.props = {
-  //   //   title: "Most Popular TV Shows",
-  //   //   isMovie: false,
-  //   //   isTop: false,
-  //   //   getItems: async () => {
-  //   //     return await tvShowService.getMostPopularTVShowsCards();
-  //   //   },
-  //   // };
-  //   // carousels.push(carouselPopularTVShows);
-
-  //   const carouselTopRatedTVShows = new Carousel(this.stage);
-  //   carouselTopRatedTVShows.props = {
-  //     title: "Top Rated TV Shows",
-  //     isMovie: false,
-  //     isTop: true,
-  //     getItems: async () => {
-  //       return await tvShowService.getTopRatedTVCards();
-  //     },
-  //   };
-  //   carousels.push(carouselTopRatedTVShows);
-
-  //   // const genres = await movieService.getMovieGenres();
-  //   // if (genres) {
-  //   //   for (const genre of genres) {
-  //   //     const carouselGenre = new Carousel(this.stage);
-  //   //     carouselGenre.props = {
-  //   //       title: genre.name,
-  //   //       isMovie: true,
-  //   //       isTop: false,
-  //   //       getItems: async () => {
-  //   //         return await movieService.getMoviesByGenre(genre.id);
-  //   //       },
-  //   //     };
-  //   //     carousels.push(carouselGenre);
-  //   //   }
-  //   // }
-
-  //   return carousels;
-  // }
   async createHomeCarousels() {
     const carousels = [];
 
