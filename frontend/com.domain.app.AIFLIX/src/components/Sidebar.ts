@@ -93,6 +93,7 @@ export class Sidebar extends Lightning.Component {
           type: Lightning.Component,
           text: {
             text: "Guest",
+            fontStyle: "bold",
             fontSize: SCREEN_SIZES.DEFAULT_BTN_FONT_SIZE,
             textColor: COLORS.WHITE,
           },
@@ -156,6 +157,7 @@ export class Sidebar extends Lightning.Component {
 
   override _handleRight() {
     Router.focusPage();
+    return true;
   }
 
   override _enable() {

@@ -31,7 +31,11 @@ export class PlaceHolder extends Lightning.Component<PlaceHolderTemplateSpec> {
       y: y,
       w: 110,
       h: 30,
-      texture: Lightning.Tools.getSvgTexture(Utils.asset("images/logoThunder.svg"), 100, 30),
+      texture: Lightning.Tools.getSvgTexture(
+        Utils.asset("images/logoThunder.svg"),
+        100,
+        30
+      ),
       zIndex: 2,
       visible: true,
     });
