@@ -320,7 +320,9 @@ export class PlayerUI
       const newTrothW = progressBarWidth * progress + 20;
       this.Troth!.w = newTrothW;
       this.CurrentTime?.patch({
-        text: this.convertSecondsToHMS(this.playerInstance?.getCurrentTime().toFixed(0)),
+        text: this.convertSecondsToHMS(
+          this.playerInstance?.getCurrentTime().toFixed(0)
+        ),
       });
     }
   }
@@ -399,11 +401,21 @@ export class PlayerUI
   }
 
   setupShowAnimations() {
-    this.playBtnShowAnimation = this.createButtonAnimationForShow(this.PlayButton);
-    this.prevBtnShowAnimation = this.createButtonAnimationForShow(this.PreviousButton);
-    this.nextBtnShowAnimation = this.createButtonAnimationForShow(this.NextButton);
-    this.bkwSkipBtnShowAnimation = this.createButtonAnimationForShow(this.BkwSkipButton);
-    this.fwdSkipBtnShowAnimation = this.createButtonAnimationForShow(this.FwdSkipButton);
+    this.playBtnShowAnimation = this.createButtonAnimationForShow(
+      this.PlayButton
+    );
+    this.prevBtnShowAnimation = this.createButtonAnimationForShow(
+      this.PreviousButton
+    );
+    this.nextBtnShowAnimation = this.createButtonAnimationForShow(
+      this.NextButton
+    );
+    this.bkwSkipBtnShowAnimation = this.createButtonAnimationForShow(
+      this.BkwSkipButton
+    );
+    this.fwdSkipBtnShowAnimation = this.createButtonAnimationForShow(
+      this.FwdSkipButton
+    );
 
     this.progressBarShowAnimation = this.ProgressBar?.animation({
       duration: this.defaultAnimationDuration,
@@ -510,11 +522,21 @@ export class PlayerUI
   }
 
   setupHideAnimations() {
-    this.playBtnHideAnimation = this.createButtonAnimationForHide(this.PlayButton);
-    this.prevBtnHideAnimation = this.createButtonAnimationForHide(this.PreviousButton);
-    this.nextBtnHideAnimation = this.createButtonAnimationForHide(this.NextButton);
-    this.bkwSkipBtnHideAnimation = this.createButtonAnimationForHide(this.BkwSkipButton);
-    this.fwdSkipBtnHideAnimation = this.createButtonAnimationForHide(this.FwdSkipButton);
+    this.playBtnHideAnimation = this.createButtonAnimationForHide(
+      this.PlayButton
+    );
+    this.prevBtnHideAnimation = this.createButtonAnimationForHide(
+      this.PreviousButton
+    );
+    this.nextBtnHideAnimation = this.createButtonAnimationForHide(
+      this.NextButton
+    );
+    this.bkwSkipBtnHideAnimation = this.createButtonAnimationForHide(
+      this.BkwSkipButton
+    );
+    this.fwdSkipBtnHideAnimation = this.createButtonAnimationForHide(
+      this.FwdSkipButton
+    );
 
     this.backgroundHideAnimation = this.Background?.animation({
       duration: this.defaultAnimationDuration,

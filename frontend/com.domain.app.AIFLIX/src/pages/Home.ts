@@ -86,6 +86,7 @@ export class Home
   }
 
   override _firstEnable() {
+    console.log("Home firstEnable");
     // Setup event listeners once
     eventBus.on("showPinOverlay", this.showPinOverlay.bind(this));
     eventBus.on("pinCorrect", this.hidePinOverlay.bind(this));
@@ -94,22 +95,21 @@ export class Home
       "setStateOnDetailButton",
       this.setStateOnDetailButton.bind(this)
     );
-  }
 
-  // Runs every time the component is enabled (visible and attached)
-  override async _enable() {
-    setTimeout(() => {
-      this.checkRoute();
-    }, 0);
     Router.focusPage(); // Make sure the page is focused properly
   }
 
   override _init() {
+    console.log("Home init");
     this.addGallery();
   }
 
   // Runs every time the component is activated (enabled and in focus)
   override _active() {
+    console.log("Home active");
+    setTimeout(() => {
+      this.checkRoute();
+    }, 100);
     this._setState("Gallery");
   }
 
@@ -468,6 +468,7 @@ export class Home
   }
 
   override _handleBack() {
+    console.log("Home _handleBack");
     return;
   }
 

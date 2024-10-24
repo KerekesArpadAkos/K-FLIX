@@ -3,23 +3,23 @@
     "outDir": "build-ts",
     "target": "ES2019",
     "lib": ["ES2019", "DOM", "ESNext"],
-    "types":["@types/node", "vite/client","jest"], // Add vite/client to types
+    "types": ["@types/node", "vite/client", "jest"], // Add vite/client to types
     "moduleResolution": "node",
     "strict": true,
     "noUncheckedIndexedAccess": true,
     "noImplicitOverride": true,
-    "esModuleInterop": true,                 // Enable interoperability between CommonJS and ES modules
-    "skipLibCheck": true,                     // Skip type checking of declaration files (speeds up compilation)
+    "esModuleInterop": true, // Enable interoperability between CommonJS and ES modules
+    "skipLibCheck": true, // Skip type checking of declaration files (speeds up compilation)
     "forceConsistentCasingInFileNames": true, // Ensure consistent casing in imports
-    "allowSyntheticDefaultImports": true,     // Allow default imports from modules with no default export
-    "module": "ESNext",                       // Use ESNext module syntax (e.g., for dynamic imports)
-    "resolveJsonModule": true,                // Allow importing .json files
-    "isolatedModules": true,                  // Ensure each file is treated as an isolated module
-    "baseUrl": "./",                          // Set base URL for resolving paths
+    "allowSyntheticDefaultImports": true, // Allow default imports from modules with no default export
+    "module": "ESNext", // Use ESNext module syntax (e.g., for dynamic imports)
+    "resolveJsonModule": true, // Allow importing .json files
+    "isolatedModules": true, // Ensure each file is treated as an isolated module
+    "baseUrl": "./", // Set base URL for resolving paths
     "paths": {
       "@reduxjs/toolkit": ["node_modules/@reduxjs/toolkit"] // Ensure proper path resolution for redux types
     }
   },
-  "include": ["src/**/*.ts", "src/**/*.tsx","./vite-env.d.ts"],  // Include .tsx files if you are using React with TypeScript
-  "exclude": ["node_modules", "build-ts"]      // Exclude unnecessary folders from compilation
+  "include": ["src/**/*.ts", "src/**/*.tsx", "./vite-env.d.ts"], // Include .tsx files if you are using React with TypeScript
+  "exclude": ["node_modules", "build-ts"] // Exclude unnecessary folders from compilation
 }

@@ -82,7 +82,7 @@ export class PlayerPage
       this.PlayerUI?.setMovieDetails(
         movieDetails.title,
         movieDetails.release_date,
-        movieDetails.runtime,
+        movieDetails.runtime
       );
     }
   }
