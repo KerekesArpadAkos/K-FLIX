@@ -151,8 +151,8 @@ export class Carousel extends Lightning.Component<CarouselTemplateSpec> {
         }
 
         override _handleLeftRelease() {
-          this.currentIndex--;
           if (this.currentIndex > 0) {
+            this.currentIndex--;
             this.List?.setIndex(this.currentIndex);
           } else {
             Router.focusWidget("Sidebar");

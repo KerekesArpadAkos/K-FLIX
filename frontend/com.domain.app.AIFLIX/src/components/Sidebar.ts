@@ -160,6 +160,10 @@ export class Sidebar extends Lightning.Component {
     return true;
   }
 
+  override _handleLeft() {
+    return;
+  }
+
   override _enable() {
     this._applyUnfocusedPatch();
   }
