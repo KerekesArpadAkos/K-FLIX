@@ -1,23 +1,81 @@
 import { Lightning, Router, Utils } from "@lightningjs/sdk";
 import { COLORS } from "../../static/constants/Colors";
 import { SCREEN_SIZES } from "../../static/constants/ScreenSizes";
-import { SidebarButton } from "./SidebarButton";
 
-interface SidebarTemplateSpec extends Lightning.Component.TemplateSpec {
-  SearchButton: typeof SidebarButton;
-  HomeButton: typeof SidebarButton;
-  MoviesButton: typeof SidebarButton;
-  SeriesButton: typeof SidebarButton;
-  SettingsButton: typeof SidebarButton;
-  ProfileButton: typeof SidebarButton;
-  Image: object;
+interface SidebarItem {
+  name: string;
+  icon: string;
+  route: string;
 }
 
-export class Sidebar
-  extends Lightning.Component<SidebarTemplateSpec>
-  implements Lightning.Component.ImplementTemplateSpec<SidebarTemplateSpec>
-{
-  static override _template(): Lightning.Component.Template<SidebarTemplateSpec> {
+class SidebarItemComponent extends Lightning.Component {
+  private _data?: SidebarItem;
+
+  static override _template() {
+    return {
+      w: SCREEN_SIZES.SIDEBAR_WIDTH_CLOSED,
+      h: 100,
+      rect: true,
+      color: COLORS.TRANSPARENT,
+      Icon: {
+        type: Lightning.Component,
+        src: "", // Set dynamically
+        w: 70,
+        h: 70,
+        x: 35,
+        y: 270,
+        color: COLORS.WHITE,
+      },
+      Label: {
+        type: Lightning.Component,
+        text: {
+          text: "",
+          fontSize: SCREEN_SIZES.DEFAULT_BTN_FONT_SIZE,
+          textColor: COLORS.WHITE,
+        },
+        x: 144,
+        y: 287,
+      },
+    };
+  }
+
+  set itemData(data: SidebarItem) {
+    this._data = data;
+    this.tag("Icon").src = Utils.asset(data.icon);
+    this.tag("Label").text = data.name;
+  }
+
+  override _focus() {
+    this.tag("Label").text.textColor = COLORS.GREEN_FOCUS;
+    this.tag("Icon").color = COLORS.GREEN_FOCUS;
+  }
+
+  override _unfocus() {
+    this.tag("Label").text.textColor = COLORS.WHITE;
+    this.tag("Icon").color = COLORS.WHITE;
+  }
+
+  showLabel(show: boolean) {
+    this.tag("Label").visible = show;
+  }
+}
+
+export class Sidebar extends Lightning.Component {
+  private _focusIndex: number = 0;
+  private sidebarConfig: SidebarItem[] = Sidebar.getSidebarConfig();
+
+  static getSidebarConfig(): SidebarItem[] {
+    return [
+      { name: "Search", icon: "images/search.png", route: "search" },
+      { name: "Home", icon: "images/home.png", route: "home" },
+      { name: "Movies", icon: "images/movies.png", route: "movies" },
+      { name: "Series", icon: "images/series.png", route: "series" },
+      { name: "Settings", icon: "images/settings.png", route: "settings" },
+    ];
+  }
+
+  static override _template() {
+    const items = Sidebar.getSidebarConfig();
     return {
       w: SCREEN_SIZES.SIDEBAR_WIDTH_CLOSED,
       h: SCREEN_SIZES.HEIGHT,
@@ -25,99 +83,75 @@ export class Sidebar
       color: COLORS.BLACK,
       shader: { type: Lightning.shaders.FadeOut, right: 0 },
       zIndex: 2,
-      HomeButton: {
-        type: SidebarButton,
-        fontSize: SCREEN_SIZES.DEFAULT_BTN_FONT_SIZE,
-        x: 35,
-        y: 390,
-        zIndex: 4,
-      },
-      SettingsButton: {
-        type: SidebarButton,
-        fontSize: SCREEN_SIZES.DEFAULT_BTN_FONT_SIZE,
-        x: 35,
-        y: 699,
-        textX: 196,
-        zIndex: 4,
-      },
-      SearchButton: {
-        type: SidebarButton,
-        fontSize: SCREEN_SIZES.DEFAULT_BTN_FONT_SIZE,
-        x: 35,
-        y: 287,
-        zIndex: 4,
-      },
-      MoviesButton: {
-        type: SidebarButton,
-        fontSize: SCREEN_SIZES.DEFAULT_BTN_FONT_SIZE,
-        x: 35,
-        y: 493,
-        zIndex: 4,
-      },
-      SeriesButton: {
-        type: SidebarButton,
-        fontSize: SCREEN_SIZES.DEFAULT_BTN_FONT_SIZE,
-        x: 35,
-        y: 596,
-        zIndex: 4,
-      },
-      ProfileButton: {
-        type: SidebarButton,
-        fontSize: SCREEN_SIZES.DEFAULT_BTN_FONT_SIZE,
+      Profile: {
+        src: Utils.asset("images/guest.png"),
         x: 35,
         y: 65,
-        zIndex: 4,
-        textX:111,
-        textY:42,
-        src: Utils.asset("images/guest.png"),
+        w: 70,
+        h: 70,
+        GuestLabel: {
+          type: Lightning.Component,
+          text: {
+            text: "Guest",
+            fontSize: SCREEN_SIZES.DEFAULT_BTN_FONT_SIZE,
+            textColor: COLORS.WHITE,
+          },
+          x: 110, // Adjusted relative position
+          y: 20,
+          visible: false,
+        },
       },
-      Image:{
+      SidebarItems: {
+        y: 65,
+        children: items.map((item, index) => ({
+          type: SidebarItemComponent,
+          name: item.name,
+          y: index * 103,
+          x: 0,
+          itemData: item,
+        })),
+      },
+      Image: {
         src: Utils.asset("images/AI.png"),
         x: 35,
         y: 967,
         w: 70,
         h: 70,
-      }
+      },
     };
   }
 
-  get HomeButton() {
-    return this.getByRef("HomeButton");
-  }
-
-  get SettingsButton() {
-    return this.getByRef("SettingsButton");
-  }
-
-  get SearchButton() {
-    return this.getByRef("SearchButton");
-  }
-
-  get MoviesButton() {  
-    return this.getByRef("MoviesButton");
-  }
-
-  get SeriesButton() {  
-    return this.getByRef("SeriesButton");
-  }
-
-  get ProfileButton() {  
-    return this.getByRef("ProfileButton");
-  }
-
-  get Image() {  
-    return this.getByRef("Image");
-  }
-
   override _getFocused() {
-    this._setState("HomeButton");
-    this._setState("SettingsButton");
-    this._setState("HomeButton");
-    this._setState("MoviesButton");
-    this._setState("SeriesButton");
-    this._setState("SearchButton");
+    return this.tag("SidebarItems").children[this._focusIndex];
+  }
 
-    return this.SearchButton;
+  override _handleDown() {
+    this._focusIndex = (this._focusIndex + 1) % this.sidebarConfig.length;
+    this._updateFocus();
+  }
+
+  override _handleUp() {
+    this._focusIndex =
+      (this._focusIndex - 1 + this.sidebarConfig.length) %
+      this.sidebarConfig.length;
+    this._updateFocus();
+  }
+
+  override _handleEnter() {
+    const selectedItem = this.sidebarConfig[this._focusIndex];
+    if (selectedItem) Router.navigate(selectedItem.route);
+    Router.focusPage();
+  }
+
+  private _updateFocus() {
+    this.tag("SidebarItems").children.forEach((child: SidebarItemComponent) => {
+      child._unfocus();
+    });
+
+    const focusedItem = this.tag("SidebarItems").children[
+      this._focusIndex
+    ] as SidebarItemComponent;
+    focusedItem._focus();
   }
 
   override _handleRight() {
@@ -125,124 +159,8 @@ export class Sidebar
   }
 
   override _enable() {
-    this.unfocusPatch();
+    this._applyUnfocusedPatch();
   }
-
-  static override _states() {
-    return [
-      class HomeButton extends this {
-        override _getFocused() {
-          return this.HomeButton;
-        }
-
-        override _handleDown() {
-          this._setState("MoviesButton");
-        }
-
-        override _handleUp() {
-          this._setState("SearchButton");
-        }
-
-        override _handleLeft() {
-          return;
-        }
-
-        override _handleEnter() {
-          Router.navigate("home");
-          Router.focusPage();
-        }
-      },
-      class SettingsButton extends this {
-        override _getFocused() {
-          return this.SettingsButton;
-        }
-
-        override _handleUp() {
-          this._setState("SeriesButton");
-        }
-
-        override _handleDown() {
-          return;
-        }
-
-        override _handleLeft() {
-          return;
-        }
-
-        override _handleEnter() {
-          Router.navigate("settings");
-          Router.focusPage();
-        }
-      },
-      class SearchButton extends this {
-        override _getFocused() {
-          return this.SearchButton;
-        }
-
-        override _handleUp() {
-          return;
-        }
-
-        override _handleLeft() {
-          return;
-        }
-
-        override _handleDown() {
-          this._setState("HomeButton");
-        }
-
-        override _handleEnter() {
-          Router.navigate("search");
-          Router.focusPage();
-        }
-      },
-      class MoviesButton extends this {
-        override _getFocused() {
-          return this.MoviesButton;
-        }
-
-        override _handleUp() {
-          this._setState("HomeButton");
-        }
-
-        override _handleDown() {
-          this._setState("SeriesButton");
-        }
-
-        override _handleLeft() {
-          return;
-        }
-
-        override _handleEnter() {
-          Router.navigate("movies");
-          Router.focusPage();
-        }
-      },
-        class SeriesButton extends this {
-          override _getFocused() {
-            return this.SeriesButton;
-          }
-  
-          override _handleUp() {
-            this._setState("MoviesButton");
-          }
-  
-          override _handleDown() {
-            this._setState("SettingsButton");
-          }
-  
-          override _handleLeft() {
-            return;
-          }
-
-          override _handleEnter() {
-            Router.navigate("series");
-            Router.focusPage();
-          }
-      } 
-    ];
-  }
-
 
   override _focus() {
     console.log("Focusing sidebar");
@@ -250,94 +168,47 @@ export class Sidebar
       w: SCREEN_SIZES.SIDEBAR_WIDTH_OPEN,
       color: COLORS.BLACK,
     });
-    this.HomeButton?.patch({
-      buttonText: "Home",
-      zIndex: 4,
-      alpha: 1,
+
+    this.tag("SidebarItems").children.forEach((child: SidebarItemComponent) => {
+      child.showLabel(true);
     });
-    this.SettingsButton?.patch({
-      buttonText: "Settings",
-      zIndex: 4,
-      alpha: 1,
+
+    this.tag("Profile").tag("GuestLabel").patch({
+      visible: true,
     });
-    this.MoviesButton?.patch({
-      buttonText: "Movies",
-      zIndex: 4,
-      alpha: 1,
-    });
-    this.SeriesButton?.patch({
-      buttonText: "Series",
-      zIndex: 4,
-      alpha: 1,
-    });
-    this.SearchButton?.patch({
-      buttonText: "Search",
-      zIndex: 4,
-      alpha: 1,
-    });
-    this.ProfileButton?.patch({
-      buttonText: "Guest", // get the name if he/she is logged in
-    });
-    this.Image?.patch({
+
+    this.tag("Image").patch({
       src: Utils.asset("images/logoName.png"),
       h: 70,
-      w:215
+      w: 215,
+    });
+
+    this._focusIndex = 0;
+    this._updateFocus();
+  }
+
+  override _unfocus() {
+    this._applyUnfocusedPatch();
+    this.tag("Profile").tag("GuestLabel").patch({
+      visible: false,
     });
   }
 
-
-  override _unfocus() {
-    this.unfocusPatch();
-  }
-
-  unfocusPatch() {
+  private _applyUnfocusedPatch() {
     console.log("Unfocusing sidebar");
     this.patch({
       w: SCREEN_SIZES.SIDEBAR_WIDTH_CLOSED,
       color: COLORS.BLACK,
     });
-    this.HomeButton?.patch({
-      src: Utils.asset("images/home.png"),
-      buttonText: "",
-      backgroundColor: COLORS.TRANSPARENT,
-      alpha: 1,
-      zIndex: 4,
+
+    this.tag("SidebarItems").children.forEach((child: SidebarItemComponent) => {
+      child.showLabel(false);
     });
-    this.SettingsButton?.patch({
-      src: Utils.asset("images/settings.png"),
-      buttonText: "",
-      backgroundColor: COLORS.TRANSPARENT,
-      alpha: 1,
-      zIndex: 4,
-    });
-    this.SearchButton?.patch({
-      src: Utils.asset("images/search.png"),
-      backgroundColor: COLORS.TRANSPARENT,
-      alpha: 1,
-      zIndex: 4,
-      buttonText: "",
-    });
-    this.MoviesButton?.patch({
-      src: Utils.asset("images/movies.png"),
-      backgroundColor: COLORS.TRANSPARENT,
-      alpha: 1,
-      zIndex: 4,
-      buttonText: "",
-    });
-    this.SeriesButton?.patch({
-      src: Utils.asset("images/series.png"),
-      backgroundColor: COLORS.TRANSPARENT,
-      alpha: 1,
-      zIndex: 4,
-      buttonText: "",
-    });
-    this.ProfileButton?.patch({
-      buttonText: "",
-    });
-    this.Image?.patch({
+
+    this.tag("Image").patch({
       src: Utils.asset("images/AI.png"),
       h: 70,
-      w:70
+      w: 70,
     });
   }
 }

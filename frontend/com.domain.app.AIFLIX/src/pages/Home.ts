@@ -14,7 +14,7 @@ import eventBus from "../components/EventBus";
 import lng from "@lightningjs/sdk/src/Lightning";
 
 interface HomePageTemplateSpec extends Lightning.Component.TemplateSpec {
-  Image:object;
+  Image: object;
   BackgroundImage: object;
   Gallery: typeof Gallery;
   VerticalList: typeof VerticalList;
@@ -35,18 +35,18 @@ export class Home
         visible: false, // Initially hidden
         zIndex: 6,
         texture: {
-            type: lng.textures.ImageTexture,
-            src: Utils.asset("images/defaultSkeleton.png"),
+          type: lng.textures.ImageTexture,
+          src: Utils.asset("images/defaultSkeleton.png"),
         },
-    },
-    BackgroundImage: {
-      zIndex: 5,
-      texture: lng.Tools.getSvgTexture(
-        Utils.asset("images/background.svg"),
-        SCREEN_SIZES.WIDTH,
-        SCREEN_SIZES.HEIGHT
-      ),
-    },
+      },
+      BackgroundImage: {
+        zIndex: 5,
+        texture: lng.Tools.getSvgTexture(
+          Utils.asset("images/background.svg"),
+          SCREEN_SIZES.WIDTH,
+          SCREEN_SIZES.HEIGHT
+        ),
+      },
       Gallery: {
         type: Gallery,
       },
@@ -90,17 +90,19 @@ export class Home
     eventBus.on("showPinOverlay", this.showPinOverlay.bind(this));
     eventBus.on("pinCorrect", this.hidePinOverlay.bind(this));
     eventBus.on("accessDenied", this.handleAccessDenied.bind(this));
-    eventBus.on("setStateOnDetailButton", this.setStateOnDetailButton.bind(this));
+    eventBus.on(
+      "setStateOnDetailButton",
+      this.setStateOnDetailButton.bind(this)
+    );
   }
 
   // Runs every time the component is enabled (visible and attached)
   override async _enable() {
     setTimeout(() => {
       this.checkRoute();
-  }, 0);
+    }, 0);
     Router.focusPage(); // Make sure the page is focused properly
   }
-
 
   override _init() {
     this.addGallery();
@@ -134,38 +136,40 @@ export class Home
     const skeleton = this.Image;
     const backgroundImage = this.BackgroundImage;
 
-    const animationDuration = 1; 
+    const animationDuration = 1;
     const fadeAlphaStart = 0.5;
     const fadeAlphaEnd = 1;
-    const displayDuration = 1000; 
+    const displayDuration = 1000;
 
     if (!skeleton || !backgroundImage) {
-        console.error("loadingImage or BackgroundImage is not found.");
-        return;
+      console.error("loadingImage or BackgroundImage is not found.");
+      return;
     }
 
     backgroundImage.patch({ visible: true, alpha: 1 });
     skeleton.patch({ visible: true, alpha: fadeAlphaStart });
 
     const pulseAnimation = skeleton.animation({
-        duration: animationDuration,
-        repeat: -1, 
-        actions: [
-            { p: 'alpha', v: { 0: fadeAlphaStart, 0.5: fadeAlphaEnd, 1: fadeAlphaStart } },
-        ],
+      duration: animationDuration,
+      repeat: -1,
+      actions: [
+        {
+          p: "alpha",
+          v: { 0: fadeAlphaStart, 0.5: fadeAlphaEnd, 1: fadeAlphaStart },
+        },
+      ],
     });
 
     pulseAnimation.start();
 
     setTimeout(() => {
-        pulseAnimation.stop();
-        skeleton.patch({ visible: false });
-        backgroundImage.patch({ visible: false });
+      pulseAnimation.stop();
+      skeleton.patch({ visible: false });
+      backgroundImage.patch({ visible: false });
     }, displayDuration);
-}
+  }
 
-
-  async addGallery(){
+  async addGallery() {
     const popularMovieDetails = await movieService.getMostPopularMovieDetails();
 
     const logoTitle = await movieService.getMovieImages(
@@ -182,7 +186,6 @@ export class Home
     const backdrop = await movieService.getMovieDetails(
       popularMovieDetails?.id || 0
     );
-
 
     this.Gallery.props = {
       logoTitle: getImageUrl(
@@ -335,12 +338,10 @@ export class Home
         return await tvShowService.getTopRatedTVCards();
       },
     };
-    carousels.push(carouselTopRatedTVShows)
+    carousels.push(carouselTopRatedTVShows);
 
     return carousels;
   }
-
-
 
   async $onFocusGallery(data: Card) {
     const logoTitle = data.isMovieCard
@@ -390,7 +391,6 @@ export class Home
   }
 
   hidePinOverlay() {
-
     this.PinOverlay.patch({
       visible: false,
     });

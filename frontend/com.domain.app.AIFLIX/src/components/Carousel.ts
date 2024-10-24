@@ -120,7 +120,7 @@ export class Carousel extends Lightning.Component<CarouselTemplateSpec> {
 
     this.patch({
       Title: {
-        x:55,
+        x: 55,
         text: { text: title },
       },
     });

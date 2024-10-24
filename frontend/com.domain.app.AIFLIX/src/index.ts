@@ -2,11 +2,11 @@ import { Launch } from '@lightningjs/sdk';
 import { App } from './App';
 
 
-const tag = document.createElement('script');
-tag.src = './devtools/lightning-inspect.js';
-tag.onload = () => console.log('Inspector script loaded successfully');
-tag.onerror = () => console.error('Failed to load inspector script');
-document.body.appendChild(tag);
+// const tag = document.createElement('script');
+// tag.src = './devtools/lightning-inspect.js';
+// tag.onload = () => console.log('Inspector script loaded successfully');
+// tag.onerror = () => console.error('Failed to load inspector script');
+// document.body.appendChild(tag);
 
 
 const app = Launch(App, {

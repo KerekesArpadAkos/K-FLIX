@@ -105,7 +105,10 @@ export class VerticalList extends Lightning.Component<VerticalListTemplateSpec> 
   static override _states() {
     return [
       class VerticalList extends this {
-        override _getFocused(): Lightning.Component<VerticalListTemplateSpec> | null | any {
+        override _getFocused():
+          | Lightning.Component<VerticalListTemplateSpec>
+          | null
+          | any {
           const list = this.List;
 
           if (list && list.length > 0) {
