@@ -108,7 +108,6 @@ export class MovieDetails
     await this.loadData();
   }
   hidePinOverlay() {
-
     this.PinOverlay.patch({
       visible: false,
     });
@@ -124,7 +123,6 @@ export class MovieDetails
   }
 
   showPinOverlay(event: CustomEvent) {
-
     this.PinOverlay.patch({
       visible: true,
       zIndex: 2,
@@ -215,7 +213,7 @@ export class MovieDetails
           name: actor.name,
         },
       }));
-      this.CastList!.children = items.splice(0, 14);
+      this.CastList!.children = items.splice(0, 13);
     }
   }
 

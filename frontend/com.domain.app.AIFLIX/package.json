@@ -8,6 +8,7 @@
     "build": "vite build"
   },
   "dependencies": {
+    "@lightningjs/core": "^2.14.0",
     "@lightningjs/sdk": "^5.5.4",
     "@lightningjs/ui-components": "^2.23.3",
     "@reduxjs/toolkit": "^2.2.8",
@@ -18,6 +19,7 @@
   "devDependencies": {
     "@babel/core": "^7.7.2",
     "@babel/preset-env": "^7.25.7",
+    "@rollup/plugin-commonjs": "^28.0.1",
     "@types/jest": "^29.5.13",
     "@types/lodash.throttle": "^4.1.9",
     "@types/node": "^22.7.5",
@@ -32,8 +34,7 @@
     "lint-staged": "^15.2.10",
     "prettier": "^2.7.1",
     "terser": "^5.34.1",
-    "typescript": "^5.6.3",
-    "vite": "^5.4.8"
+    "typescript": "^5.6.3"
   },
   "lint-staged": {
     "*.js": [

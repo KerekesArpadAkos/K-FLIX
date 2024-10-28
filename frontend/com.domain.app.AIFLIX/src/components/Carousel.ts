@@ -1,4 +1,4 @@
-import { Lightning, Log, Router } from "@lightningjs/sdk";
+import { Lightning, Router } from "@lightningjs/sdk";
 import Card from "./Card";
 import { CardItem } from "../utils/interfaces/items/itemsInterface";
 
@@ -120,7 +120,7 @@ export class Carousel extends Lightning.Component<CarouselTemplateSpec> {
 
     this.patch({
       Title: {
-        x:55,
+        x: 55,
         text: { text: title },
       },
     });
@@ -144,7 +144,6 @@ export class Carousel extends Lightning.Component<CarouselTemplateSpec> {
       class Carousel extends this {
         override _getFocused() {
           const list = this.List as ListComponentType;
-
           if (list.length > 0) {
             return list.getElement(this.currentIndex);
           }
@@ -162,7 +161,6 @@ export class Carousel extends Lightning.Component<CarouselTemplateSpec> {
 
         override _handleRightRelease() {
           const list = this.List as ListComponentType;
-
           if (list && this.currentIndex < list.length - 1) {
             this.currentIndex++;
             this.List?.setIndex(this.currentIndex);

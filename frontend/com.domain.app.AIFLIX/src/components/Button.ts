@@ -18,7 +18,9 @@ export class Button
   extends Lightning.Component<ButtonTemplateSpec & ButtonProps>
   implements Lightning.Component.ImplementTemplateSpec<ButtonTemplateSpec>
 {
-  static override _template(): Lightning.Component.Template<ButtonTemplateSpec & ButtonProps> {
+  static override _template(): Lightning.Component.Template<
+    ButtonTemplateSpec & ButtonProps
+  > {
     return {
       w: 120,
       h: 50,
@@ -79,14 +81,14 @@ export class PlayerUIButton extends Button {
         type: Lightning.shaders.RoundedRectangle,
         radius: 10,
         stroke: 5,
-        strokeColor: COLORS.GREY_LIGHT,
+        strokeColor: COLORS.GREEN_FOCUS,
       },
     });
   }
 
   override _unfocus() {
     this.patch({
-      color: COLORS.GREEN_FOCUS,
+      color: COLORS.GREY_LIGHT,
       shader: null,
     });
   }

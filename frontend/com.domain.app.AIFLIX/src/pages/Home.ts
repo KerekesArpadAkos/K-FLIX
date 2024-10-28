@@ -2,9 +2,7 @@ import { Lightning, Router, Utils } from "@lightningjs/sdk";
 import { Gallery } from "../components/Gallery";
 import { movieService } from "../utils/service/MovieService";
 import { SCREEN_SIZES } from "../../static/constants/ScreenSizes";
-import lng from "@lightningjs/sdk/src/Lightning";
 import VerticalList from "../components/VerticalList";
-import { Sidebar } from "../components/Sidebar";
 import { GalleryItem } from "../utils/interfaces/items/itemsInterface";
 import Card from "../components/Card";
 import { getImageUrl } from "../utils";
@@ -13,9 +11,11 @@ import { tvShowService } from "../utils/service/TVShowService";
 import { convertItemToGallery } from "../utils/formatters/itemMapper";
 import PinOverlay from "../components/PinOverlay";
 import eventBus from "../components/EventBus";
+import lng from "@lightningjs/sdk/src/Lightning";
 
 interface HomePageTemplateSpec extends Lightning.Component.TemplateSpec {
-  Sidebar: typeof Sidebar;
+  Image: object;
+  BackgroundImage: object;
   Gallery: typeof Gallery;
   VerticalList: typeof VerticalList;
   PinOverlay: typeof PinOverlay;
@@ -25,14 +25,22 @@ export class Home
   extends Lightning.Component<HomePageTemplateSpec>
   implements Lightning.Component.ImplementTemplateSpec<HomePageTemplateSpec>
 {
-  static override _template() {
+  static override _template(): Lightning.Component.Template<HomePageTemplateSpec> {
     return {
       w: SCREEN_SIZES.WIDTH,
       h: SCREEN_SIZES.HEIGHT,
-      Svg_Background: {
+      Image: {
         w: SCREEN_SIZES.WIDTH,
         h: SCREEN_SIZES.HEIGHT,
-        zIndex: 0,
+        visible: false, // Initially hidden
+        zIndex: 6,
+        texture: {
+          type: lng.textures.ImageTexture,
+          src: Utils.asset("images/defaultSkeleton.png"),
+        },
+      },
+      BackgroundImage: {
+        zIndex: 5,
         texture: lng.Tools.getSvgTexture(
           Utils.asset("images/background.svg"),
           SCREEN_SIZES.WIDTH,
@@ -58,6 +66,13 @@ export class Home
     };
   }
 
+  get Image() {
+    return this.getByRef("Image");
+  }
+
+  get BackgroundImage() {
+    return this.getByRef("BackgroundImage");
+  }
   get PinOverlay() {
     return this.getByRef("PinOverlay") as PinOverlay;
   }
@@ -71,36 +86,39 @@ export class Home
   }
 
   override _firstEnable() {
+    console.log("Home firstEnable");
     // Setup event listeners once
     eventBus.on("showPinOverlay", this.showPinOverlay.bind(this));
     eventBus.on("pinCorrect", this.hidePinOverlay.bind(this));
     eventBus.on("accessDenied", this.handleAccessDenied.bind(this));
-    eventBus.on("setStateOnDetailButton", this.setStateOnDetailButton.bind(this));
-  }
+    eventBus.on(
+      "setStateOnDetailButton",
+      this.setStateOnDetailButton.bind(this)
+    );
 
-  // Runs every time the component is enabled (visible and attached)
-  override async _enable() {
-    setTimeout(() => {
-      this.checkRoute();
-  }, 50);
     Router.focusPage(); // Make sure the page is focused properly
   }
 
-
   override _init() {
+    console.log("Home init");
     this.addGallery();
   }
 
   // Runs every time the component is activated (enabled and in focus)
   override _active() {
+    console.log("Home active");
+    setTimeout(() => {
+      this.checkRoute();
+    }, 100);
     this._setState("Gallery");
   }
 
   async checkRoute() {
     const activeHash = Router.getActiveHash();
 
+    this.addDefaultSkeletonAnimation();
+
     if (activeHash === "home") {
-      
       const carousels = await this.createHomeCarousels();
       this.VerticalList.loadItems(carousels);
     } else if (activeHash === "series") {
@@ -114,7 +132,44 @@ export class Home
     }
   }
 
-  async addGallery(){
+  addDefaultSkeletonAnimation() {
+    const skeleton = this.Image;
+    const backgroundImage = this.BackgroundImage;
+
+    const animationDuration = 1;
+    const fadeAlphaStart = 0.5;
+    const fadeAlphaEnd = 1;
+    const displayDuration = 1000;
+
+    if (!skeleton || !backgroundImage) {
+      console.error("loadingImage or BackgroundImage is not found.");
+      return;
+    }
+
+    backgroundImage.patch({ visible: true, alpha: 1 });
+    skeleton.patch({ visible: true, alpha: fadeAlphaStart });
+
+    const pulseAnimation = skeleton.animation({
+      duration: animationDuration,
+      repeat: -1,
+      actions: [
+        {
+          p: "alpha",
+          v: { 0: fadeAlphaStart, 0.5: fadeAlphaEnd, 1: fadeAlphaStart },
+        },
+      ],
+    });
+
+    pulseAnimation.start();
+
+    setTimeout(() => {
+      pulseAnimation.stop();
+      skeleton.patch({ visible: false });
+      backgroundImage.patch({ visible: false });
+    }, displayDuration);
+  }
+
+  async addGallery() {
     const popularMovieDetails = await movieService.getMostPopularMovieDetails();
 
     const logoTitle = await movieService.getMovieImages(
@@ -131,7 +186,6 @@ export class Home
     const backdrop = await movieService.getMovieDetails(
       popularMovieDetails?.id || 0
     );
-
 
     this.Gallery.props = {
       logoTitle: getImageUrl(
@@ -151,72 +205,6 @@ export class Home
     };
   }
 
-
-  // async createCarousels() {
-  //   const carousels = [];
-
-  //   // const carouselPopularMovies = new Carousel(this.stage);
-  //   // carouselPopularMovies.props = {
-  //   //   title: "Most Popular Movies",
-  //   //   isMovie: true,
-  //   //   isTop: false,
-  //   //   getItems: async () => {
-  //   //     return await movieService.getMostPopularMoviesCards();
-  //   //   },
-  //   // };
-  //   // carousels.push(carouselPopularMovies);
-
-  //   // const carouselTopRatedMovies = new Carousel(this.stage);
-  //   // carouselTopRatedMovies.props = {
-  //   //   title: "Top Rated Movies",
-  //   //   isMovie: true,
-  //   //   isTop: true,
-  //   //   getItems: async () => {
-  //   //     return await movieService.getTopRatedMovieCards();
-  //   //   },
-  //   // };
-  //   // carousels.push(carouselTopRatedMovies);
-
-  //   // const carouselPopularTVShows = new Carousel(this.stage);
-  //   // carouselPopularTVShows.props = {
-  //   //   title: "Most Popular TV Shows",
-  //   //   isMovie: false,
-  //   //   isTop: false,
-  //   //   getItems: async () => {
-  //   //     return await tvShowService.getMostPopularTVShowsCards();
-  //   //   },
-  //   // };
-  //   // carousels.push(carouselPopularTVShows);
-
-  //   const carouselTopRatedTVShows = new Carousel(this.stage);
-  //   carouselTopRatedTVShows.props = {
-  //     title: "Top Rated TV Shows",
-  //     isMovie: false,
-  //     isTop: true,
-  //     getItems: async () => {
-  //       return await tvShowService.getTopRatedTVCards();
-  //     },
-  //   };
-  //   carousels.push(carouselTopRatedTVShows);
-
-  //   // const genres = await movieService.getMovieGenres();
-  //   // if (genres) {
-  //   //   for (const genre of genres) {
-  //   //     const carouselGenre = new Carousel(this.stage);
-  //   //     carouselGenre.props = {
-  //   //       title: genre.name,
-  //   //       isMovie: true,
-  //   //       isTop: false,
-  //   //       getItems: async () => {
-  //   //         return await movieService.getMoviesByGenre(genre.id);
-  //   //       },
-  //   //     };
-  //   //     carousels.push(carouselGenre);
-  //   //   }
-  //   // }
-
-  //   return carousels;
-  // }
   async createHomeCarousels() {
     const carousels = [];
 
@@ -350,12 +338,10 @@ export class Home
         return await tvShowService.getTopRatedTVCards();
       },
     };
-    carousels.push(carouselTopRatedTVShows)
+    carousels.push(carouselTopRatedTVShows);
 
     return carousels;
   }
-
-
 
   async $onFocusGallery(data: Card) {
     const logoTitle = data.isMovieCard
@@ -405,7 +391,6 @@ export class Home
   }
 
   hidePinOverlay() {
-
     this.PinOverlay.patch({
       visible: false,
     });
@@ -483,6 +468,7 @@ export class Home
   }
 
   override _handleBack() {
+    console.log("Home _handleBack");
     return;
   }
 

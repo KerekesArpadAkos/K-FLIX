@@ -44,7 +44,7 @@ export class Card extends Lightning.Component<CardTemplateSpec> {
           type: Lightning.shaders.RoundedRectangle,
           radius: 20,
           stroke: 0,
-          strokeColor: COLORS.GREY_LIGHT,
+          strokeColor: COLORS.GREEN_FOCUS,
         },
         transitions: {
           scale: { duration: 0.3 },
