@@ -9,6 +9,7 @@
   "platformSettings": {
     "path": "./static",
     "log": true,
-    "inscpector": true
-    }
+    "inspector": true,
+    "showFps": true
+  }
 }

@@ -8,6 +8,7 @@
     "build": "vite build"
   },
   "dependencies": {
+    "@lightningjs/core": "^2.14.0",
     "@lightningjs/sdk": "^5.5.4",
     "@lightningjs/ui-components": "^2.23.3",
     "@reduxjs/toolkit": "^2.2.8",
@@ -33,8 +34,7 @@
     "lint-staged": "^15.2.10",
     "prettier": "^2.7.1",
     "terser": "^5.34.1",
-    "typescript": "^5.6.3",
-    "vite": "^5.4.8"
+    "typescript": "^5.6.3"
   },
   "lint-staged": {
     "*.js": [
