@@ -11,13 +11,15 @@ export class VerticalList extends Lightning.Component<VerticalListTemplateSpec> 
 
   static override _template() {
     return {
-      w: 1870,
+      w: 1780,
       h: 1080,
       zIndex: -1,
       List: {
         type: Lightning.components.ListComponent,
-        w: 1870,
+        w: 1780,
         h: 15000,
+        //how much should be the x here?
+        x: 40,
         itemSize: 30,
         roll: true,
         clipping: true,

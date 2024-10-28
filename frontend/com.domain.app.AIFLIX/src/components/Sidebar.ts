@@ -23,7 +23,7 @@ class SidebarItemComponent extends Lightning.Component {
         w: 70,
         h: 70,
         x: 35,
-        y: 270,
+        y: 15, // Adjusted y-position for Icon
         color: COLORS.WHITE,
       },
       Label: {
@@ -33,8 +33,9 @@ class SidebarItemComponent extends Lightning.Component {
           fontSize: SCREEN_SIZES.DEFAULT_BTN_FONT_SIZE,
           textColor: COLORS.WHITE,
         },
-        x: 144,
-        y: 287,
+        x: 144, // Adjusted x-position for Label
+        mountY: 0.5,
+        y: 50, // Adjusted y-position for Label to align with Icon
       },
     };
   }
@@ -97,17 +98,17 @@ export class Sidebar extends Lightning.Component {
             fontSize: SCREEN_SIZES.DEFAULT_BTN_FONT_SIZE,
             textColor: COLORS.WHITE,
           },
-          x: 110, // Adjusted relative position
+          x: 114, // Adjusted relative position
           y: 20,
           visible: false,
         },
       },
       SidebarItems: {
-        y: 65,
+        y: 287,
         children: items.map((item, index) => ({
           type: SidebarItemComponent,
           name: item.name,
-          y: index * 103,
+          y: index * 100,
           x: 0,
           itemData: item,
         })),
@@ -209,6 +210,7 @@ export class Sidebar extends Lightning.Component {
 
     this.tag("SidebarItems").children.forEach((child: SidebarItemComponent) => {
       child.showLabel(false);
+      child.w = 285;
     });
 
     this.tag("Image").patch({
