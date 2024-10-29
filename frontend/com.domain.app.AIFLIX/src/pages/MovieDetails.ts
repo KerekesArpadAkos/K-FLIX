@@ -88,9 +88,18 @@ export class MovieDetails
     return this.getByRef("PinOverlay") as PinOverlay;
   }
 
-  override set params(param: { id: string; isMovie: boolean }) {
-    this._id = Number(param.id);
-    this._isMovie = param.isMovie;
+  override set params(param: { id: string; isMovie?: boolean }) {
+    const newId = Number(param.id);
+    const newIsMovie = param.isMovie !== undefined ? param.isMovie : true;
+
+    if (this._id !== newId || this._isMovie !== newIsMovie) {
+      this._id = newId;
+      this._isMovie = newIsMovie;
+
+      this.resetComponentPositions();
+      this._setState("Gallery");
+      this.loadData();
+    }
   }
 
   override async _enable() {
@@ -142,6 +151,16 @@ export class MovieDetails
       await this.getShowCast();
     }
     await this.getSimilarMovies(isMovie);
+  }
+
+  private resetComponentPositions() {
+    // Reset positions of components
+    this.VerticalList.setSmooth("y", 200, { duration: 0 });
+    this.Gallery.Details.setSmooth("y", 0, { duration: 0 });
+    this.CastList?.setSmooth("y", 540, { duration: 0 });
+
+    // Reset VerticalList internal state
+    this.VerticalList.reset();
   }
 
   async getMovieDetails(isMovie: boolean) {

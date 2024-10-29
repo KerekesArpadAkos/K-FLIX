@@ -206,9 +206,7 @@ export class Card extends Lightning.Component<CardTemplateSpec> {
         isMovie: this._isMovieCard,
       });
     } else {
-      Router.navigate(
-        (this._isMovieCard ? "movie" : "tvshow") + `/${this._id}`
-      );
+      Router.navigate(`movie/${this._id}`, { isMovie: this._isMovieCard });
     }
   }
 }
