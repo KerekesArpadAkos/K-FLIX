@@ -6,34 +6,24 @@ interface SettingsButtonTemplateSpec extends Lightning.Component.TemplateSpec {
 
 export class SettingsButton
   extends Lightning.Component<SettingsButtonTemplateSpec>
-  implements Lightning.Component.ImplementTemplateSpec<SettingsButtonTemplateSpec>
+  implements
+    Lightning.Component.ImplementTemplateSpec<SettingsButtonTemplateSpec>
 {
   buttonText: string | undefined;
 
   static override _template(): Lightning.Component.Template<SettingsButtonTemplateSpec> {
     return {
-      w: 360,
-      h: 160,
+      x: 200,
+      w: 700,
+      h: 100,
       rect: true,
-      color: 0x00000000,
-      shader: {
-        type: Lightning.shaders.RoundedRectangle,
-        radius: 15,
-        stroke: 2,
-        strokeColor: COLORS.GREY_LIGHT,
-      },
+      color: COLORS.BLACK,
       Label: {
-        x: 180,
-        y: 80,
-        mount: 0.5,
+        x: 25,
         text: {
           fontSize: 40,
           fontStyle: "normal",
           fontFace: "system-ui",
-        },
-        shader: {
-          type: Lightning.shaders.RoundedRectangle,
-          strokeColor: 0x00000000,
         },
       },
     };
@@ -54,16 +44,12 @@ export class SettingsButton
       this.signal("toggleLanguages", 0);
     }
     this.patch({
-      shader: {
-        strokeColor: COLORS.WHITE,
-      },
+      color: COLORS.BLUE_FOCUS,
     });
   }
   override _unfocus() {
     this.patch({
-      shader: {
-        strokeColor: COLORS.GREY_LIGHT,
-      },
+      color: COLORS.BLACK,
     });
   }
 }

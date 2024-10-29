@@ -3,13 +3,18 @@ import { SettingsColumn } from "../components/SettingsColumn";
 import { SettingsButton } from "../components/SettingsButton";
 import { SCREEN_SIZES } from "../../static/constants/ScreenSizes";
 import { COLORS } from "../../static/constants/Colors";
-import { PARCON_OPTIONS, LANGUAGE_OPTIONS } from "../../static/constants/SettingsOptions";
+import {
+  PARCON_OPTIONS,
+  LANGUAGE_OPTIONS,
+} from "../../static/constants/SettingsOptions";
 import eventBus from "../components/EventBus";
 import PinOverlay from "../components/PinOverlay";
 import { KEYS } from "../../static/constants/Keys";
 import { getPressedKey } from "../../static/constants/Keys";
 import { Sidebar } from "../components/Sidebar";
+import Topbar from "src/components/Topbar";
 interface SettingsPageTemplateSpec extends Lightning.Component.TemplateSpec {
+  Topbar: typeof Topbar;
   Content: {
     MainColumn: {
       LanguageButton: typeof SettingsButton;
@@ -19,7 +24,6 @@ interface SettingsPageTemplateSpec extends Lightning.Component.TemplateSpec {
       LanguageOptions: typeof SettingsColumn;
       ParconOptions: typeof SettingsColumn;
     };
-    Line: object;
     PinOverlay: typeof PinOverlay;
     Sidebar: typeof Sidebar;
   };
@@ -27,7 +31,8 @@ interface SettingsPageTemplateSpec extends Lightning.Component.TemplateSpec {
 
 export default class SettingsPage
   extends Lightning.Component<SettingsPageTemplateSpec>
-  implements Lightning.Component.ImplementTemplateSpec<SettingsPageTemplateSpec>
+  implements
+    Lightning.Component.ImplementTemplateSpec<SettingsPageTemplateSpec>
 {
   buttonIndex = 0;
 
@@ -35,65 +40,51 @@ export default class SettingsPage
     return {
       w: SCREEN_SIZES.WIDTH,
       h: SCREEN_SIZES.HEIGHT,
-      color: COLORS.BLACK,
+      color: COLORS.BACKGROUND,
       rect: true,
+      Topbar: {
+        type: Topbar,
+      },
       Content: {
         MainColumn: {
-          LanguageButton: {
-            x: SCREEN_SIZES.WIDTH * 0.25,
-            y: SCREEN_SIZES.HEIGHT * 0.4,
-            mount: 0.5,
-            type: SettingsButton,
-            ref: "LANG",
-            buttonText: "Language",
-            signals: {
-              toggleLanguages: true,
-              toggleParcon: true,
-            },
-          },
           ParconButton: {
-            x: SCREEN_SIZES.WIDTH * 0.25,
-            y: SCREEN_SIZES.HEIGHT * 0.6,
-            mount: 0.5,
+            y: 307,
             type: SettingsButton,
             ref: "PARCON",
-            buttonText: "Parcon",
+            buttonText: "Parental Control & PIN",
             signals: {
               toggleLanguages: true,
               toggleParcon: true,
               showPinOverlayForParcon: true,
-              focusSettingsPageParconButton: true,
+              // focusSettingsPageParconButton: true,
+            },
+          },
+          LanguageButton: {
+            y: 187,
+            type: SettingsButton,
+            ref: "LANG",
+            buttonText: "Languages",
+            signals: {
+              toggleLanguages: true,
+              toggleParcon: true,
             },
           },
         },
         OptionsColumn: {
           LanguageOptions: {
             visible: false,
-            x: SCREEN_SIZES.WIDTH * 0.75,
-            y: SCREEN_SIZES.HEIGHT * 0.5,
+            x: 1090,
+            y: 187,
             type: SettingsColumn,
-            w: 280,
-            h: 480,
-            mount: 0.5,
           },
           ParconOptions: {
             visible: false,
-            x: SCREEN_SIZES.WIDTH * 0.75,
-            y: SCREEN_SIZES.HEIGHT * 0.5,
-            w: 280,
-            h: 360,
-            mount: 0.5,
+            x: 1090,
+            y: 187,
             type: SettingsColumn,
           },
         },
-        Line: {
-          x: SCREEN_SIZES.WIDTH * 0.5,
-          w: 1,
-          h: SCREEN_SIZES.HEIGHT,
-          rect: true,
-          color: COLORS.GREY_LIGHT,
-          zIndex: 1,
-        },
+
         PinOverlay: {
           type: PinOverlay,
           visible: false,
@@ -153,12 +144,15 @@ export default class SettingsPage
     this.ParconOptions.items = [...PARCON_OPTIONS];
   }
 
-  getOptionIndexByRef(options: { label: string; ref: string }[], ref: string): number {
+  getOptionIndexByRef(
+    options: { label: string; ref: string }[],
+    ref: string
+  ): number {
     return options.findIndex((option) => option.ref === ref);
   }
 
-  focusSettingsPageParconButton() {
-    this.buttonIndex = 1;
+  focusSettingsPageLanguagesButton() {
+    this.buttonIndex = 0;
     this._setState("MainColumn");
   }
 
@@ -167,7 +161,10 @@ export default class SettingsPage
     const parcon: string = localStorage.getItem("parcon") ?? "";
 
     if (lang) {
-      const langIndex = this.getOptionIndexByRef(LANGUAGE_OPTIONS, lang.replace(/"/g, ""));
+      const langIndex = this.getOptionIndexByRef(
+        LANGUAGE_OPTIONS,
+        lang.replace(/"/g, "")
+      );
       if (langIndex !== -1) {
         this.buttonIndex = 0;
         this._setState("LanguageOptions");
@@ -182,7 +179,10 @@ export default class SettingsPage
     }
 
     if (parcon) {
-      const parconIndex = this.getOptionIndexByRef(PARCON_OPTIONS, parcon.replace(/"/g, ""));
+      const parconIndex = this.getOptionIndexByRef(
+        PARCON_OPTIONS,
+        parcon.replace(/"/g, "")
+      );
       if (parconIndex !== -1) {
         this.buttonIndex = 1;
         this._setState("ParconOptions");
@@ -198,8 +198,15 @@ export default class SettingsPage
   }
 
   override _init() {
+    if (!localStorage.getItem("lang")) {
+      localStorage.setItem("lang", "EN");
+    }
+    if (!localStorage.getItem("parcon")) {
+      localStorage.setItem("parcon", "OFF");
+    }
+
     eventBus.on("showPinOverlayForParcon", (event: CustomEvent) =>
-      this.showPinOverlayForParcon(event),
+      this.showPinOverlayForParcon(event)
     );
     eventBus.on("focusMainColumn", () => this._setState("MainColumn"));
 
@@ -275,16 +282,21 @@ export default class SettingsPage
               this._handleBack();
               break;
             case KEYS.VK_UP:
-              this.buttonIndex = 0;
+              this.buttonIndex = 1;
               break;
             case KEYS.VK_DOWN:
-              this.buttonIndex = 1;
+              this.buttonIndex = 0;
               break;
             case KEYS.VK_RIGHT:
               if (this.buttonIndex === 0) {
-                this._setState("LanguageOptions");
-              } else if (this.buttonIndex === 1) {
                 this._setState("ParconOptions");
+                this.toggleLanguages(false);
+                this.toggleParcon(true);
+              } else if (this.buttonIndex === 1) {
+                // Right key on ParconButton
+                this._setState("LanguageOptions");
+                this.toggleLanguages(true);
+                this.toggleParcon(false);
               }
               break;
             case KEYS.VK_LEFT:
