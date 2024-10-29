@@ -111,7 +111,6 @@ export default class SearchPage
   }
 
   hidePinOverlay() {
-
     this.PinOverlay.patch({
       visible: false,
     });
