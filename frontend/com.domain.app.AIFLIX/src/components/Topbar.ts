@@ -1,4 +1,4 @@
-import { Lightning, Utils } from "@lightningjs/sdk";
+import { Lightning, Router, Utils } from "@lightningjs/sdk";
 import { COLORS } from "static/constants/Colors";
 
 interface TopbarTemplateSpec extends Lightning.Component.TemplateSpec {
@@ -89,5 +89,19 @@ export default class Topbar
       clearInterval(this._timeInterval);
       this._timeInterval = null;
     }
+  }
+  override _handleEnter() {
+    Router.back();
+  }
+
+  override _focus() {
+    this.tag("TopBarComponent.Button")?.patch({ color: COLORS.BLUE_FOCUS });
+  }
+
+  override _unfocus() {
+    this.tag("TopBarComponent.Button")?.patch({ color: COLORS.WHITE });
+  }
+  getFocused() {
+    return this.tag("TopBarComponent.Button");
   }
 }

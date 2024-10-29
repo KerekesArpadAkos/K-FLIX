@@ -20,6 +20,9 @@ export class SettingsButton
       color: COLORS.BLACK,
       Label: {
         x: 25,
+        // y: 25,
+        mountY: 0.5,
+        y: 50,
         text: {
           fontSize: 40,
           fontStyle: "normal",
