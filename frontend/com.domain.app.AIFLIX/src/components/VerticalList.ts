@@ -58,6 +58,11 @@ export class VerticalList extends Lightning.Component<VerticalListTemplateSpec> 
       console.error("Error loading items:", error);
     }
   }
+  reset() {
+    this.currentIndex = 0;
+    this.List.setIndex(0);
+    this.List.setSmooth("y", 0, { duration: 0 });
+  }
 
   async clearItems() {
     this.List.items = [];
