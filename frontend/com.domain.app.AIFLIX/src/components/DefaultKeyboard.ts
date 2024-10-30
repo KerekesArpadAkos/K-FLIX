@@ -6,6 +6,7 @@ import eventBus from "./EventBus";
 export default class DefaultKeyboard extends Lightning.Component {
   _rowIndex = 0;
   _columnIndex = 0;
+  ok = 0;
 
   static override _template() {
     const keys: string[][] = [
@@ -68,6 +69,7 @@ export default class DefaultKeyboard extends Lightning.Component {
   }
 
   override _init() {
+    this.ok = 0;
     this._updateFocus();
   }
 
@@ -81,7 +83,6 @@ export default class DefaultKeyboard extends Lightning.Component {
   }
 
   private _updateFocus() {
-    console.log(this._rowIndex);
     this.children.forEach((row, rowIndex) => {
       row.children.forEach((button, colIndex) => {
         button.patch({
@@ -131,13 +132,24 @@ export default class DefaultKeyboard extends Lightning.Component {
     this._columnIndex = Math.min(this._columnIndex, row.children.length - 1);
     this._updateFocus();
   }
-
+  override _handleEnter() {
+    const currentKey = this._getCurrentKey();
+    if (currentKey) {
+      const buttonText = (currentKey as any).buttonText;
+      if (buttonText === "SPACE") {
+        eventBus.emit("inputTextUpdate", " ");
+      } else if (buttonText === "BACK") {
+        eventBus.emit("inputTextUpdate", "BACK");
+      } else if (buttonText === "ENTER") {
+        eventBus.emit("inputTextUpdate", "ENTER");
+        this.ok = 1;
+      } else {
+        eventBus.emit("inputTextUpdate", buttonText);
+      }
+    }
+  }
   focusUp() {
     if (this._rowIndex === 0) {
-      //change the color of the search button
-      //   eventBus.emit("focusSearchInput");
-      //change the color of the button where i was, if possible
-
       return;
     }
 
@@ -158,7 +170,16 @@ export default class DefaultKeyboard extends Lightning.Component {
 
   override _handleRight() {
     const row = this.children[this._rowIndex] as Lightning.Component;
-    if (this._columnIndex < row.children.length - 1) {
+    if (
+      (this._columnIndex == 5 ||
+        this._rowIndex == 7 ||
+        (this._rowIndex == 0 && this._columnIndex == 1)) &&
+      this.ok === 1
+    ) {
+      eventBus.emit("focusCarousel");
+      console.log("here");
+    } else if (this._columnIndex < row.children.length - 1) {
+      console.log(" not here");
       this._columnIndex++;
       this._updateFocus();
     }
@@ -177,7 +198,6 @@ export default class DefaultKeyboard extends Lightning.Component {
     if (currentKey) {
       const buttonText = (currentKey as any).buttonText;
       if (buttonText) {
-        console.log(buttonText);
         return buttonText;
       }
     }

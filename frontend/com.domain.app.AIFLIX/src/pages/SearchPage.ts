@@ -1,4 +1,4 @@
-import { Lightning } from "@lightningjs/sdk";
+import { Lightning, Utils } from "@lightningjs/sdk";
 import SearchInput from "../components/SearchInput";
 import { movieService } from "../utils/service/MovieService";
 import VerticalList from "../components/VerticalList";
@@ -10,17 +10,17 @@ import Router from "@lightningjs/sdk/src/Router";
 import { getImageUrl } from "../utils";
 import Card from "../components/Card";
 import eventBus from "../components/EventBus";
-import PinOverlay from "../components/PinOverlay";
 import Topbar from "src/components/Topbar";
 import DefaultKeyboard from "src/components/DefaultKeyboard";
+import { Button } from "src/components/Button";
 
 interface SearchPageTemplateSpec extends Lightning.Component.TemplateSpec {
   Sidebar: typeof Sidebar;
   SearchInput: typeof SearchInput;
   VerticalList: typeof VerticalList;
-  PinOverlay: typeof PinOverlay;
   Topbar: typeof Topbar;
   DefaultKeyboard: typeof DefaultKeyboard;
+  MicrophoneButton: typeof Button;
 }
 
 export default class SearchPage
@@ -54,13 +54,18 @@ export default class SearchPage
       },
       VerticalList: {
         type: VerticalList,
-        x: 100,
-        y: -50,
+        x: 500,
+        y: -300,
         zIndex: 1,
       },
-      PinOverlay: {
-        type: PinOverlay,
-        visible: false,
+      MicrophoneButton: {
+        type: Button,
+        x: 289,
+        y: 783,
+        w: 150,
+        h: 150,
+        src: Utils.asset("images/microphoneSilent.png"),
+        zIndex: 2,
       },
     };
   }
@@ -85,10 +90,6 @@ export default class SearchPage
     Router.focusWidget("Sidebar");
   }
 
-  get PinOverlay() {
-    return this.getByRef("PinOverlay") as PinOverlay;
-  }
-
   get Topbar() {
     return this.getByRef("Topbar") as Topbar;
   }
@@ -96,47 +97,20 @@ export default class SearchPage
     this.Topbar?.patch({
       TopBarComponent: { Label: { text: { text: "Search" } } },
     });
-    eventBus.on("showPinOverlay", (event: CustomEvent) =>
-      this.showPinOverlay(event)
-    );
-    eventBus.on("pinCorrect", this.hidePinOverlay.bind(this));
-    eventBus.on("accessDenied", this.handleAccessDenied.bind(this));
-    eventBus.on(
-      "setStateOnDetailButton",
-      this.setStateOnDetailButton.bind(this)
-    );
 
     // eventBus.on("focusSearchInput", () => {
     //   this._setState("SearchInputFocus");
     // });
     eventBus.on("focusDefaultKeyboard", () => {
+      console.log("focusDefaultKeyboard catched in SearchPage");
       this._setState("DefaultKeyboard");
     });
-  }
-  showPinOverlay(event: CustomEvent) {
-    this.PinOverlay.patch({
-      visible: true,
-      zIndex: 2,
+
+    eventBus.on("focusCarousel", () => {
+      this._setState("VerticalList");
     });
-    this.PinOverlay._isMovie = event.detail.isMovie;
-    this.PinOverlay.movieId = event.detail.movieId;
-    this._setState("PinOverlayFocus");
   }
 
-  hidePinOverlay() {
-    this.PinOverlay.patch({
-      visible: false,
-    });
-    this._setState("VerticalList");
-  }
-
-  setStateOnDetailButton() {
-    this.hidePinOverlay();
-  }
-
-  handleAccessDenied() {
-    this.hidePinOverlay();
-  }
   async _onSearch(query: string) {
     const movieResults = await movieService.searchMovies(query);
     const tvResults = await tvShowService.searchTVShows(query);
@@ -176,22 +150,9 @@ export default class SearchPage
     return [
       class DefaultKeyboard extends this {
         override _getFocused() {
-          console.log("DefaultKeyboard");
           return this.tag("DefaultKeyboard");
         }
-
-        override _handleKey(key: { keyCode: number }) {
-          if (key.keyCode === 13) {
-            // Enter key
-            const keyPressed = this.tag("DefaultKeyboard")?.triggerEnter();
-            // if (keyPressed) {
-            //   this.SearchInput.addText(keyPressed); // Assuming addText method exists
-            // }
-          }
-        }
-
         override _handleUp() {
-          console.log("Up pressed");
           this._setState("SearchInputFocus");
         }
       },
@@ -223,19 +184,6 @@ export default class SearchPage
       //     this._setState("DefaultKeyboard");
       //   }
       // },
-      class PinOverlayFocus extends this {
-        override _getFocused(): PinOverlay {
-          return this.PinOverlay;
-        }
-
-        override _handleBack() {
-          this.PinOverlay.hidePinOverlay();
-        }
-
-        override _handleEnter() {
-          this.PinOverlay._handleEnter();
-        }
-      },
     ];
   }
 }

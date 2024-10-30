@@ -1,6 +1,7 @@
 import { Lightning, Router } from "@lightningjs/sdk";
 import Card from "./Card";
 import { CardItem } from "../utils/interfaces/items/itemsInterface";
+import eventBus from "./EventBus";
 
 interface CarouselTemplateSpec extends Lightning.Component.TemplateSpec {
   Title: object;
@@ -144,6 +145,7 @@ export class Carousel extends Lightning.Component<CarouselTemplateSpec> {
         override _getFocused() {
           const list = this.List as ListComponentType;
           if (list.length > 0) {
+            console.log("Carousel _getFocused");
             return list.getElement(this.currentIndex);
           }
           return null;
@@ -154,7 +156,12 @@ export class Carousel extends Lightning.Component<CarouselTemplateSpec> {
             this.currentIndex--;
             this.List?.setIndex(this.currentIndex);
           } else {
-            Router.focusWidget("Sidebar");
+            if (Router.getActiveHash() === "search") {
+              console.log("focusDefaultKeyboard from search");
+              eventBus.emit("focusDefaultKeyboard");
+            } else {
+              Router.focusWidget("Sidebar");
+            }
           }
         }
 

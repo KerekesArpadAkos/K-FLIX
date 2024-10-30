@@ -1,6 +1,5 @@
-import { Colors, Lightning, Utils } from "@lightningjs/sdk";
+import { Lightning, Utils } from "@lightningjs/sdk";
 import { COLORS } from "../../static/constants/Colors";
-import { SCREEN_SIZES } from "../../static/constants/ScreenSizes";
 import { Input } from "@lightningjs/ui-components";
 import eventBus from "./EventBus";
 
@@ -63,60 +62,41 @@ export default class SearchInput
       },
     };
   }
-  get Content() {
-    return this.getByRef("Content");
+
+  override _init() {
+    eventBus.on("inputTextUpdate", (event: CustomEvent) => {
+      const input = event.detail as string;
+      if (input === "BACK") {
+        this._inputText = this._inputText.slice(0, -1);
+      } else if (input === "ENTER") {
+        this._triggerSearch();
+      } else {
+        this._inputText += input;
+      }
+      this._updateInputField();
+    });
   }
 
-  get InputField() {
-    return this.Content?.tag("InputField");
+  private _updateInputField() {
+    this.patch({
+      Content: {
+        InputField: {
+          text: { text: this._inputText },
+        },
+      },
+    });
+  }
+
+  private _triggerSearch() {
+    this.signal("search", this._inputText);
   }
 
   set inputText(value: string) {
     this._inputText = value;
-    this.InputField?.patch({
-      text: { text: this._inputText },
-    });
+    this._updateInputField();
   }
 
   get inputText() {
     return this._inputText;
-  }
-
-  override _handleKey(event: KeyboardEvent) {
-    if (event.key.length === 1) {
-      this.inputText += event.key;
-    } else if (event.key === "Backspace") {
-      this.inputText = this.inputText.slice(0, -1);
-    }
-  }
-
-  override _handleEnter() {
-    this.signal("search", this.inputText);
-  }
-
-  override _handleDown() {
-    // this.signal("focusList");
-    eventBus.emit("focusDefaultKeyboard");
-  }
-
-  override _handleLeft() {
-    this.signal("focusSidebar");
-  }
-
-  get inputValue() {
-    return this.inputText;
-  }
-
-  override _focus() {
-    console.log("Focused on InputField"); // Debugging for focus tracking
-    this.InputField?.patch({
-      color: COLORS.GREEN_FOCUS,
-    });
-  }
-
-  override _unfocus() {
-    this.InputField?.patch({
-      color: COLORS.GREY_DARK,
-    });
   }
 }

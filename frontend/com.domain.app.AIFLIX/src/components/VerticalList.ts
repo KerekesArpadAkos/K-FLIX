@@ -1,4 +1,4 @@
-import { Lightning } from "@lightningjs/sdk";
+import { Lightning, Router } from "@lightningjs/sdk";
 import Carousel from "./Carousel";
 import Card from "./Card";
 
@@ -119,7 +119,9 @@ export class VerticalList extends Lightning.Component<VerticalListTemplateSpec> 
           const list = this.List;
 
           if (list && list.length > 0) {
-            this.repositionWrapper();
+            if (Router.getActiveHash() !== "search") {
+              this.repositionWrapper();
+            }
             const focused: Card = (
               list.getElement(this.currentIndex) as Carousel
             )._getFocused() as Card;
