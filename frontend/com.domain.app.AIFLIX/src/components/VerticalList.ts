@@ -117,7 +117,6 @@ export class VerticalList extends Lightning.Component<VerticalListTemplateSpec> 
           | null
           | any {
           const list = this.List;
-
           if (list && list.length > 0) {
             if (Router.getActiveHash() !== "search") {
               this.repositionWrapper();
@@ -131,8 +130,8 @@ export class VerticalList extends Lightning.Component<VerticalListTemplateSpec> 
           }
           return null;
         }
-
         override _handleDown() {
+          console.log("down");
           const list = this.List;
 
           if (this.currentIndex < list.length - 1) {

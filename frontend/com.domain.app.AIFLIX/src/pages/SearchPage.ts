@@ -167,23 +167,10 @@ export default class SearchPage
             this.VerticalList!.setCurrentIndex = currentIndex - 1;
             this.VerticalList!.List.setIndex(currentIndex - 1);
           } else {
-            this._setState("SearchInput");
+            return;
           }
         }
       },
-      // class SearchInputFocus extends this {
-      //   override _getFocused() {
-      //     return this.getByRef("SearchInput");
-      //   }
-
-      //   override _handleKey(key: { keyCode: number }) {
-      //     // Add handling here if needed
-      //   }
-
-      //   override _handleDown() {
-      //     this._setState("DefaultKeyboard");
-      //   }
-      // },
     ];
   }
 }

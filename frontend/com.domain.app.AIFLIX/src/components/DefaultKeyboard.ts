@@ -177,9 +177,7 @@ export default class DefaultKeyboard extends Lightning.Component {
       this.ok === 1
     ) {
       eventBus.emit("focusCarousel");
-      console.log("here");
     } else if (this._columnIndex < row.children.length - 1) {
-      console.log(" not here");
       this._columnIndex++;
       this._updateFocus();
     }

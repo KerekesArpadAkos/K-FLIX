@@ -145,7 +145,6 @@ export class Carousel extends Lightning.Component<CarouselTemplateSpec> {
         override _getFocused() {
           const list = this.List as ListComponentType;
           if (list.length > 0) {
-            console.log("Carousel _getFocused");
             return list.getElement(this.currentIndex);
           }
           return null;
