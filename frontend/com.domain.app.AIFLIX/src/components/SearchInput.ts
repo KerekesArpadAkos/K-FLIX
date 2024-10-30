@@ -1,7 +1,8 @@
-import { Lightning, Utils } from "@lightningjs/sdk";
+import { Colors, Lightning, Utils } from "@lightningjs/sdk";
 import { COLORS } from "../../static/constants/Colors";
 import { SCREEN_SIZES } from "../../static/constants/ScreenSizes";
 import { Input } from "@lightningjs/ui-components";
+import eventBus from "./EventBus";
 
 interface SearchInputTemplateSpec extends Lightning.Component.TemplateSpec {
   Content: {
@@ -19,17 +20,14 @@ export default class SearchInput
 
   static override _template() {
     return {
-      x: SCREEN_SIZES.WIDTH * 0.5,
-      mountX: 0.5,
       rect: true,
-      w: 350,
-      h: 60,
-      color: COLORS.GREY_LIGHT,
+      w: 1606,
+      h: 55,
+      color: COLORS.GREY_DARK,
       shader: {
         type: Lightning.shaders.RoundedRectangle,
         radius: 15,
         stroke: 2,
-        strokeColor: COLORS.WHITE,
       },
       Content: {
         SearchImage: {
@@ -41,7 +39,7 @@ export default class SearchInput
           src: Utils.asset("images/search.png"),
           shader: {
             type: Lightning.shaders.RoundedRectangle,
-            strokeColor: 0x00000000,
+            strokeColor: COLORS.BLACK,
           },
         },
         InputField: {
@@ -49,23 +47,22 @@ export default class SearchInput
           y: 30,
           mountY: 0.5,
           type: Input,
-          w: 290,
-          h: 60,
+          w: 1546,
+          h: 55,
           text: {
-            text: "Search...",
+            text: "Enter title here...",
             fontSize: 44,
             textColor: COLORS.WHITE,
           },
           shader: {
             type: Lightning.shaders.RoundedRectangle,
-            strokeColor: 0x00000000,
+            strokeColor: COLORS.BLACK,
             radius: [0, 15, 15, 0],
           },
         },
       },
     };
   }
-
   get Content() {
     return this.getByRef("Content");
   }
@@ -98,7 +95,8 @@ export default class SearchInput
   }
 
   override _handleDown() {
-    this.signal("focusList");
+    // this.signal("focusList");
+    eventBus.emit("focusDefaultKeyboard");
   }
 
   override _handleLeft() {
@@ -110,20 +108,15 @@ export default class SearchInput
   }
 
   override _focus() {
-    this.patch({
-      smooth: { x: [SCREEN_SIZES.WIDTH * 0.5, { duration: 0.2 }] },
-    });
+    console.log("Focused on InputField"); // Debugging for focus tracking
     this.InputField?.patch({
-      color: COLORS.WHITE,
+      color: COLORS.GREEN_FOCUS,
     });
   }
 
   override _unfocus() {
-    this.patch({
-      smooth: { x: [SCREEN_SIZES.WIDTH + 120, { duration: 0.2 }] },
-    });
     this.InputField?.patch({
-      color: COLORS.GREEN_FOCUS,
+      color: COLORS.GREY_DARK,
     });
   }
 }
