@@ -4,7 +4,7 @@ import { COLORS } from "static/constants/Colors";
 interface TopbarTemplateSpec extends Lightning.Component.TemplateSpec {
   TopBarComponent: {
     Button: object;
-    SettingsLabel: object;
+    Label: object;
     CurrentTime: object;
   };
 }
@@ -33,9 +33,9 @@ export default class Topbar
           h: 52,
           y: centeredY - 26,
         },
-        SettingsLabel: {
+        Label: {
           text: {
-            text: "Settings",
+            text: "",
             fontSize: 50,
             textColor: COLORS.WHITE,
           },
@@ -55,6 +55,11 @@ export default class Topbar
         },
       },
     };
+  }
+
+  set props(props: { title: string }) {
+    const { title } = props;
+    this.patch({ TopBarComponent: { Label: { text: { text: title } } } });
   }
 
   getCurrentTime(): string {

@@ -164,6 +164,10 @@ export default class SettingsPage
   }
 
   override _init() {
+    this.Topbar?.patch({
+      TopBarComponent: { Label: { text: { text: "Settings" } } },
+    });
+
     if (!localStorage.getItem("lang")) {
       localStorage.setItem("lang", "EN");
     }
