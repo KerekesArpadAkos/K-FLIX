@@ -23,6 +23,7 @@ interface SearchPageTemplateSpec extends Lightning.Component.TemplateSpec {
   DefaultKeyboard: typeof DefaultKeyboard;
   Microphone: typeof Microphone;
   Carousel: typeof Carousel;
+  Label: object;
 }
 
 export default class SearchPage
@@ -69,6 +70,16 @@ export default class SearchPage
       Microphone: {
         type: Microphone,
         zIndex: 2,
+      },
+      Label: {
+        x: 847,
+        y: 555,
+        text: {
+          text: "No results found...",
+          fontSize: 65,
+          textColor: COLORS.WHITE,
+        },
+        visible: false,
       },
     };
   }
@@ -133,6 +144,9 @@ export default class SearchPage
     // Optionally, trigger a search with the recognized text
     this._onSearch(text);
   }
+  get Label() {
+    return this.getByRef("Label");
+  }
 
   async _onSearch(query: string) {
     const movieResults = await movieService.searchMovies(query);
@@ -156,6 +170,12 @@ export default class SearchPage
         return movieResults || [];
       },
     };
+
+    if (movieResults.length === 0 && tvResults?.length === 0) {
+      this.Label!.visible = true;
+      this.VerticalList!.visible = false;
+      // eventBus.emit("focusDefaultKeyboard");
+    }
 
     if (query !== "") {
       if (movies || tvShows) {
