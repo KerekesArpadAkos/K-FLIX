@@ -23,11 +23,6 @@ export default class SearchInput
       w: 1606,
       h: 55,
       color: COLORS.GREY_DARK,
-      shader: {
-        type: Lightning.shaders.RoundedRectangle,
-        radius: 15,
-        stroke: 2,
-      },
       Content: {
         SearchImage: {
           x: 10,
@@ -36,15 +31,9 @@ export default class SearchInput
           w: 40,
           h: 40,
           src: Utils.asset("images/search.png"),
-          shader: {
-            type: Lightning.shaders.RoundedRectangle,
-            strokeColor: COLORS.BLACK,
-          },
         },
         InputField: {
           x: 60,
-          y: 30,
-          mountY: 0.5,
           type: Input,
           w: 1546,
           h: 55,
@@ -52,11 +41,6 @@ export default class SearchInput
             text: "Enter title here...",
             fontSize: 44,
             textColor: COLORS.WHITE,
-          },
-          shader: {
-            type: Lightning.shaders.RoundedRectangle,
-            strokeColor: COLORS.BLACK,
-            radius: [0, 15, 15, 0],
           },
         },
       },

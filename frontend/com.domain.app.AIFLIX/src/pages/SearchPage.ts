@@ -31,7 +31,7 @@ export default class SearchPage
     return {
       w: 1920,
       h: 1080,
-      color: COLORS.RAISIN_BLACK,
+      color: COLORS.BACKGROUND,
       rect: true,
       Topbar: {
         type: Topbar,
@@ -39,7 +39,7 @@ export default class SearchPage
       },
       DefaultKeyboard: {
         type: DefaultKeyboard,
-        zIndex: 2,
+        zIndex: 0,
       },
       SearchInput: {
         type: SearchInput,

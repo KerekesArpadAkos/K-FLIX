@@ -25,7 +25,7 @@ export default class DefaultKeyboard extends Lightning.Component {
       y: 279,
       w: 325,
       h: 436,
-      rect: true,
+      color: COLORS.BACKGROUND,
       flex: {
         direction: "column" as const,
         alignItems: "center" as const,
@@ -58,7 +58,6 @@ export default class DefaultKeyboard extends Lightning.Component {
             textY: 25,
             fontSize: 36,
             backgroundColor: COLORS.GREY_DARK,
-            textColor: COLORS.WHITE,
             flexItem: {
               margin: 2.5,
             },
@@ -88,8 +87,8 @@ export default class DefaultKeyboard extends Lightning.Component {
         button.patch({
           color:
             rowIndex === this._rowIndex && colIndex === this._columnIndex
-              ? 0xffaaaaaa
-              : 0xff333333,
+              ? COLORS.GREEN_FOCUS
+              : COLORS.GREY_DARK,
         });
       });
     });

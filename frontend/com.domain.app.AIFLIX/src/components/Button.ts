@@ -27,8 +27,8 @@ export class Button
       rect: true,
       color: this.bindProp("backgroundColor"),
       Text: {
-        x: this.bindProp("textX"),
-        y: this.bindProp("textY"),
+        x: (w) => w / 2, // Center horizontally
+        y: (h) => h / 2 + 2, // Center vertically
         mount: 0.5,
         text: {
           text: this.bindProp("buttonText"),
