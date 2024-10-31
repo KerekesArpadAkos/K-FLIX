@@ -1,7 +1,7 @@
 import { Lightning, Utils } from "@lightningjs/sdk";
 import { COLORS } from "../../static/constants/Colors";
-import { SCREEN_SIZES } from "../../static/constants/ScreenSizes";
 import { Input } from "@lightningjs/ui-components";
+import eventBus from "./EventBus";
 
 interface SearchInputTemplateSpec extends Lightning.Component.TemplateSpec {
   Content: {
@@ -19,18 +19,10 @@ export default class SearchInput
 
   static override _template() {
     return {
-      x: SCREEN_SIZES.WIDTH * 0.5,
-      mountX: 0.5,
       rect: true,
-      w: 350,
-      h: 60,
-      color: COLORS.GREY_LIGHT,
-      shader: {
-        type: Lightning.shaders.RoundedRectangle,
-        radius: 15,
-        stroke: 2,
-        strokeColor: COLORS.WHITE,
-      },
+      w: 1606,
+      h: 55,
+      color: COLORS.GREY_DARK,
       Content: {
         SearchImage: {
           x: 10,
@@ -39,91 +31,62 @@ export default class SearchInput
           w: 40,
           h: 40,
           src: Utils.asset("images/search.png"),
-          shader: {
-            type: Lightning.shaders.RoundedRectangle,
-            strokeColor: 0x00000000,
-          },
         },
         InputField: {
           x: 60,
-          y: 30,
-          mountY: 0.5,
           type: Input,
-          w: 290,
-          h: 60,
+          w: 1546,
+          h: 55,
           text: {
-            text: "Search...",
+            text: "Enter title here...",
             fontSize: 44,
             textColor: COLORS.WHITE,
-          },
-          shader: {
-            type: Lightning.shaders.RoundedRectangle,
-            strokeColor: 0x00000000,
-            radius: [0, 15, 15, 0],
           },
         },
       },
     };
   }
 
-  get Content() {
-    return this.getByRef("Content");
+  override _init() {
+    eventBus.on("inputTextUpdate", (event: CustomEvent) => {
+      const input = event.detail as string;
+      if (input === "BACK") {
+        this._inputText = this._inputText.slice(0, -1);
+      } else if (input === "ENTER") {
+        this._triggerSearch();
+      } else {
+        this._inputText += input;
+      }
+      this._updateInputField();
+    });
   }
 
-  get InputField() {
-    return this.Content?.tag("InputField");
+  private _updateInputField() {
+    this.patch({
+      Content: {
+        InputField: {
+          text: { text: this._inputText },
+        },
+      },
+    });
+  }
+
+  // Implementing the setText method
+  public setText(text: string) {
+    this._inputText = text;
+    this._updateInputField();
+  }
+
+  private _triggerSearch() {
+    this.signal("search", this._inputText);
   }
 
   set inputText(value: string) {
     this._inputText = value;
-    this.InputField?.patch({
-      text: { text: this._inputText },
-    });
+    this._updateInputField();
   }
 
   get inputText() {
     return this._inputText;
-  }
-
-  override _handleKey(event: KeyboardEvent) {
-    if (event.key.length === 1) {
-      this.inputText += event.key;
-    } else if (event.key === "Backspace") {
-      this.inputText = this.inputText.slice(0, -1);
-    }
-  }
-
-  override _handleEnter() {
-    this.signal("search", this.inputText);
-  }
-
-  override _handleDown() {
-    this.signal("focusList");
-  }
-
-  override _handleLeft() {
-    this.signal("focusSidebar");
-  }
-
-  get inputValue() {
-    return this.inputText;
-  }
-
-  override _focus() {
-    this.patch({
-      smooth: { x: [SCREEN_SIZES.WIDTH * 0.5, { duration: 0.2 }] },
-    });
-    this.InputField?.patch({
-      color: COLORS.WHITE,
-    });
-  }
-
-  override _unfocus() {
-    this.patch({
-      smooth: { x: [SCREEN_SIZES.WIDTH + 120, { duration: 0.2 }] },
-    });
-    this.InputField?.patch({
-      color: COLORS.GREEN_FOCUS,
-    });
   }
 }

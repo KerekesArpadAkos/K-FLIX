@@ -1,4 +1,4 @@
-import { Lightning } from "@lightningjs/sdk";
+import { Lightning, Utils } from "@lightningjs/sdk";
 import SearchInput from "../components/SearchInput";
 import { movieService } from "../utils/service/MovieService";
 import VerticalList from "../components/VerticalList";
@@ -7,18 +7,23 @@ import { COLORS } from "../../static/constants/Colors";
 import { tvShowService } from "../utils/service/TVShowService";
 import { Sidebar } from "../components/Sidebar";
 import Router from "@lightningjs/sdk/src/Router";
-import { Gallery } from "../components/Gallery";
 import { getImageUrl } from "../utils";
 import Card from "../components/Card";
 import eventBus from "../components/EventBus";
-import PinOverlay from "../components/PinOverlay";
+import Topbar from "src/components/Topbar";
+import DefaultKeyboard from "src/components/DefaultKeyboard";
+import { Button } from "src/components/Button";
+import { Microphone } from "src/components/Microphone";
 
 interface SearchPageTemplateSpec extends Lightning.Component.TemplateSpec {
   Sidebar: typeof Sidebar;
   SearchInput: typeof SearchInput;
   VerticalList: typeof VerticalList;
-  Gallery: typeof Gallery;
-  PinOverlay: typeof PinOverlay;
+  Topbar: typeof Topbar;
+  DefaultKeyboard: typeof DefaultKeyboard;
+  Microphone: typeof Microphone;
+  Carousel: typeof Carousel;
+  Label: object;
 }
 
 export default class SearchPage
@@ -29,11 +34,20 @@ export default class SearchPage
     return {
       w: 1920,
       h: 1080,
-      color: COLORS.RAISIN_BLACK,
+      color: COLORS.BACKGROUND,
       rect: true,
+      Topbar: {
+        type: Topbar,
+        zIndex: 2,
+      },
+      DefaultKeyboard: {
+        type: DefaultKeyboard,
+        zIndex: 0,
+      },
       SearchInput: {
         type: SearchInput,
-        y: 100,
+        x: 199,
+        y: 170,
         zIndex: 2,
         signals: {
           focusList: true,
@@ -41,21 +55,30 @@ export default class SearchPage
           focusSidebar: true,
         },
       },
-      Gallery: {
-        type: Gallery,
-      },
       VerticalList: {
         type: VerticalList,
-        x: 100,
-        y: -50,
+        x: 500,
+        y: -300,
         zIndex: 1,
-        signals: {
-          $onFocusGallery: true,
-          $dimGallery: true,
-        },
       },
-      PinOverlay: {
-        type: PinOverlay,
+      Carousel: {
+        type: Carousel,
+        // x: 500,
+        // y: 100,
+        // zIndex: 1,
+      },
+      Microphone: {
+        type: Microphone,
+        zIndex: 2,
+      },
+      Label: {
+        x: 847,
+        y: 555,
+        text: {
+          text: "No results found...",
+          fontSize: 65,
+          textColor: COLORS.WHITE,
+        },
         visible: false,
       },
     };
@@ -81,49 +104,50 @@ export default class SearchPage
     Router.focusWidget("Sidebar");
   }
 
-  get Gallery() {
-    return this.getByRef("Gallery") as Gallery;
+  get Topbar() {
+    return this.getByRef("Topbar") as Topbar;
   }
-
-  get PinOverlay() {
-    return this.getByRef("PinOverlay") as PinOverlay;
+  get Carousel() {
+    return this.getByRef("Carousel") as Carousel;
   }
-
   override _init() {
-    eventBus.on("showPinOverlay", (event: CustomEvent) =>
-      this.showPinOverlay(event)
-    );
-    eventBus.on("pinCorrect", this.hidePinOverlay.bind(this));
-    eventBus.on("accessDenied", this.handleAccessDenied.bind(this));
-    eventBus.on(
-      "setStateOnDetailButton",
-      this.setStateOnDetailButton.bind(this)
-    );
-  }
-  showPinOverlay(event: CustomEvent) {
-    this.PinOverlay.patch({
-      visible: true,
-      zIndex: 2,
+    this.Topbar?.patch({
+      TopBarComponent: { Label: { text: { text: "Search" } } },
     });
-    this.PinOverlay._isMovie = event.detail.isMovie;
-    this.PinOverlay.movieId = event.detail.movieId;
-    this._setState("PinOverlayFocus");
-  }
 
-  hidePinOverlay() {
-    this.PinOverlay.patch({
-      visible: false,
+    eventBus.on("focusDefaultKeyboard", () => {
+      console.log("focusDefaultKeyboard catched in SearchPage");
+      this._setState("DefaultKeyboard");
     });
-    this._setState("VerticalList");
+
+    eventBus.on("focusCarousel", () => {
+      this._setState("VerticalList");
+    });
+    eventBus.on("focusMicrophone", () => {
+      console.log("Focus shifted to Microphone");
+      this._setState("MicrophoneFocus");
+    });
+    eventBus.on("recognizedText", (event: CustomEvent) => {
+      const transcript = event.detail as string;
+      console.log("Recognized text received in SearchPage:", transcript);
+      this._updateSearchInput(transcript);
+    });
+    eventBus.on("focusBackButton", () => {
+      console.log("Focus shifted to TopBar");
+      this._setState("TopBarFocus");
+    });
+  }
+  private _updateSearchInput(text: string) {
+    // Update the SearchInput component
+    this.tag("SearchInput")?.setText(text);
+
+    // Optionally, trigger a search with the recognized text
+    this._onSearch(text);
+  }
+  get Label() {
+    return this.getByRef("Label");
   }
 
-  setStateOnDetailButton() {
-    this.hidePinOverlay();
-  }
-
-  handleAccessDenied() {
-    this.hidePinOverlay();
-  }
   async _onSearch(query: string) {
     const movieResults = await movieService.searchMovies(query);
     const tvResults = await tvShowService.searchTVShows(query);
@@ -146,85 +170,39 @@ export default class SearchPage
         return movieResults || [];
       },
     };
+
+    if (movieResults.length === 0 && tvResults?.length === 0) {
+      this.Label!.visible = true;
+      this.VerticalList!.visible = false;
+      // eventBus.emit("focusDefaultKeyboard");
+    }
+
     if (query !== "") {
       if (movies || tvShows) {
         this.VerticalList!.loadItems([movies, tvShows]);
         this._setState("VerticalList");
-        this.patch({
-          Gallery: {
-            zIndex: 1,
-            type: Gallery,
-          },
-        });
       }
     }
   }
 
-  $onFocusGallery(data: Card) {
-    this.Gallery.props = {
-      isHomePage: true,
-      isMovie: data.isMovieCard,
-      logoTitle: data.title,
-      title: data.title,
-      description: data.overview,
-      src: getImageUrl(data.srcImage, "w1280"),
-      id: data.idCard,
-      showBtn: false,
-      showTrailers: false,
-      adult: false,
-      isCentered: true,
-    };
-  }
-
-  $dimGallery(focused: number) {
-    this.Gallery.Details.patch({
-      smooth: { alpha: focused < 1 ? 1 : 0 },
-      transitions: { alpha: { duration: 0.1 } },
-    });
-    this.Gallery.DetailsBtn.patch({
-      smooth: { alpha: focused < 1 ? 1 : 0 },
-      transitions: { alpha: { duration: 0.4 } },
-    });
-    this.Gallery.Details.patch({
-      smooth: { y: focused < 1 ? 0 : -50 },
-      transitions: { alpha: { duration: 0.4 }, y: { duration: 0.3 } },
-    });
-    this.Gallery.Description.patch({
-      smooth: { alpha: focused < 1 ? 1 : 0 },
-      transitions: { alpha: { duration: 0.4 } },
-    });
-    this.Gallery.Image.patch({
-      smooth: { alpha: focused < 2 ? 1 : 0.9 },
-      transitions: { alpha: { duration: 0.4 } },
-    });
-  }
-
   override _enable() {
-    this.Gallery.patch({
-      zIndex: 1,
-    });
-
-    this.Gallery.props = {
-      isHomePage: true,
-      isMovie: false,
-      logoTitle: "",
-      title: "",
-      description: "",
-      src: "",
-      id: 0,
-      showBtn: false,
-      showTrailers: false,
-      adult: false,
-      isCentered: true,
-    };
-    this._setState("SearchInput");
+    this._setState("DefaultKeyboard");
     Router.focusPage();
   }
 
   static override _states() {
     return [
+      class DefaultKeyboard extends this {
+        override _getFocused() {
+          return this.tag("DefaultKeyboard");
+        }
+        override _handleUp() {
+          this._setState("SearchInputFocus");
+        }
+      },
       class VerticalList extends this {
         override _getFocused() {
+          this.VerticalList.setCarouselsWidth(1370);
           return this.getByRef("VerticalList");
         }
         override _handleUp() {
@@ -233,33 +211,19 @@ export default class SearchPage
           if (currentIndex > 0) {
             this.VerticalList!.setCurrentIndex = currentIndex - 1;
             this.VerticalList!.List.setIndex(currentIndex - 1);
-            this.signal("$dimGallery", currentIndex - 1);
           } else {
-            this._setState("SearchInput");
+            return;
           }
         }
-
-        override _handleDown() {
-          const currentIndex = this.VerticalList!.getCurrentIndex;
-          this.signal("$dimGallery", currentIndex);
+      },
+      class TopBarFocus extends this {
+        override _getFocused(): Lightning.Component | undefined {
+          return this.tag("Topbar") as Topbar;
         }
       },
-      class SearchInput extends this {
+      class MicrophoneFocus extends this {
         override _getFocused() {
-          return this.getByRef("SearchInput");
-        }
-      },
-      class PinOverlayFocus extends this {
-        override _getFocused(): PinOverlay {
-          return this.PinOverlay;
-        }
-
-        override _handleBack() {
-          this.PinOverlay.hidePinOverlay();
-        }
-
-        override _handleEnter() {
-          this.PinOverlay._handleEnter();
+          return this.tag("Microphone");
         }
       },
     ];

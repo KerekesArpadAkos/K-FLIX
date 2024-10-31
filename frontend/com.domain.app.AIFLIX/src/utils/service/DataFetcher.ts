@@ -11,7 +11,7 @@ class DataFetcher {
 
   protected request = async <T extends object>(
     info: RequestInfo,
-    init?: RequestInit,
+    init?: RequestInit
   ): Promise<T | null> => {
     const defaultUrl = DataFetcher.createUrl(info as string);
     const defaultParams = {
@@ -34,7 +34,10 @@ class DataFetcher {
     return this.handleResponse<T>(response);
   };
 
-  protected fetch = (info: RequestInfo, init?: RequestInit): Promise<Response> => {
+  protected fetch = (
+    info: RequestInfo,
+    init?: RequestInit
+  ): Promise<Response> => {
     return fetch(info, init);
   };
 
