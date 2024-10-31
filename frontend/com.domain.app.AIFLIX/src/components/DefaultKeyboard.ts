@@ -82,43 +82,39 @@ export default class DefaultKeyboard extends Lightning.Component {
   }
 
   private _updateFocus() {
+    const isKeyboardFocused = this.hasFocus();
     this.children.forEach((row, rowIndex) => {
       row.children.forEach((button, colIndex) => {
         button.patch({
           color:
-            rowIndex === this._rowIndex && colIndex === this._columnIndex
+            isKeyboardFocused &&
+            rowIndex === this._rowIndex &&
+            colIndex === this._columnIndex
               ? COLORS.GREEN_FOCUS
               : COLORS.GREY_DARK,
         });
       });
     });
   }
+  override _focus() {
+    // Update the focus visuals when the keyboard gains focus
+    this._updateFocus();
+  }
 
+  override _unfocus() {
+    // Reset key colors when the keyboard loses focus
+    this.children.forEach((row) => {
+      row.children.forEach((button) => {
+        button.patch({
+          color: COLORS.GREY_DARK, // Default key color
+        });
+      });
+    });
+  }
   _setIndex(index: number) {
     this._rowIndex = Math.floor(index / 6);
     this._columnIndex = index % 6;
     this._updateFocus();
-  }
-
-  focusNext() {
-    const row = this.children[this._rowIndex] as
-      | Lightning.Component
-      | undefined;
-    if (row) {
-      this._columnIndex = (this._columnIndex + 1) % row.children.length;
-      this._updateFocus();
-    }
-  }
-
-  focusPrevious() {
-    const row = this.children[this._rowIndex] as
-      | Lightning.Component
-      | undefined;
-    if (row) {
-      this._columnIndex =
-        (this._columnIndex - 1 + row.children.length) % row.children.length;
-      this._updateFocus();
-    }
   }
 
   focusDown() {
@@ -150,6 +146,7 @@ export default class DefaultKeyboard extends Lightning.Component {
   }
   focusUp() {
     if (this._rowIndex === 0) {
+      // this._updateFocus();
       eventBus.emit("focusBackButton");
       return;
     }
