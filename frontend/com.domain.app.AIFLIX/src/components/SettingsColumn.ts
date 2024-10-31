@@ -1,6 +1,7 @@
 import { Lightning, Utils } from "@lightningjs/sdk";
 import SettingsColumnItem from "./SettingsColumnItem";
 import { COLORS } from "../../static/constants/Colors";
+import eventBus from "./EventBus";
 
 interface SettingsColumnTemplateSpec extends Lightning.Component.TemplateSpec {
   Image: object;
@@ -32,7 +33,6 @@ export class SettingsColumn
       },
     };
   }
-
   set items(items: { label: string; ref: string }[]) {
     const itemsTag = this.tag("Items");
     if (itemsTag) {

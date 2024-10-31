@@ -107,8 +107,11 @@ export default class Topbar
   override _handleEnter() {
     Router.back();
   }
-
+  override _active() {
+    this._unfocus();
+  }
   override _handleDown() {
+    eventBus.emit("focusMainColumn");
     eventBus.emit("focusDefaultKeyboard");
   }
   override _getFocused(): Lightning.Component | undefined {
