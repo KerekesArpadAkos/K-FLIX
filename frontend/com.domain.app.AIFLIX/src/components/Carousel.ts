@@ -6,7 +6,7 @@ import eventBus from "./EventBus";
 interface CarouselTemplateSpec extends Lightning.Component.TemplateSpec {
   Title: object;
   List: {
-    type: ListComponentType;
+    type: object;
     items: Card[];
   };
 }
@@ -25,7 +25,7 @@ export class Carousel extends Lightning.Component<CarouselTemplateSpec> {
 
   static override _template() {
     return {
-      w: 1820,
+      w: 1780,
       h: 400,
       y: 200,
       Title: {
@@ -39,7 +39,7 @@ export class Carousel extends Lightning.Component<CarouselTemplateSpec> {
       },
       List: {
         type: Lightning.components.ListComponent,
-        w: 1780,
+        w: 1770,
         h: 400,
         itemSize: 230,
         roll: true,
@@ -59,7 +59,7 @@ export class Carousel extends Lightning.Component<CarouselTemplateSpec> {
     this._setState("Carousel");
   }
 
-  get List(): ListComponentType {
+  get List() {
     return this.getByRef("List") as ListComponentType;
   }
 
@@ -77,6 +77,10 @@ export class Carousel extends Lightning.Component<CarouselTemplateSpec> {
 
   get isTop() {
     return this._isTop;
+  }
+
+  set listWidth(width: number) {
+    this.List.w = width; // Use 'this.tag("List")' to access the List component
   }
 
   async loadMovies() {

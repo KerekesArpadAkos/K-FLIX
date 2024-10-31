@@ -21,6 +21,7 @@ interface SearchPageTemplateSpec extends Lightning.Component.TemplateSpec {
   Topbar: typeof Topbar;
   DefaultKeyboard: typeof DefaultKeyboard;
   MicrophoneButton: typeof Button;
+  Carousel: typeof Carousel;
 }
 
 export default class SearchPage
@@ -58,6 +59,12 @@ export default class SearchPage
         y: -300,
         zIndex: 1,
       },
+      Carousel: {
+        type: Carousel,
+        // x: 500,
+        // y: 100,
+        // zIndex: 1,
+      },
       MicrophoneButton: {
         type: Button,
         x: 289,
@@ -93,11 +100,16 @@ export default class SearchPage
   get Topbar() {
     return this.getByRef("Topbar") as Topbar;
   }
+  get Carousel() {
+    return this.getByRef("Carousel") as Carousel;
+  }
   override _init() {
     this.Topbar?.patch({
       TopBarComponent: { Label: { text: { text: "Search" } } },
     });
 
+    // this.VerticalList.listWidth = 780;
+    // this.Carousel.listWidth = 780;
     // eventBus.on("focusSearchInput", () => {
     //   this._setState("SearchInputFocus");
     // });
@@ -133,6 +145,7 @@ export default class SearchPage
         return movieResults || [];
       },
     };
+
     if (query !== "") {
       if (movies || tvShows) {
         this.VerticalList!.loadItems([movies, tvShows]);
@@ -158,6 +171,7 @@ export default class SearchPage
       },
       class VerticalList extends this {
         override _getFocused() {
+          this.VerticalList.setCarouselsWidth(1370);
           return this.getByRef("VerticalList");
         }
         override _handleUp() {

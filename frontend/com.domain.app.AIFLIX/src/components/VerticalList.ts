@@ -18,7 +18,6 @@ export class VerticalList extends Lightning.Component<VerticalListTemplateSpec> 
         type: Lightning.components.ListComponent,
         w: 1780,
         h: 15000,
-        //how much should be the x here?
         x: 40,
         itemSize: 30,
         roll: true,
@@ -33,7 +32,19 @@ export class VerticalList extends Lightning.Component<VerticalListTemplateSpec> 
       },
     };
   }
+  setCarouselsWidth(width: number) {
+    const list = this.List;
+    for (let i = 0; i < list.length; i++) {
+      const carousel = list.getElement(i) as Carousel;
+      if (carousel) {
+        carousel.listWidth = width;
+      }
+    }
+  }
 
+  set listWidth(width: number) {
+    this.List.w = width; // Use 'this.tag("List")' to access the List component
+  }
   override _init() {
     this.currentIndex = 0;
     this._setState("VerticalList");
