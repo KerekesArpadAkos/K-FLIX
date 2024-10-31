@@ -123,6 +123,7 @@ export default class DefaultKeyboard extends Lightning.Component {
 
   focusDown() {
     if (this._rowIndex === this.children.length - 1) {
+      eventBus.emit("focusMicrophone");
       return; // If on the last row ("ENTER"), do nothing on further down presses
     }
 

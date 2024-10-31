@@ -13,6 +13,7 @@ import eventBus from "../components/EventBus";
 import Topbar from "src/components/Topbar";
 import DefaultKeyboard from "src/components/DefaultKeyboard";
 import { Button } from "src/components/Button";
+import { Microphone } from "src/components/Microphone";
 
 interface SearchPageTemplateSpec extends Lightning.Component.TemplateSpec {
   Sidebar: typeof Sidebar;
@@ -20,7 +21,7 @@ interface SearchPageTemplateSpec extends Lightning.Component.TemplateSpec {
   VerticalList: typeof VerticalList;
   Topbar: typeof Topbar;
   DefaultKeyboard: typeof DefaultKeyboard;
-  MicrophoneButton: typeof Button;
+  Microphone: typeof Microphone;
   Carousel: typeof Carousel;
 }
 
@@ -65,13 +66,8 @@ export default class SearchPage
         // y: 100,
         // zIndex: 1,
       },
-      MicrophoneButton: {
-        type: Button,
-        x: 289,
-        y: 783,
-        w: 150,
-        h: 150,
-        src: Utils.asset("images/microphoneSilent.png"),
+      Microphone: {
+        type: Microphone,
         zIndex: 2,
       },
     };
@@ -121,6 +117,22 @@ export default class SearchPage
     eventBus.on("focusCarousel", () => {
       this._setState("VerticalList");
     });
+    eventBus.on("focusMicrophone", () => {
+      console.log("Focus shifted to Microphone");
+      this._setState("MicrophoneFocus");
+    });
+    eventBus.on("recognizedText", (event: CustomEvent) => {
+      const transcript = event.detail as string;
+      console.log("Recognized text received in SearchPage:", transcript);
+      this._updateSearchInput(transcript);
+    });
+  }
+  private _updateSearchInput(text: string) {
+    // Update the SearchInput component
+    this.tag("SearchInput")?.setText(text);
+
+    // Optionally, trigger a search with the recognized text
+    this._onSearch(text);
   }
 
   async _onSearch(query: string) {
@@ -183,6 +195,11 @@ export default class SearchPage
           } else {
             return;
           }
+        }
+      },
+      class MicrophoneFocus extends this {
+        override _getFocused() {
+          return this.tag("Microphone");
         }
       },
     ];

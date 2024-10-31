@@ -71,6 +71,12 @@ export default class SearchInput
     });
   }
 
+  // Implementing the setText method
+  public setText(text: string) {
+    this._inputText = text;
+    this._updateInputField();
+  }
+
   private _triggerSearch() {
     this.signal("search", this._inputText);
   }
