@@ -150,6 +150,7 @@ export default class DefaultKeyboard extends Lightning.Component {
   }
   focusUp() {
     if (this._rowIndex === 0) {
+      eventBus.emit("focusBackButton");
       return;
     }
 

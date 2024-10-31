@@ -104,11 +104,6 @@ export default class SearchPage
       TopBarComponent: { Label: { text: { text: "Search" } } },
     });
 
-    // this.VerticalList.listWidth = 780;
-    // this.Carousel.listWidth = 780;
-    // eventBus.on("focusSearchInput", () => {
-    //   this._setState("SearchInputFocus");
-    // });
     eventBus.on("focusDefaultKeyboard", () => {
       console.log("focusDefaultKeyboard catched in SearchPage");
       this._setState("DefaultKeyboard");
@@ -125,6 +120,10 @@ export default class SearchPage
       const transcript = event.detail as string;
       console.log("Recognized text received in SearchPage:", transcript);
       this._updateSearchInput(transcript);
+    });
+    eventBus.on("focusBackButton", () => {
+      console.log("Focus shifted to TopBar");
+      this._setState("TopBarFocus");
     });
   }
   private _updateSearchInput(text: string) {
@@ -195,6 +194,11 @@ export default class SearchPage
           } else {
             return;
           }
+        }
+      },
+      class TopBarFocus extends this {
+        override _getFocused(): Lightning.Component | undefined {
+          return this.tag("Topbar") as Topbar;
         }
       },
       class MicrophoneFocus extends this {

@@ -1,9 +1,10 @@
 import { Lightning, Router, Utils } from "@lightningjs/sdk";
 import { COLORS } from "static/constants/Colors";
+import eventBus from "./EventBus";
 
 interface TopbarTemplateSpec extends Lightning.Component.TemplateSpec {
   TopBarComponent: {
-    Button: object;
+    Button: Lightning.Component;
     Label: object;
     CurrentTime: object;
   };
@@ -28,6 +29,7 @@ export default class Topbar
         x: 199,
         y: 58,
         Button: {
+          type: Lightning.Component,
           src: Utils.asset("images/backButton.png"),
           w: 52,
           h: 52,
@@ -36,7 +38,7 @@ export default class Topbar
         Label: {
           text: {
             text: "",
-            fontSize: 50,
+            fontSize: 40,
             textColor: COLORS.WHITE,
           },
           x: 75,
@@ -57,6 +59,13 @@ export default class Topbar
     };
   }
 
+  override _init() {
+    eventBus.on("focusBackButton", () => {
+      //focus on the back button
+      this._focus();
+      this._refocus();
+    });
+  }
   set props(props: { title: string }) {
     const { title } = props;
     this.patch({ TopBarComponent: { Label: { text: { text: title } } } });
@@ -99,6 +108,12 @@ export default class Topbar
     Router.back();
   }
 
+  override _handleDown() {
+    eventBus.emit("focusDefaultKeyboard");
+  }
+  override _getFocused(): Lightning.Component | undefined {
+    return this.tag("TopBarComponent.Button") as Lightning.Component;
+  }
   override _focus() {
     this.tag("TopBarComponent.Button")?.patch({ color: COLORS.BLUE_FOCUS });
   }
