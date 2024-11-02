@@ -17,11 +17,12 @@ interface LoginPageTemplateSpec extends Lightning.Component.TemplateSpec {
     NoAccountMessage: object;
     RegisterButton: typeof Button;
   };
-  //here will come the LandscapeKeyboard component
   LandscapeKeyboard: typeof LandscapeKeyboard;
 }
 
 export default class LoginPage extends Lightning.Component<LoginPageTemplateSpec> {
+  private _currentInputField: "Email" | "Password" | null = null;
+
   static override _template(): Lightning.Component.Template<LoginPageTemplateSpec> {
     return {
       rect: true,
@@ -42,6 +43,7 @@ export default class LoginPage extends Lightning.Component<LoginPageTemplateSpec
       },
 
       Container: {
+        ref: "Container",
         x: 722,
         y: 125,
         w: 476,
@@ -49,6 +51,7 @@ export default class LoginPage extends Lightning.Component<LoginPageTemplateSpec
         rect: true,
         color: COLORS.BACKGROUND,
         EmailContainer: {
+          ref: "EmailContainer",
           x: 15,
           y: 89,
           w: 450,
@@ -62,6 +65,7 @@ export default class LoginPage extends Lightning.Component<LoginPageTemplateSpec
             strokeColor: COLORS.GREY_LIGHT,
           },
           EmailLabel: {
+            ref: "EmailLabel",
             x: 15,
             y: 25,
             w: 420,
@@ -74,13 +78,14 @@ export default class LoginPage extends Lightning.Component<LoginPageTemplateSpec
             },
             shader: {
               type: Lightning.shaders.RoundedRectangle,
-              radius: 0,
+              radius: 6,
               stroke: 0,
             },
           },
         },
 
         PasswordContainer: {
+          ref: "PasswordContainer",
           x: 15,
           y: 233,
           w: 450,
@@ -94,6 +99,7 @@ export default class LoginPage extends Lightning.Component<LoginPageTemplateSpec
             strokeColor: COLORS.GREY_LIGHT,
           },
           PasswordLabel: {
+            ref: "PasswordLabel",
             x: 16,
             y: 25,
             w: 420,
@@ -106,13 +112,14 @@ export default class LoginPage extends Lightning.Component<LoginPageTemplateSpec
             },
             shader: {
               type: Lightning.shaders.RoundedRectangle,
-              radius: 0,
+              radius: 6,
               stroke: 0,
             },
           },
         },
 
         LoginButton: {
+          ref: "LoginButton",
           type: Button,
           x: 15,
           y: 440,
@@ -143,6 +150,7 @@ export default class LoginPage extends Lightning.Component<LoginPageTemplateSpec
         },
 
         RegisterButton: {
+          ref: "RegisterButton",
           type: Button,
           x: 140,
           y: 564,
@@ -159,46 +167,122 @@ export default class LoginPage extends Lightning.Component<LoginPageTemplateSpec
         },
       },
       LandscapeKeyboard: {
+        ref: "LandscapeKeyboard",
         type: LandscapeKeyboard,
         visible: false,
+        signals: {
+          onKeyPress: true,
+          upFromKeyboard: true,
+        },
       },
     };
   }
 
   get Container() {
-    return this.getByRef("Container");
+    return this.tag("Container");
   }
 
   get EmailContainer() {
-    return this.Container?.getByRef("EmailContainer");
+    return this.Container?.tag("EmailContainer");
   }
 
   get EmailLabel() {
-    return this.EmailContainer?.getByRef("EmailLabel");
+    return this.EmailContainer?.tag("EmailLabel");
   }
 
   get PasswordContainer() {
-    return this.Container?.getByRef("PasswordContainer");
+    return this.Container?.tag("PasswordContainer");
   }
 
   get PasswordLabel() {
-    return this.PasswordContainer?.getByRef("PasswordLabel");
+    return this.PasswordContainer?.tag("PasswordLabel");
   }
 
   get LoginButton() {
-    return this.Container?.getByRef("LoginButton");
+    return this.Container?.tag("LoginButton");
   }
 
   get RegisterButton() {
-    return this.Container?.getByRef("RegisterButton");
+    return this.Container?.tag("RegisterButton");
   }
 
   get LandscapeKeyboard() {
-    return this.getByRef("LandscapeKeyboard");
+    return this.tag("LandscapeKeyboard");
   }
 
   override _init() {
     this._setState("LoginButton");
+  }
+
+  // Handle key press events from the keyboard
+  onKeyPress(char: string) {
+    let label;
+    if (this._currentInputField === "Email") {
+      label = this.EmailLabel;
+    } else if (this._currentInputField === "Password") {
+      label = this.PasswordLabel;
+    }
+
+    if (label) {
+      let currentText = label.text?.text || "";
+      if (currentText === "Email" || currentText === "Password") {
+        currentText = "";
+      }
+      if (char === "BS") {
+        // Handle backspace
+        currentText = currentText.slice(0, -1);
+      } else if (char === "OK") {
+        // Hide keyboard on OK
+        if (this.LandscapeKeyboard) {
+          this.LandscapeKeyboard.visible = false;
+        }
+        // Unfocus from current container and move to LoginButton
+        this._unfocusCurrentInput();
+        this._setState("LoginButton");
+      } else {
+        currentText += char;
+      }
+      label.patch({ text: { text: currentText } });
+    }
+  }
+
+  // Handle up navigation from the keyboard
+  upFromKeyboard() {
+    if (this._currentInputField === "Password") {
+      // Move to EmailContainer
+      this._unfocusCurrentInput();
+      this._setState("EmailContainer");
+    } else if (this._currentInputField === "Email") {
+      // Move to RegisterButton
+      this._unfocusCurrentInput();
+      this._setState("RegisterButton");
+    }
+  }
+
+  private _unfocusCurrentInput() {
+    if (this._currentInputField === "Email") {
+      this.EmailContainer?.patch({
+        shader: {
+          type: Lightning.shaders.RoundedRectangle,
+          radius: 10,
+          stroke: 3,
+          strokeColor: COLORS.GREY_LIGHT,
+        },
+      });
+    } else if (this._currentInputField === "Password") {
+      this.PasswordContainer?.patch({
+        shader: {
+          type: Lightning.shaders.RoundedRectangle,
+          radius: 10,
+          stroke: 3,
+          strokeColor: COLORS.GREY_LIGHT,
+        },
+      });
+    }
+    if (this.LandscapeKeyboard) {
+      this.LandscapeKeyboard.visible = false;
+    }
+    this._currentInputField = null;
   }
 
   static override _states() {
@@ -214,8 +298,7 @@ export default class LoginPage extends Lightning.Component<LoginPageTemplateSpec
           this._setState("RegisterButton");
         }
         override _handleEnter() {
-          // Router.navigate("signin");
-          //here should be the logic to sign in
+          // Implement sign-in logic here
         }
       },
       class RegisterButton extends this {
@@ -231,6 +314,7 @@ export default class LoginPage extends Lightning.Component<LoginPageTemplateSpec
       },
       class PasswordContainer extends this {
         override _getFocused() {
+          this._currentInputField = "Password";
           this.PasswordContainer?.patch({
             shader: {
               type: Lightning.shaders.RoundedRectangle,
@@ -245,17 +329,7 @@ export default class LoginPage extends Lightning.Component<LoginPageTemplateSpec
           return this.LandscapeKeyboard;
         }
         override _unfocus() {
-          this.PasswordContainer?.patch({
-            shader: {
-              type: Lightning.shaders.RoundedRectangle,
-              radius: 10,
-              stroke: 3,
-              strokeColor: COLORS.GREY_LIGHT,
-            },
-          });
-          if (this.LandscapeKeyboard) {
-            this.LandscapeKeyboard.visible = false;
-          }
+          this._unfocusCurrentInput();
         }
         override _handleUp() {
           this._unfocus();
@@ -268,6 +342,7 @@ export default class LoginPage extends Lightning.Component<LoginPageTemplateSpec
       },
       class EmailContainer extends this {
         override _getFocused() {
+          this._currentInputField = "Email";
           this.EmailContainer?.patch({
             shader: {
               type: Lightning.shaders.RoundedRectangle,
@@ -282,29 +357,11 @@ export default class LoginPage extends Lightning.Component<LoginPageTemplateSpec
           return this.LandscapeKeyboard;
         }
         override _unfocus() {
-          this.EmailContainer?.patch({
-            shader: {
-              type: Lightning.shaders.RoundedRectangle,
-              radius: 10,
-              stroke: 3,
-              strokeColor: COLORS.GREY_LIGHT,
-            },
-          });
-          if (this.LandscapeKeyboard) {
-            this.LandscapeKeyboard.visible = false;
-          }
+          this._unfocusCurrentInput();
         }
         override _handleDown() {
           this._unfocus();
           this._setState("PasswordContainer");
-        }
-      },
-      class LandscapeKeyboard extends this {
-        override _getFocused() {
-          return this.LandscapeKeyboard;
-        }
-        override _handleUp() {
-          this._setState("RegisterButton");
         }
       },
     ];
