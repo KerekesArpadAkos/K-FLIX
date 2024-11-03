@@ -27,7 +27,7 @@ export class LandscapeKeyboard extends Lightning.Component<LandscapeKeyboardTemp
       ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"],
       ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j"],
       ["m", "n", "o", "p", "q", "r", "s", "t", "u", "v"],
-      ["y", "z", "k", "l", "w", "x", "@", "BS", "SP", "OK"],
+      ["y", "z", "k", "l", "w", "x", "@", ".", "BS", "OK"],
     ];
 
     const buttonGrid = keyboardLayout.flatMap((row, rowIndex) =>
@@ -63,7 +63,7 @@ export class LandscapeKeyboard extends Lightning.Component<LandscapeKeyboardTemp
       ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"],
       ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j"],
       ["m", "n", "o", "p", "q", "r", "s", "t", "u", "v"],
-      ["y", "z", "k", "l", "w", "x", "@", "BS", "SP", "OK"],
+      ["y", "z", "k", "l", "w", "x", "@", ".", "BS", "OK"],
     ];
   }
 
@@ -113,8 +113,6 @@ export class LandscapeKeyboard extends Lightning.Component<LandscapeKeyboardTemp
     // Handle special keys
     if (char === "BS") {
       this.signal("onKeyPress", "BS");
-    } else if (char === "SP") {
-      this.signal("onKeyPress", " ");
     } else if (char === "OK") {
       this.signal("onKeyPress", "OK");
     } else {

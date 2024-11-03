@@ -10,9 +10,11 @@ interface LoginPageTemplateSpec extends Lightning.Component.TemplateSpec {
     EmailContainer: {
       EmailLabel: object;
     };
+    WrongEmailMessage: object;
     PasswordContainer: {
       PasswordLabel: object;
     };
+    WrongPasswordMessage: object;
     LoginButton: typeof Button;
     NoAccountMessage: object;
     RegisterButton: typeof Button;
@@ -84,6 +86,19 @@ export default class LoginPage extends Lightning.Component<LoginPageTemplateSpec
           },
         },
 
+        WrongEmailMessage: {
+          x: 18,
+          y: 185,
+          w: 405,
+          h: 30,
+          text: {
+            text: "Please enter a registered email address",
+            fontSize: 20,
+            fontFace: "Regular",
+            textColor: COLORS.RED_ERROR,
+          },
+        },
+
         PasswordContainer: {
           ref: "PasswordContainer",
           x: 15,
@@ -115,6 +130,19 @@ export default class LoginPage extends Lightning.Component<LoginPageTemplateSpec
               radius: 6,
               stroke: 0,
             },
+          },
+        },
+
+        WrongPasswordMessage: {
+          x: 18,
+          y: 335,
+          w: 191,
+          h: 30,
+          text: {
+            text: "Wrong password",
+            fontSize: 20,
+            fontFace: "Regular",
+            textColor: COLORS.RED_ERROR,
           },
         },
 
@@ -231,7 +259,7 @@ export default class LoginPage extends Lightning.Component<LoginPageTemplateSpec
       if (char === "BS") {
         // Handle backspace
         currentText = currentText.slice(0, -1);
-      } else if (char === "OK") {
+      } else if (char === "OK" && this._currentInputField === "Password") {
         // Hide keyboard on OK
         if (this.LandscapeKeyboard) {
           this.LandscapeKeyboard.visible = false;
@@ -239,6 +267,10 @@ export default class LoginPage extends Lightning.Component<LoginPageTemplateSpec
         // Unfocus from current container and move to LoginButton
         this._unfocusCurrentInput();
         this._setState("LoginButton");
+      } else if (char === "OK" && this._currentInputField === "Email") {
+        // Unfocus from current container and move to LoginButton
+        this._unfocusCurrentInput();
+        this._setState("PasswordContainer");
       } else {
         currentText += char;
       }
