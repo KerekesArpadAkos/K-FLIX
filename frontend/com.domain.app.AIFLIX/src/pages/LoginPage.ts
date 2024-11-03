@@ -218,43 +218,43 @@ export default class LoginPage extends Lightning.Component<LoginPageTemplateSpec
   }
 
   get Container() {
-    return this.tag("Container");
+    return this.getByRef("Container");
   }
 
   get EmailContainer() {
-    return this.Container?.tag("EmailContainer");
+    return this.Container?.getByRef("EmailContainer");
   }
 
   get EmailLabel() {
-    return this.EmailContainer?.tag("EmailLabel");
+    return this.EmailContainer?.getByRef("EmailLabel");
   }
 
   get WrongEmailMessage() {
-    return this.Container?.tag("WrongEmailMessage");
+    return this.Container?.getByRef("WrongEmailMessage");
   }
 
   get PasswordContainer() {
-    return this.Container?.tag("PasswordContainer");
+    return this.Container?.getByRef("PasswordContainer");
   }
 
   get PasswordLabel() {
-    return this.PasswordContainer?.tag("PasswordLabel");
+    return this.PasswordContainer?.getByRef("PasswordLabel");
   }
 
   get WrongPasswordMessage() {
-    return this.Container?.tag("WrongPasswordMessage");
+    return this.Container?.getByRef("WrongPasswordMessage");
   }
 
   get LoginButton() {
-    return this.Container?.tag("LoginButton");
+    return this.Container?.getByRef("LoginButton");
   }
 
   get RegisterButton() {
-    return this.Container?.tag("RegisterButton");
+    return this.Container?.getByRef("RegisterButton");
   }
 
   get LandscapeKeyboard() {
-    return this.tag("LandscapeKeyboard");
+    return this.getByRef("LandscapeKeyboard");
   }
 
   override _init() {
