@@ -1,4 +1,4 @@
-import API_KEY from "../../.env/.key";
+import API_KEY from "../../.envi/.key";
 import { SCREEN_SIZES } from "../../static/constants/ScreenSizes";
 import { BASE_URL, URLS } from "../../static/constants/URLS";
 let baseImageUrl: string;
@@ -10,7 +10,10 @@ const defaultFetchParams = {
   },
 };
 
-export function getImageUrl(path: string, posterSize = SCREEN_SIZES.CARD_IMAGE_WIDTH) {
+export function getImageUrl(
+  path: string,
+  posterSize = SCREEN_SIZES.CARD_IMAGE_WIDTH
+) {
   if (path.startsWith("http")) {
     return path.replace(SCREEN_SIZES.CARD_IMAGE_WIDTH, posterSize);
   }

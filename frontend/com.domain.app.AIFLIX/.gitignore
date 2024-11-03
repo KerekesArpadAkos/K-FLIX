@@ -7,3 +7,5 @@ build-ts
 releases
 .tmp
 .env
+.envi
+firebaseConfig.ts

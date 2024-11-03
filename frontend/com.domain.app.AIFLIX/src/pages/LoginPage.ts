@@ -3,6 +3,15 @@ import { Button } from "src/components/Button";
 import { COLORS } from "static/constants/Colors";
 import { SCREEN_SIZES } from "static/constants/ScreenSizes";
 import { LandscapeKeyboard } from "src/components/LandscapeKeyboard";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import {
+  getFirestore,
+  collection,
+  query,
+  where,
+  getDocs,
+} from "firebase/firestore";
+import { app, auth, db } from "../services/firebaseService"; // Import Firebase app instance
 
 interface LoginPageTemplateSpec extends Lightning.Component.TemplateSpec {
   Name: object;
@@ -97,6 +106,7 @@ export default class LoginPage extends Lightning.Component<LoginPageTemplateSpec
             fontFace: "Regular",
             textColor: COLORS.RED_ERROR,
           },
+          visible: false,
         },
 
         PasswordContainer: {
@@ -144,6 +154,7 @@ export default class LoginPage extends Lightning.Component<LoginPageTemplateSpec
             fontFace: "Regular",
             textColor: COLORS.RED_ERROR,
           },
+          visible: false,
         },
 
         LoginButton: {
@@ -218,12 +229,20 @@ export default class LoginPage extends Lightning.Component<LoginPageTemplateSpec
     return this.EmailContainer?.tag("EmailLabel");
   }
 
+  get WrongEmailMessage() {
+    return this.Container?.tag("WrongEmailMessage");
+  }
+
   get PasswordContainer() {
     return this.Container?.tag("PasswordContainer");
   }
 
   get PasswordLabel() {
     return this.PasswordContainer?.tag("PasswordLabel");
+  }
+
+  get WrongPasswordMessage() {
+    return this.Container?.tag("WrongPasswordMessage");
   }
 
   get LoginButton() {
@@ -240,6 +259,28 @@ export default class LoginPage extends Lightning.Component<LoginPageTemplateSpec
 
   override _init() {
     this._setState("LoginButton");
+  }
+
+  errorEmailContainer() {
+    this.EmailContainer?.patch({
+      shader: {
+        type: Lightning.shaders.RoundedRectangle,
+        radius: 10,
+        stroke: 3,
+        strokeColor: COLORS.RED_ERROR,
+      },
+    });
+  }
+
+  errorPasswordContainer() {
+    this.PasswordContainer?.patch({
+      shader: {
+        type: Lightning.shaders.RoundedRectangle,
+        radius: 10,
+        stroke: 3,
+        strokeColor: COLORS.RED_ERROR,
+      },
+    });
   }
 
   // Handle key press events from the keyboard
@@ -330,7 +371,80 @@ export default class LoginPage extends Lightning.Component<LoginPageTemplateSpec
           this._setState("RegisterButton");
         }
         override _handleEnter() {
-          // Implement sign-in logic here
+          const email = this.EmailLabel?.text?.text || "";
+          const password = this.PasswordLabel?.text?.text || "";
+
+          // Step 1: Check if the email exists in Firestore
+          const usersRef = collection(db, "user");
+          const q = query(usersRef, where("email", "==", email));
+
+          getDocs(q)
+            .then((querySnapshot) => {
+              if (querySnapshot.empty) {
+                // Email does not exist in Firestore
+                if (this.WrongEmailMessage) {
+                  this.WrongEmailMessage.visible = true;
+                  this.errorEmailContainer();
+                }
+                if (this.WrongPasswordMessage) {
+                  this.WrongPasswordMessage.visible = false;
+                }
+              } else {
+                // Email exists, attempt to sign in with Firebase Authentication
+                signInWithEmailAndPassword(auth, email, password)
+                  .then(() => {
+                    console.log("Successfully signed in!");
+                    if (this.WrongEmailMessage) {
+                      this.WrongEmailMessage.visible = false;
+                    }
+                    if (this.WrongPasswordMessage) {
+                      this.WrongPasswordMessage.visible = false;
+                    }
+                    // Router.navigate("home"); // Or any other route
+                  })
+                  .catch((error) => {
+                    console.error("Error during login process:", error.message);
+
+                    // Hide both error messages initially
+                    if (this.WrongEmailMessage)
+                      this.WrongEmailMessage.visible = false;
+                    if (this.WrongPasswordMessage)
+                      this.WrongPasswordMessage.visible = false;
+
+                    // Check for Firebase-specific error codes
+                    switch (error.code) {
+                      case "auth/user-not-found":
+                        console.log("User not found.");
+                        // Show email error message and highlight email container
+                        if (this.WrongEmailMessage) {
+                          this.errorEmailContainer;
+                          this.WrongEmailMessage.visible = true;
+                        }
+                        this.errorEmailContainer();
+                        break;
+
+                      case "auth/wrong-password":
+                      case "auth/invalid-credential": // Treat invalid credential as wrong password
+                        console.log("Incorrect password.");
+                        // Show password error message and highlight password container
+                        if (this.WrongPasswordMessage) {
+                          this.errorPasswordContainer();
+                          this.WrongPasswordMessage.visible = true;
+                        }
+                        this.errorPasswordContainer();
+                        break;
+
+                      default:
+                        console.log("Other error:", error.message);
+                        break;
+                    }
+                  });
+              }
+            })
+            .catch((error) => {
+              console.error("Error during login process:", error);
+              // Handle any unexpected errors here
+            });
         }
       },
       class RegisterButton extends this {

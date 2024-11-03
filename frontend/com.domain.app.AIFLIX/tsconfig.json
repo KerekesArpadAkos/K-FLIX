@@ -3,7 +3,7 @@
     "outDir": "build-ts",
     "target": "ES2019",
     "lib": ["ES2019", "DOM", "ESNext"],
-    "types": ["@types/node", "vite/client", "jest"], // Add vite/client to types
+    "types": ["@types/node", "jest"],
     "moduleResolution": "node",
     "strict": true,
     "noUncheckedIndexedAccess": true,
@@ -20,6 +20,6 @@
       "@reduxjs/toolkit": ["node_modules/@reduxjs/toolkit"] // Ensure proper path resolution for redux types
     }
   },
-  "include": ["src/**/*.ts", "src/**/*.tsx", "./vite-env.d.ts"], // Include .tsx files if you are using React with TypeScript
+  "include": ["src/**/*.ts", "src/**/*.tsx"], // Include .tsx files if you are using React with TypeScript
   "exclude": ["node_modules", "build-ts"] // Exclude unnecessary folders from compilation
 }
