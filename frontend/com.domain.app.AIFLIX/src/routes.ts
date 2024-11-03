@@ -7,6 +7,9 @@ import { MovieDetails } from "./pages/MovieDetails";
 import SettingsPage from "./pages/SettingsPage";
 import SearchInput from "./components/SearchInput";
 import SearchPage from "./pages/SearchPage";
+import WelcomePage from "./pages/WelcomePage";
+import LoginPage from "./pages/LoginPage";
+import RegisterPage from "./pages/RegisterPage";
 
 interface PageInstance extends Router.PageInstance {
   loadData: (id: number, isMovie: boolean) => Promise<void>;
@@ -20,6 +23,18 @@ const routes: Router.Config["routes"] = [
   {
     path: "splash",
     component: SplashScreen as Router.PageConstructor<Router.PageInstance>,
+  },
+  {
+    path: "welcome",
+    component: WelcomePage as Router.PageConstructor<Router.PageInstance>,
+  },
+  {
+    path: "signin",
+    component: LoginPage as Router.PageConstructor<Router.PageInstance>,
+  },
+  {
+    path: "signup",
+    component: RegisterPage as Router.PageConstructor<Router.PageInstance>,
   },
   {
     path: "home",
@@ -81,7 +96,7 @@ const boot = (qs: Router.QueryParams): Promise<void> => {
 };
 
 export const routerConfig: Router.Config = {
-  root: "home",
+  root: "welcome",
   boot,
   routes,
 };

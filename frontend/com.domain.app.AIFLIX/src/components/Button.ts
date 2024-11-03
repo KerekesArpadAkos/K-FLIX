@@ -2,7 +2,7 @@ import { Lightning } from "@lightningjs/sdk";
 import { COLORS } from "../../static/constants/Colors";
 
 interface ButtonTemplateSpec extends Lightning.Component.TemplateSpec {
-  Text: object;
+  Background: { Text: object };
 }
 
 interface ButtonProps {
@@ -22,52 +22,54 @@ export class Button
     ButtonTemplateSpec & ButtonProps
   > {
     return {
-      w: 120,
-      h: 50,
-      rect: true,
-      color: this.bindProp("backgroundColor"),
-      Text: {
-        x: (w) => w / 2, // Center horizontally
-        y: (h) => h / 2 + 2, // Center vertically
-        mount: 0.5,
-        text: {
-          text: this.bindProp("buttonText"),
-          fontSize: this.bindProp("fontSize"),
-          textColor: this.bindProp("textColor"),
-          textAlign: "center",
-          fontStyle: "bold",
+      Background: {
+        w: this.bindProp("w"), // Bind width dynamically
+        h: this.bindProp("h"), // Bind height dynamically
+        rect: true,
+        color: this.bindProp("backgroundColor"),
+        shader: {
+          type: Lightning.shaders.RoundedRectangle,
+          radius: 6,
+          stroke: 0, // Start without stroke
+        },
+        Text: {
+          x: (w) => w / 2, // Center horizontally
+          y: (h) => h / 2 + 2, // Center vertically
+          mount: 0.5,
+          text: {
+            text: this.bindProp("buttonText"),
+            fontSize: this.bindProp("fontSize"),
+            textColor: this.bindProp("textColor"),
+            textAlign: "center",
+            fontStyle: "bold",
+          },
+          shader: {
+            type: Lightning.shaders.RoundedRectangle,
+            radius: 0,
+            stroke: 0,
+          },
         },
       },
     };
   }
 
   override _focus() {
-    this.patch({
-      color: COLORS.BLACK,
+    this.tag("Background")?.patch({
       shader: {
         type: Lightning.shaders.RoundedRectangle,
-        radius: 4,
-        stroke: 2,
+        radius: 6,
+        stroke: 6,
         strokeColor: COLORS.GREEN_FOCUS,
-      },
-      Text: {
-        shader: null,
-        text: {
-          textColor: COLORS.GREEN_FOCUS,
-        },
       },
     });
   }
 
   override _unfocus() {
-    this.patch({
-      color: COLORS.GREEN_FOCUS,
-      shader: null,
-      Text: {
-        shader: null,
-        text: {
-          textColor: COLORS.GREEN_FOCUS,
-        },
+    this.tag("Background")?.patch({
+      shader: {
+        type: Lightning.shaders.RoundedRectangle,
+        radius: 6,
+        stroke: 0, // Remove stroke on unfocus
       },
     });
   }

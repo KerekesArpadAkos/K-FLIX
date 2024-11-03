@@ -1,5 +1,5 @@
 import { BASE_URL } from "../../../static/constants/URLS";
-import API_KEY from "../../../.env/.key";
+import API_KEY from "../../../.envi/.key";
 
 class DataFetcher {
   protected static acceptLanguage = "en-US,en;q=0.5";
