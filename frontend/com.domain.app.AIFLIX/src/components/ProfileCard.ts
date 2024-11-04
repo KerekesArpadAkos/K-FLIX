@@ -16,10 +16,6 @@ export default class ProfileCard extends Lightning.Component<ProfileCardTemplate
         w: 220,
         h: 282,
         color: COLORS.BACKGROUND,
-        flexItem: {
-          marginLeft: 40,
-          marginRight: 40,
-        },
         ProfileImage: {
           ref: "ProfileImage",
           w: 220,

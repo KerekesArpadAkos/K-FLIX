@@ -1,18 +1,10 @@
-import { SCREEN_SIZES } from "static/constants/ScreenSizes";
-import { COLORS } from "static/constants/Colors";
 import { Lightning, Utils } from "@lightningjs/sdk";
 import ProfileCard from "src/components/ProfileCard";
+import { COLORS } from "static/constants/Colors";
+import { SCREEN_SIZES } from "static/constants/ScreenSizes";
 
-interface LoadingPageTemplateSpec extends Lightning.Component.TemplateSpec {
-  Title: object;
-  Container: {
-    ProfileCard: typeof ProfileCard;
-    AddProfile: typeof ProfileCard;
-  };
-}
-
-export default class LoadingPage extends Lightning.Component<LoadingPageTemplateSpec> {
-  static override _template(): Lightning.Component.Template<LoadingPageTemplateSpec> {
+export default class ProfileSelection extends Lightning.Component {
+  static override _template() {
     return {
       w: SCREEN_SIZES.WIDTH,
       h: SCREEN_SIZES.HEIGHT,
@@ -30,19 +22,19 @@ export default class LoadingPage extends Lightning.Component<LoadingPageTemplate
           textColor: COLORS.WHITE,
           textAlign: "center",
         },
-        zIndex: 1,
       },
       Container: {
         x: 256,
         y: 462,
-        w: 1407,
+        w: 1407, // Full screen width for centering
         h: 333,
-        ProfileCard: {
-          type: ProfileCard,
+        flex: {
+          direction: "row", // Horizontal layout
+          wrap: false, // No wrapping
+          justifyContent: "space-around", // Center items horizontally
+          alignItems: "center", // Center items vertically
         },
-        AddProfile: {
-          type: ProfileCard,
-        },
+        children: [], // Start with empty children, populated in _init
       },
     };
   }
@@ -51,19 +43,22 @@ export default class LoadingPage extends Lightning.Component<LoadingPageTemplate
     return this.getByRef("Container");
   }
 
-  get ProfileCards() {
-    return this.Container?.getByRef("ProfileCard");
-  }
-
-  get AddProfile() {
-    return this.Container?.getByRef("AddProfile");
-  }
-
   override _init() {
-    if (this.AddProfile) {
-      this.AddProfile.x = 500;
-      this.AddProfile.profileImage = Utils.asset("images/addProfile.png"); // Use the setter
-      this.AddProfile.profileName = "Add Profile"; // Use the setter
-    }
+    const profiles = [
+      { name: "Jennifer", image: Utils.asset("images/profile1.png") },
+      { name: "Jennifer", image: Utils.asset("images/profile1.png") },
+      { name: "Michael", image: Utils.asset("images/profile1.png") },
+      { name: "Michael", image: Utils.asset("images/profile1.png") },
+      { name: "Add Profile", image: Utils.asset("images/addProfile.png") },
+    ];
+
+    // Set Container children dynamically
+    this.Container.children = profiles.map((profile) => ({
+      y: -130,
+      x: -110,
+      type: ProfileCard,
+      profileImage: profile.image,
+      profileName: profile.name,
+    }));
   }
 }
