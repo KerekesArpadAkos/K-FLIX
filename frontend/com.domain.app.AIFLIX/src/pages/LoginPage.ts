@@ -400,7 +400,7 @@ export default class LoginPage extends Lightning.Component<LoginPageTemplateSpec
                     if (this.WrongPasswordMessage) {
                       this.WrongPasswordMessage.visible = false;
                     }
-                    // Router.navigate("home"); // Or any other route
+                    Router.navigate("profileselection"); // Or any other route
                   })
                   .catch((error) => {
                     console.error("Error during login process:", error.message);

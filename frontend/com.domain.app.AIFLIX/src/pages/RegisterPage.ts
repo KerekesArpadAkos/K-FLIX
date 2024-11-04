@@ -608,7 +608,7 @@ export default class LoginPage extends Lightning.Component<LoginPageTemplateSpec
                 .then(() => {
                   console.log("User data saved in Firestore");
                   // Navigate to home or login page
-                  Router.navigate("home");
+                  Router.navigate("profileselection");
                 })
                 .catch((error) => {
                   console.error("Error writing user data to Firestore:", error);

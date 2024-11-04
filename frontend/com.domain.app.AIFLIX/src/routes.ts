@@ -106,7 +106,7 @@ const boot = (qs: Router.QueryParams): Promise<void> => {
 };
 
 export const routerConfig: Router.Config = {
-  root: "welcome",
+  root: "profileselection",
   boot,
   routes,
 };

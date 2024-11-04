@@ -39,20 +39,21 @@ export default class ProfileSelection extends Lightning.Component {
     };
   }
 
+  _focusIndex = 0;
+
   get Container() {
     return this.getByRef("Container");
   }
 
   override _init() {
     const profiles = [
-      { name: "Jennifer", image: Utils.asset("images/profile1.png") },
+      // { name: "Jennifer", image: Utils.asset("images/profile1.png") },
       { name: "Jennifer", image: Utils.asset("images/profile1.png") },
       { name: "Michael", image: Utils.asset("images/profile1.png") },
       { name: "Michael", image: Utils.asset("images/profile1.png") },
       { name: "Add Profile", image: Utils.asset("images/addProfile.png") },
     ];
 
-    // Set Container children dynamically
     this.Container.children = profiles.map((profile) => ({
       y: -130,
       x: -110,
@@ -60,5 +61,46 @@ export default class ProfileSelection extends Lightning.Component {
       profileImage: profile.image,
       profileName: profile.name,
     }));
+
+    this._applyFocus();
+  }
+
+  _applyFocus() {
+    const focusedCard = this.Container.children[this._focusIndex];
+    focusedCard.tag("ProfileImage").patch({
+      shader: {
+        type: Lightning.shaders.RoundedRectangle,
+        radius: 10,
+        stroke: 9,
+        strokeColor: COLORS.GREEN_FOCUS,
+      },
+    });
+  }
+
+  _removeFocus() {
+    const focusedCard = this.Container.children[this._focusIndex];
+    focusedCard.tag("ProfileImage").patch({
+      shader: null,
+    });
+  }
+
+  override _handleRight() {
+    if (this._focusIndex < this.Container.children.length - 1) {
+      this._removeFocus();
+      this._focusIndex++;
+      this._applyFocus();
+    }
+  }
+
+  override _handleLeft() {
+    if (this._focusIndex > 0) {
+      this._removeFocus();
+      this._focusIndex--;
+      this._applyFocus();
+    }
+  }
+
+  override _getFocused() {
+    return this.Container.children[this._focusIndex];
   }
 }
