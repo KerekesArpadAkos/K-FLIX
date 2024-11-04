@@ -20,7 +20,7 @@ export default class ProfileCard extends Lightning.Component<ProfileCardTemplate
           ref: "ProfileImage",
           w: 220,
           h: 220,
-          src: Utils.asset("images/profile1.png"), //user will select a profile image
+          src: "", //user will select a profile image
         },
         ProfileName: {
           ref: "ProfileName",
