@@ -26,7 +26,7 @@ export class App extends Router.App {
   }
 
   override _init() {
-    Router.navigate("loadingpage");
+    Router.navigate("profileselection");
     Router.focusPage();
   }
 }

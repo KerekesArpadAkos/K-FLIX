@@ -1,6 +1,6 @@
 import { SCREEN_SIZES } from "static/constants/ScreenSizes";
 import { COLORS } from "static/constants/Colors";
-import Lightning from "@lightningjs/core";
+import { Lightning, Utils } from "@lightningjs/sdk";
 import LoadingSpinner from "src/components/LoadingSpinner";
 
 interface LoadingPageTemplateSpec extends Lightning.Component.TemplateSpec {
