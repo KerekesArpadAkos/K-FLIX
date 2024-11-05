@@ -81,7 +81,9 @@ export default class ProfileSelection extends Lightning.Component {
       y: -130,
       x: -110,
       type: ProfileCard,
-      profileImage: Utils.asset(profile.image || "images/profile1.png"),
+      profileImage: Utils.asset(
+        profile.image || "images/profiles/profile1.png"
+      ),
       profileName: profile.name,
     }));
 
