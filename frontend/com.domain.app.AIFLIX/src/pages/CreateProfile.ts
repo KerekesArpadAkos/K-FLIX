@@ -58,7 +58,7 @@ export default class CreateProfile extends Lightning.Component {
         x: 635,
         y: 59,
         w: 650,
-        h: 980,
+        h: 760,
         rect: true,
         color: COLORS.BLACK,
         visible: false,
@@ -73,7 +73,7 @@ export default class CreateProfile extends Lightning.Component {
           y: 36,
           x: 150,
 
-          src: Utils.asset(`images/profiles/profile1.png`), //here should be the image that i've selected with handleEnter
+          src: Utils.asset(`images/profiles/profile1.png`),
         },
         NameInputContainer: {
           type: NameInput,
@@ -85,7 +85,7 @@ export default class CreateProfile extends Lightning.Component {
           x: 15,
           y: 485,
           signals: {
-            onKeyPress: "onKeyPress", // Specify the signal here
+            onKeyPress: "onKeyPress",
           },
         },
       },
@@ -132,7 +132,6 @@ export default class CreateProfile extends Lightning.Component {
   _applyFocus() {
     this.Container.children.forEach((child: any, index: number) => {
       if (index === this._selectedIndex) {
-        // Apply shader only to the selected image
         child.patch({
           shader: {
             type: Lightning.shaders.RoundedRectangle,
@@ -140,7 +139,6 @@ export default class CreateProfile extends Lightning.Component {
             stroke: 6,
             strokeColor: COLORS.GREEN_FOCUS,
           },
-          //make the selected item  litter bigger
           scale: 1.1,
           transitions: {
             scale: { duration: 0.3, timingFunction: "ease-in" },
@@ -148,7 +146,6 @@ export default class CreateProfile extends Lightning.Component {
           },
         });
       } else {
-        // Ensure other images are reset without the shader
         child.patch({
           shader: null,
           scale: 1,
@@ -183,30 +180,23 @@ export default class CreateProfile extends Lightning.Component {
     );
     this.ProfileOverlay.tag("ProfileImage").src = selectedProfileImageSrc;
   }
-  _nameInputText = ""; // Track the input text
+  _nameInputText = "";
 
-  // Signal handler function for onKeyPress
   onKeyPress(key: string) {
     if (key === "BS") {
-      // Backspace: remove the last character
       this._nameInputText = this._nameInputText.slice(0, -1);
     } else if (key === "OK") {
-      // Enter: confirm the input (you may add additional logic here)
       console.log("Name confirmed:", this._nameInputText);
     } else if (key === "SP") {
-      // Space: add a space character
       this._nameInputText += " ";
     } else {
-      // Append the character to the input text
       this._nameInputText += key;
     }
 
-    // Update the NameInputContainer with the current input text
     this.updateNameInput();
   }
 
   updateNameInput() {
-    // Use the setText method to update the displayed text
     this.tag("NameInputContainer").setText(this._nameInputText);
   }
   static override _states() {
@@ -248,7 +238,6 @@ export default class CreateProfile extends Lightning.Component {
         }
 
         override _handleEnter() {
-          //make the background a little bit transparent
           this.setBlur();
 
           this._setState("ProfileOverlay");
@@ -261,7 +250,6 @@ export default class CreateProfile extends Lightning.Component {
           });
           this.setOverlayImage();
 
-          // Make the overlay visible
           if (this.ProfileOverlay) {
             this.ProfileOverlay.visible = true;
           }
@@ -269,7 +257,6 @@ export default class CreateProfile extends Lightning.Component {
         }
 
         override _handleBack() {
-          // Go back to the ProfilesContainer state and reset transparency
           this.removeBlur();
           this.ProfileOverlay.visible = false;
           this._setState("ProfilesContainer");
@@ -279,7 +266,6 @@ export default class CreateProfile extends Lightning.Component {
   }
 }
 
-// ProfileImage Component
 class ProfileImage extends Lightning.Component {
   static override _template() {
     return {
