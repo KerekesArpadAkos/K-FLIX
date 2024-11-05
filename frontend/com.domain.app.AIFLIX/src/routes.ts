@@ -12,6 +12,7 @@ import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import LoadingPage from "./pages/LoadingPage";
 import ProfileSelection from "./pages/ProfileSelection";
+import CreateProfile from "./pages/CreateProfile";
 
 interface PageInstance extends Router.PageInstance {
   loadData: (id: number, isMovie: boolean) => Promise<void>;
@@ -45,6 +46,10 @@ const routes: Router.Config["routes"] = [
   {
     path: "profileselection",
     component: ProfileSelection as Router.PageConstructor<Router.PageInstance>,
+  },
+  {
+    path: "createprofile",
+    component: CreateProfile as Router.PageConstructor<Router.PageInstance>,
   },
   {
     path: "home",
@@ -106,7 +111,7 @@ const boot = (qs: Router.QueryParams): Promise<void> => {
 };
 
 export const routerConfig: Router.Config = {
-  root: "welcome",
+  root: "createprofile",
   boot,
   routes,
 };
