@@ -4,7 +4,16 @@ import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
 } from "firebase/auth";
-import { getFirestore } from "firebase/firestore";
+import {
+  collection,
+  getDocs,
+  addDoc,
+  where,
+  query,
+  getFirestore,
+  doc,
+  getDoc,
+} from "firebase/firestore";
 import { firebaseConfig } from "../firebaseConfig";
 
 // Firebase configuration
@@ -52,4 +61,33 @@ export const loginUser = async (email: string, password: string) => {
     console.error("Login Error:", error);
     throw error;
   }
+};
+
+export const fetchProfiles = async (userId: string) => {
+  try {
+    const userDocRef = doc(db, "user", userId);
+    const userDocSnap = await getDoc(userDocRef);
+
+    if (userDocSnap.exists()) {
+      const userData = userDocSnap.data();
+      // Check if profiles array exists and return it
+      console.log("User data:", userData);
+      return userData.profiles || [];
+    } else {
+      console.error("No user document found.");
+      return [];
+    }
+  } catch (error) {
+    console.error("Error fetching profiles:", error);
+    throw error;
+  }
+};
+
+export const addProfile = async (userId: string) => {
+  const profilesRef = collection(db, "users", userId, "profiles");
+  const newProfile = {
+    name: "Added User",
+    image: "images/profile2.png", // Dummy image for new profiles
+  };
+  await addDoc(profilesRef, newProfile);
 };

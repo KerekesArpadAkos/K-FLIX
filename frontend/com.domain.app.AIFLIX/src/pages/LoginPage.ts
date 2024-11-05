@@ -392,15 +392,23 @@ export default class LoginPage extends Lightning.Component<LoginPageTemplateSpec
               } else {
                 // Email exists, attempt to sign in with Firebase Authentication
                 signInWithEmailAndPassword(auth, email, password)
-                  .then(() => {
+                  .then((userCredential) => {
+                    const user = userCredential.user;
+                    const userId = user.uid;
+
                     console.log("Successfully signed in!");
+                    console.log("User ID from loginPage:", userId);
+
+                    // Hide error messages
                     if (this.WrongEmailMessage) {
                       this.WrongEmailMessage.visible = false;
                     }
                     if (this.WrongPasswordMessage) {
                       this.WrongPasswordMessage.visible = false;
                     }
-                    Router.navigate("profileselection"); // Or any other route
+
+                    // Navigate to ProfileSelection and pass the userId as a parameter
+                    Router.navigate("profileselection", { userId: userId });
                   })
                   .catch((error) => {
                     console.error("Error during login process:", error.message);
@@ -417,7 +425,6 @@ export default class LoginPage extends Lightning.Component<LoginPageTemplateSpec
                         console.log("User not found.");
                         // Show email error message and highlight email container
                         if (this.WrongEmailMessage) {
-                          this.errorEmailContainer;
                           this.WrongEmailMessage.visible = true;
                         }
                         this.errorEmailContainer();
@@ -428,7 +435,6 @@ export default class LoginPage extends Lightning.Component<LoginPageTemplateSpec
                         console.log("Incorrect password.");
                         // Show password error message and highlight password container
                         if (this.WrongPasswordMessage) {
-                          this.errorPasswordContainer();
                           this.WrongPasswordMessage.visible = true;
                         }
                         this.errorPasswordContainer();
