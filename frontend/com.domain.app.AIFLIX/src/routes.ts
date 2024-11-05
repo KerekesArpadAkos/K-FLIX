@@ -48,7 +48,11 @@ const routes: Router.Config["routes"] = [
     component: ProfileSelection as Router.PageConstructor<Router.PageInstance>,
   },
   {
-    path: "createprofile",
+    path: "profileselection/:userId",
+    component: ProfileSelection as Router.PageConstructor<Router.PageInstance>,
+  },
+  {
+    path: "createprofile/:userId",
     component: CreateProfile as Router.PageConstructor<Router.PageInstance>,
   },
   {
@@ -111,7 +115,7 @@ const boot = (qs: Router.QueryParams): Promise<void> => {
 };
 
 export const routerConfig: Router.Config = {
-  root: "createprofile",
+  root: "welcome",
   boot,
   routes,
 };

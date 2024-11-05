@@ -3,8 +3,25 @@ import NameInput from "src/components/NameInput";
 import { COLORS } from "static/constants/Colors";
 import { SCREEN_SIZES } from "static/constants/ScreenSizes";
 import { LandscapeKeyboardForProfile } from "src/components/LandscapeKeyboardForProfile";
+import {
+  addDoc,
+  arrayUnion,
+  collection,
+  doc,
+  getDoc,
+  setDoc,
+  updateDoc,
+} from "firebase/firestore";
+import { db } from "src/services/firebaseService";
 
 export default class CreateProfile extends Lightning.Component {
+  private _userId: any;
+  _selectedIndex = 0;
+
+  override set params(params: { userId: string }) {
+    this._userId = params.userId;
+    console.log("Received userId in CreateProfile:", this._userId);
+  }
   static override _template() {
     const profiles = [];
     for (let i = 1; i <= 28; i++) {
@@ -105,8 +122,6 @@ export default class CreateProfile extends Lightning.Component {
     };
   }
 
-  _selectedIndex = 0;
-
   get Container() {
     return this.tag("Container");
   }
@@ -187,6 +202,7 @@ export default class CreateProfile extends Lightning.Component {
       this._nameInputText = this._nameInputText.slice(0, -1);
     } else if (key === "OK") {
       console.log("Name confirmed:", this._nameInputText);
+      this.saveProfileToFirebase();
     } else if (key === "SP") {
       this._nameInputText += " ";
     } else {
@@ -194,6 +210,67 @@ export default class CreateProfile extends Lightning.Component {
     }
 
     this.updateNameInput();
+  }
+
+  async saveProfileToFirebase() {
+    try {
+      if (!this._userId) {
+        console.error("User ID is undefined. Cannot save profile.");
+        return;
+      }
+
+      const now = new Date();
+      const pad = (n: number) => n.toString().padStart(2, "0");
+
+      const year = now.getFullYear();
+      const month = pad(now.getMonth() + 1);
+      const day = pad(now.getDate());
+      const hours = pad(now.getHours());
+      const minutes = pad(now.getMinutes());
+      const seconds = pad(now.getSeconds());
+
+      const uniqueId = `profile-${year}-${month}-${day}-${hours}-${minutes}-${seconds}-${Math.floor(
+        Math.random() * 10000
+      )}`;
+
+      const selectedProfileImagePath = `images/profiles/profile${
+        this._selectedIndex + 1
+      }.png`;
+
+      const userDocRef = doc(db, "user", this._userId);
+
+      const userDoc = await getDoc(userDocRef);
+
+      if (userDoc.exists()) {
+        await updateDoc(userDocRef, {
+          profiles: arrayUnion({
+            id: uniqueId,
+            name: this._nameInputText,
+            image: selectedProfileImagePath,
+          }),
+        });
+      } else {
+        await setDoc(userDocRef, {
+          profiles: [
+            {
+              id: uniqueId,
+              name: this._nameInputText,
+              image: selectedProfileImagePath,
+            },
+          ],
+        });
+      }
+
+      console.log("Profile saved successfully:", {
+        id: uniqueId,
+        name: this._nameInputText,
+        image: selectedProfileImagePath,
+      });
+
+      Router.navigate("profileselection");
+    } catch (error) {
+      console.error("Error saving profile to Firebase:", error);
+    }
   }
 
   updateNameInput() {

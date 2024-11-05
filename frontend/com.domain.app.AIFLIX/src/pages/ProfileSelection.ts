@@ -1,4 +1,4 @@
-import { Lightning, Utils } from "@lightningjs/sdk";
+import { Lightning, Router, Utils } from "@lightningjs/sdk";
 import ProfileCard from "src/components/ProfileCard";
 import { COLORS } from "static/constants/Colors";
 import { SCREEN_SIZES } from "static/constants/ScreenSizes";
@@ -55,6 +55,18 @@ export default class ProfileSelection extends Lightning.Component {
   }
 
   override async _active() {
+    if (!this._userId) {
+      const auth = getAuth();
+      const user = auth.currentUser;
+      if (user) {
+        this._userId = user.uid;
+      } else {
+        console.error("User not authenticated.");
+        // Optionally, navigate to the login screen
+        Router.navigate("signin");
+        return;
+      }
+    }
     await this.loadProfiles();
     if (this.Container.children.length > 0) {
       this._applyFocus();
@@ -152,6 +164,30 @@ export default class ProfileSelection extends Lightning.Component {
       this._removeFocus();
       this._focusIndex--;
       this._applyFocus();
+    }
+  }
+
+  override _handleEnter() {
+    const focusedCard = this.Container.children[this._focusIndex];
+    if (focusedCard && focusedCard.tag && focusedCard.tag("ProfileName")) {
+      const profileName = focusedCard.tag("ProfileName").text.text;
+      if (profileName === "Add Profile") {
+        if (this._userId) {
+          Router.navigate(`createprofile/${this._userId}`);
+        } else {
+          console.error("User ID is null. Cannot navigate to create profile.");
+        }
+      } else {
+        const auth = getAuth();
+        const user = auth.currentUser;
+        if (user) {
+          const userId = user.uid;
+          console.log("User ID:", userId);
+          // this.dispatchEvent(new CustomEvent("profileSelected", { detail: userId }));
+        } else {
+          console.error("User not authenticated.");
+        }
+      }
     }
   }
 
