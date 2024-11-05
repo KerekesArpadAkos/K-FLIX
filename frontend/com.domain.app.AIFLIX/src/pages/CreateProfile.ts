@@ -1,6 +1,8 @@
 import { Lightning, Router, Utils } from "@lightningjs/sdk";
+import NameInput from "src/components/NameInput";
 import { COLORS } from "static/constants/Colors";
 import { SCREEN_SIZES } from "static/constants/ScreenSizes";
+import { LandscapeKeyboardForProfile } from "src/components/LandscapeKeyboardForProfile";
 
 export default class CreateProfile extends Lightning.Component {
   static override _template() {
@@ -18,7 +20,7 @@ export default class CreateProfile extends Lightning.Component {
       w: SCREEN_SIZES.WIDTH,
       h: SCREEN_SIZES.HEIGHT,
       rect: true,
-      color: COLORS.BLACK,
+      color: COLORS.BACKGROUND,
       Title: {
         x: 80,
         y: 80,
@@ -52,6 +54,41 @@ export default class CreateProfile extends Lightning.Component {
         h: 684,
         children: profiles,
       },
+      ProfileOverlay: {
+        x: 635,
+        y: 59,
+        w: 650,
+        h: 980,
+        rect: true,
+        color: COLORS.BLACK,
+        visible: false,
+        alpha: 1,
+        shader: {
+          type: Lightning.shaders.RoundedRectangle,
+          radius: 20,
+        },
+        ProfileImage: {
+          w: 350,
+          h: 350,
+          y: 36,
+          x: 150,
+
+          src: Utils.asset(`images/profiles/profile1.png`), //here should be the image that i've selected with handleEnter
+        },
+        NameInputContainer: {
+          type: NameInput,
+          x: 210.5,
+          y: 410,
+        },
+        LandscapeKeyboardForProfile: {
+          type: LandscapeKeyboardForProfile,
+          x: 15,
+          y: 485,
+          signals: {
+            onKeyPress: "onKeyPress", // Specify the signal here
+          },
+        },
+      },
       GenerateAvatar: {
         x: 80,
         y: 1010,
@@ -72,6 +109,20 @@ export default class CreateProfile extends Lightning.Component {
 
   get Container() {
     return this.tag("Container");
+  }
+
+  get ProfileOverlay() {
+    return this.getByRef("ProfileOverlay");
+  }
+  get Title() {
+    return this.getByRef("Title");
+  }
+
+  get ChooseAvatar() {
+    return this.getByRef("ChooseAvatar");
+  }
+  get GenerateAvatar() {
+    return this.getByRef("GenerateAvatar");
   }
 
   override _init() {
@@ -110,6 +161,54 @@ export default class CreateProfile extends Lightning.Component {
     });
   }
 
+  setBlur() {
+    this.Title.patch({ alpha: 0.5 });
+    this.ChooseAvatar.patch({ alpha: 0.5 });
+    this.Container.patch({ alpha: 0.5 });
+    this.GenerateAvatar.patch({ alpha: 0.5 });
+    this.color = COLORS.BLACK_OPACITY_70;
+  }
+
+  removeBlur() {
+    this.Title.patch({ alpha: 1 });
+    this.ChooseAvatar.patch({ alpha: 1 });
+    this.Container.patch({ alpha: 1 });
+    this.GenerateAvatar.patch({ alpha: 1 });
+    this.color = COLORS.BACKGROUND;
+  }
+
+  setOverlayImage() {
+    const selectedProfileImageSrc = Utils.asset(
+      `images/profiles/profile${this._selectedIndex + 1}.png`
+    );
+    this.ProfileOverlay.tag("ProfileImage").src = selectedProfileImageSrc;
+  }
+  _nameInputText = ""; // Track the input text
+
+  // Signal handler function for onKeyPress
+  onKeyPress(key: string) {
+    if (key === "BS") {
+      // Backspace: remove the last character
+      this._nameInputText = this._nameInputText.slice(0, -1);
+    } else if (key === "OK") {
+      // Enter: confirm the input (you may add additional logic here)
+      console.log("Name confirmed:", this._nameInputText);
+    } else if (key === "SP") {
+      // Space: add a space character
+      this._nameInputText += " ";
+    } else {
+      // Append the character to the input text
+      this._nameInputText += key;
+    }
+
+    // Update the NameInputContainer with the current input text
+    this.updateNameInput();
+  }
+
+  updateNameInput() {
+    // Use the setText method to update the displayed text
+    this.tag("NameInputContainer").setText(this._nameInputText);
+  }
   static override _states() {
     return [
       class ProfilesContainer extends this {
@@ -146,6 +245,34 @@ export default class CreateProfile extends Lightning.Component {
             this._selectedIndex += 7;
             this._applyFocus();
           }
+        }
+
+        override _handleEnter() {
+          //make the background a little bit transparent
+          this.setBlur();
+
+          this._setState("ProfileOverlay");
+        }
+      },
+      class ProfileOverlay extends this {
+        override _getFocused() {
+          this.ProfileOverlay.patch({
+            alpha: 1,
+          });
+          this.setOverlayImage();
+
+          // Make the overlay visible
+          if (this.ProfileOverlay) {
+            this.ProfileOverlay.visible = true;
+          }
+          return this.tag("LandscapeKeyboardForProfile");
+        }
+
+        override _handleBack() {
+          // Go back to the ProfilesContainer state and reset transparency
+          this.removeBlur();
+          this.ProfileOverlay.visible = false;
+          this._setState("ProfilesContainer");
         }
       },
     ];
