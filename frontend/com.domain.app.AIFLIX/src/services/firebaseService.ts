@@ -13,6 +13,8 @@ import {
   getFirestore,
   doc,
   getDoc,
+  setDoc,
+  serverTimestamp,
 } from "firebase/firestore";
 import { firebaseConfig } from "../firebaseConfig";
 
@@ -34,16 +36,30 @@ export const db = getFirestore(app);
 // Register a new user
 export const registerUser = async (email: string, password: string) => {
   try {
+    // Create user with Firebase Authentication
     const userCredential = await createUserWithEmailAndPassword(
       auth,
       email,
       password
     );
-    const token = await userCredential.user.getIdToken();
-    return token; // Return the token to store or use in API requests
-  } catch (error) {
+    const user = userCredential.user;
+
+    // Add user data to the existing 'users' collection in Firestore with an empty 'profiles' array
+    await setDoc(doc(db, "users", user.uid), {
+      email: user.email,
+      createdAt: serverTimestamp(),
+      profiles: [], // Initialize with an empty array
+      // Add other user-specific fields here if necessary
+    });
+
+    console.log("User registered successfully:", user.uid);
+
+    return { success: true, user };
+  } catch (error: any) {
     console.error("Registration Error:", error);
-    throw error;
+
+    // Return error details for handling in the registration handler
+    return { success: false, error };
   }
 };
 
@@ -65,7 +81,7 @@ export const loginUser = async (email: string, password: string) => {
 
 export const fetchProfiles = async (userId: string) => {
   try {
-    const userDocRef = doc(db, "user", userId);
+    const userDocRef = doc(db, "users", userId);
     const userDocSnap = await getDoc(userDocRef);
 
     if (userDocSnap.exists()) {

@@ -375,7 +375,7 @@ export default class LoginPage extends Lightning.Component<LoginPageTemplateSpec
           const password = this.PasswordLabel?.text?.text || "";
 
           // Step 1: Check if the email exists in Firestore
-          const usersRef = collection(db, "user");
+          const usersRef = collection(db, "users");
           const q = query(usersRef, where("email", "==", email));
 
           getDocs(q)

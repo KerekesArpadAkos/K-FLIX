@@ -237,7 +237,7 @@ export default class CreateProfile extends Lightning.Component {
         this._selectedIndex + 1
       }.png`;
 
-      const userDocRef = doc(db, "user", this._userId);
+      const userDocRef = doc(db, "users", this._userId);
 
       const userDoc = await getDoc(userDocRef);
 
