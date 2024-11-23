@@ -598,18 +598,12 @@ export default class RegisterPage extends Lightning.Component<RegisterPageTempla
 
           // Attempt registration
           registerUser(email, password1)
-          .then((result) => {
-            if (result.success && result.user) {
-              const userId = result.user.uid;
-              const token = result.token; // Retrieve the token from the result
-    
-              console.log("Successfully registered!");
-              console.log("User ID from RegisterPage:", userId);
-              console.log("JWT token:", token);
-    
-              // Save the token in localStorage
-              localStorage.setItem("access_token", token);
-              console.log("JWT token saved in localStorage.");
+            .then((result) => {
+              if (result.success && result.user) {
+                const userId = result.user.uid;
+
+                console.log("Successfully registered!");
+                console.log("User ID from RegisterPage:", userId);
 
                 // Navigate to ProfileSelection and pass the userId as a parameter
                 Router.navigate("profileselection", { userId: userId });

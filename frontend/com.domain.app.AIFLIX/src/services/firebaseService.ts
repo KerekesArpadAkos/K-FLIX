@@ -37,27 +37,31 @@ export const db = getFirestore(app);
 export const registerUser = async (email: string, password: string) => {
   try {
     // Create user with Firebase Authentication
-    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+    const userCredential = await createUserWithEmailAndPassword(
+      auth,
+      email,
+      password
+    );
     const user = userCredential.user;
 
-    // Retrieve the JWT token (ID token)
-    const token = await user.getIdToken();
-
-    // Add user data to Firestore
+    // Add user data to the existing 'users' collection in Firestore with an empty 'profiles' array
     await setDoc(doc(db, "users", user.uid), {
       email: user.email,
       createdAt: serverTimestamp(),
       profiles: [], // Initialize with an empty array
+      // Add other user-specific fields here if necessary
     });
 
     console.log("User registered successfully:", user.uid);
-    return { success: true, user, token }; // Return token along with user
+
+    return { success: true, user };
   } catch (error: any) {
     console.error("Registration Error:", error);
+
+    // Return error details for handling in the registration handler
     return { success: false, error };
   }
 };
-
 
 // Login an existing user
 export const loginUser = async (email: string, password: string) => {
