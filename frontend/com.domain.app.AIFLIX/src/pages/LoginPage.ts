@@ -29,6 +29,7 @@ interface LoginPageTemplateSpec extends Lightning.Component.TemplateSpec {
     RegisterButton: typeof Button;
   };
   LandscapeKeyboard: typeof LandscapeKeyboard;
+  // LoadingPage: typeof LoadingPage;
 }
 
 export default class LoginPage extends Lightning.Component<LoginPageTemplateSpec> {
@@ -214,6 +215,9 @@ export default class LoginPage extends Lightning.Component<LoginPageTemplateSpec
           upFromKeyboard: true,
         },
       },
+      // LoadingPage: {
+      //   type: LoadingPage,
+      // },
     };
   }
 
@@ -384,12 +388,19 @@ export default class LoginPage extends Lightning.Component<LoginPageTemplateSpec
               } else {
                 // Email exists, attempt to sign in with Firebase Authentication
                 signInWithEmailAndPassword(auth, email, password)
-                  .then((userCredential) => {
-                    const user = userCredential.user;
-                    const userId = user.uid;
-
-                    console.log("Successfully signed in!");
-                    console.log("User ID from loginPage:", userId);
+                .then(async (userCredential) => {
+                  const user = userCredential.user;
+                  const userId = user.uid;
+                  console.log("Successfully signed in!");
+                  console.log("User ID from loginPage:", userId);
+    
+                  // Retrieve the JWT token
+                  const token = await user.getIdToken();
+                  console.log("JWT token:", token);
+    
+                  // Save the token in localStorage
+                  localStorage.setItem("access_token", token);
+                  console.log("JWT token saved in localStorage.");
 
                     // Hide error messages
                     if (this.WrongEmailMessage) {

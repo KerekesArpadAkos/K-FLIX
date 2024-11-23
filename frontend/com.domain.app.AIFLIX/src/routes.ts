@@ -10,7 +10,6 @@ import SearchPage from "./pages/SearchPage";
 import WelcomePage from "./pages/WelcomePage";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
-import LoadingPage from "./pages/LoadingPage";
 import ProfileSelection from "./pages/ProfileSelection";
 import CreateProfile from "./pages/CreateProfile";
 
@@ -38,10 +37,6 @@ const routes: Router.Config["routes"] = [
   {
     path: "signup",
     component: RegisterPage as Router.PageConstructor<Router.PageInstance>,
-  },
-  {
-    path: "loadingpage",
-    component: LoadingPage as Router.PageConstructor<Router.PageInstance>,
   },
   {
     path: "profileselection",
