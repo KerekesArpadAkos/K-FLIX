@@ -5,7 +5,7 @@ import {
   createUserWithEmailAndPassword,
 } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
-import { firebaseConfig } from "../firebaseConfig";
+import { firebaseConfig } from "./firebaseConfig";
 
 // Firebase configuration
 // const firebaseConfig = {
