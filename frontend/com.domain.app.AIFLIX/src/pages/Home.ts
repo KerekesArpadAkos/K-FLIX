@@ -127,7 +127,7 @@ export class Home
   async checkRoute() {
     const activeHash = Router.getActiveHash();
 
-    this.addDefaultSkeletonAnimation();
+    // this.addDefaultSkeletonAnimation();
 
     if (activeHash === "home") {
       const carousels = await this.createHomeCarousels();

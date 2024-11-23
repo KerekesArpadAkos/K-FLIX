@@ -76,40 +76,40 @@ export class SplashScreen extends Lightning.Component {
     return this.Logo.tag("Slogan");
   }
 
-  // override async _init() {
-  //   await this.Name.setSmooth("alpha", 1, { duration: 1.3 });
-  //   await this.Name.animation({
-  //     duration: 1.3,
-  //     actions: [
-  //       { p: "y", v: { 0: 100, 1: 50 } },
-  //       { p: "scale", v: { 0: 0.8, 0.5: 1.1, 1: 1 } },
-  //     ],
-  //   }).start();
+  override async _init() {
+    await this.Name.setSmooth("alpha", 1, { duration: 1.3 });
+    await this.Name.animation({
+      duration: 1.3,
+      actions: [
+        { p: "y", v: { 0: 100, 1: 50 } },
+        { p: "scale", v: { 0: 0.8, 0.5: 1.1, 1: 1 } },
+      ],
+    }).start();
 
-  //   await this.Thunder.setSmooth("alpha", 1, { duration: 2 });
-  //   await this.Thunder.animation({
-  //     duration: 2,
-  //     actions: [
-  //       { p: "scale", v: { 0: 4, 0.5: 1 } },
-  //       {
-  //         p: "rotation",
-  //         v: { 0: 0, 0.5: 2 * Math.PI },
-  //       },
-  //     ],
-  //   }).start();
+    await this.Thunder.setSmooth("alpha", 1, { duration: 2 });
+    await this.Thunder.animation({
+      duration: 2,
+      actions: [
+        { p: "scale", v: { 0: 4, 0.5: 1 } },
+        {
+          p: "rotation",
+          v: { 0: 0, 0.5: 2 * Math.PI },
+        },
+      ],
+    }).start();
 
-  //   await delay(2000);
-  //   await this.Slogan.setSmooth("alpha", 1, { duration: 2 });
-  //   await this.Slogan.animation({
-  //     duration: 2,
-  //     actions: [{ p: "scale", v: { 0: 0.8, 0.5: 1.1, 1: 1 } }],
-  //   }).start();
+    await delay(2000);
+    await this.Slogan.setSmooth("alpha", 1, { duration: 2 });
+    await this.Slogan.animation({
+      duration: 2,
+      actions: [{ p: "scale", v: { 0: 0.8, 0.5: 1.1, 1: 1 } }],
+    }).start();
 
-  //   await delay(3500);
-  //   await this.Logo.setSmooth("alpha", 0, { duration: 1 });
+    await delay(3500);
+    await this.Logo.setSmooth("alpha", 0, { duration: 1 });
 
-  //   Router.navigate("home");
-  // }
+    Router.navigate("welcome");
+  }
 }
 
 export default SplashScreen;
