@@ -43,7 +43,7 @@ export class VerticalList extends Lightning.Component<VerticalListTemplateSpec> 
   }
 
   set listWidth(width: number) {
-    this.List.w = width; // Use 'this.tag("List")' to access the List component
+    this.List.w = width;
   }
   override _init() {
     this.currentIndex = 0;

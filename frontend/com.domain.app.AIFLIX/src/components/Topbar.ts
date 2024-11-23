@@ -61,7 +61,6 @@ export default class Topbar
 
   override _init() {
     eventBus.on("focusBackButton", () => {
-      //focus on the back button
       this._focus();
       this._refocus();
     });
@@ -80,22 +79,22 @@ export default class Topbar
 
   get CurrentTime() {
     const topBarComponent = this.tag("TopBarComponent");
-    return topBarComponent ? topBarComponent.tag("CurrentTime") : undefined; // Updated for consistent tag referencing
+    return topBarComponent ? topBarComponent.tag("CurrentTime") : undefined;
   }
 
   updateTime() {
     if (this.CurrentTime) {
       this.CurrentTime.patch({
-        text: { text: this.getCurrentTime() }, // Update text directly
+        text: { text: this.getCurrentTime() },
       });
     }
   }
 
   override _enable() {
-    this.updateTime(); // Initial time update
+    this.updateTime(); 
     this._timeInterval = setInterval(() => {
       this.updateTime();
-    }, 60000); // Update every 1 minute
+    }, 60000); 
   }
 
   override _disable() {

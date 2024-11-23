@@ -48,7 +48,7 @@ export class SettingsColumn
           ref: "SETTING-" + item.ref,
           type: SettingsColumnItem,
           y: index * 120,
-          item, //
+          item, 
           selected: item.ref === storedValue,
           signals: {
             itemSelected: true,

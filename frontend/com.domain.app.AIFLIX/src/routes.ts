@@ -43,9 +43,9 @@ const routes: Router.Config["routes"] = [
     component: ProfileSelection as Router.PageConstructor<Router.PageInstance>,
   },
   {
-    path: "profileselection/:userId",
+    path: "profileselection/:userId?",
     component: ProfileSelection as Router.PageConstructor<Router.PageInstance>,
-  },
+  },  
   {
     path: "createprofile/:userId",
     component: CreateProfile as Router.PageConstructor<Router.PageInstance>,

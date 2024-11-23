@@ -4,8 +4,13 @@ import { COLORS } from "static/constants/Colors";
 import { SCREEN_SIZES } from "static/constants/ScreenSizes";
 import { fetchProfiles, addProfile } from "../services/firebaseService";
 import { getAuth } from "firebase/auth";
+import { setGlobalUserId, setGlobalProfileId } from "../services/firebaseService";
 
 export default class ProfileSelection extends Lightning.Component {
+  private _focusIndex = 0;
+  private _userId: string | null = null;
+  private _profiles: any[] = []
+  
   static override _template() {
     return {
       w: SCREEN_SIZES.WIDTH,
@@ -41,15 +46,10 @@ export default class ProfileSelection extends Lightning.Component {
     };
   }
 
-  _focusIndex = 0;
-  // _userId = "exampleUserId"; // Replace with the actual user ID from Firebase Authentication
-
-  _userId: string | null = null;
   get Container() {
     return this.getByRef("Container");
   }
 
-  // In ProfileSelection.ts
   override set params(params: { userId: string }) {
     this._userId = params.userId || null;
   }
@@ -62,7 +62,6 @@ export default class ProfileSelection extends Lightning.Component {
         this._userId = user.uid;
       } else {
         console.error("User not authenticated.");
-        // Optionally, navigate to the login screen
         Router.navigate("signin");
         return;
       }
@@ -99,7 +98,6 @@ export default class ProfileSelection extends Lightning.Component {
       profileName: profile.name,
     }));
 
-    // Add "Add Profile" card if profiles are less than or equal to 4
     if (profileCards.length <= 4) {
       profileCards.push({
         y: -130,
@@ -107,7 +105,7 @@ export default class ProfileSelection extends Lightning.Component {
         type: ProfileCard,
         profileImage: Utils.asset("images/addProfile.png"),
         profileName: "Add Profile",
-        onEnter: () => this.handleAddProfile(), // Attach handleAddProfile to onEnter
+        onEnter: () => this.handleAddProfile(),
       });
     }
 
@@ -118,11 +116,11 @@ export default class ProfileSelection extends Lightning.Component {
     try {
       console.log("Adding profile...");
       if (this._userId) {
-        await addProfile(this._userId); // Add profile to Firebase
+        await addProfile(this._userId);
       } else {
         console.error("User ID is null.");
       }
-      await this.loadProfiles(); // Reload profiles to show the new one
+      await this.loadProfiles(); 
     } catch (error) {
       console.error("Error adding profile:", error);
     }
@@ -166,30 +164,42 @@ export default class ProfileSelection extends Lightning.Component {
       this._applyFocus();
     }
   }
-
   override _handleEnter() {
     const focusedCard = this.Container.children[this._focusIndex];
     if (focusedCard && focusedCard.tag && focusedCard.tag("ProfileName")) {
-      const profileName = focusedCard.tag("ProfileName").text.text;
-      if (profileName === "Add Profile") {
-        if (this._userId) {
-          Router.navigate(`createprofile/${this._userId}`);
+        const profileName = focusedCard.tag("ProfileName").text.text;
+
+        if (profileName === "Add Profile") {
+            if (this._userId) {
+                Router.navigate(`createprofile/${this._userId}`);
+            } else {
+                console.error("User ID is null. Cannot navigate to create profile.");
+            }
         } else {
-          console.error("User ID is null. Cannot navigate to create profile.");
+            fetchProfiles(this._userId!)
+                .then((profiles) => {
+                    const selectedProfile = profiles.find((profile: any) => profile.name === profileName);
+                    
+                    if (selectedProfile) {
+                        const profileId = selectedProfile.id; 
+                        console.log("Navigating to Home with:", { userId: this._userId, profileId });
+
+                        setGlobalProfileId(profileId); 
+
+                        Router.navigate("home");
+                    } else {
+                        console.error("Profile not found for the selected name:", profileName);
+                    }
+                })
+                .catch((error) => {
+                    console.error("Error fetching profiles for navigation:", error);
+                });
         }
-      } else {
-        const auth = getAuth();
-        const user = auth.currentUser;
-        if (user) {
-          const userId = user.uid;
-          console.log("User ID:", userId);
-          // this.dispatchEvent(new CustomEvent("profileSelected", { detail: userId }));
-        } else {
-          console.error("User not authenticated.");
-        }
-      }
     }
-  }
+}
+
+  
+  
 
   override _getFocused() {
     return this.Container.children[this._focusIndex];

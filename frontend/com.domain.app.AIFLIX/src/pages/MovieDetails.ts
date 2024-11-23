@@ -154,12 +154,10 @@ export class MovieDetails
   }
 
   private resetComponentPositions() {
-    // Reset positions of components
     this.VerticalList.setSmooth("y", 200, { duration: 0 });
     this.Gallery.Details.setSmooth("y", 0, { duration: 0 });
     this.CastList?.setSmooth("y", 540, { duration: 0 });
 
-    // Reset VerticalList internal state
     this.VerticalList.reset();
   }
 

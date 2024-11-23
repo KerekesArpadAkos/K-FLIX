@@ -236,7 +236,7 @@ export class Gallery
         },
         Title: {
           text: {
-            text: logoTitle ? "" : title, // title,
+            text: logoTitle ? "" : title,
           },
         },
         Description: {
@@ -275,7 +275,7 @@ export class Gallery
     title?: string
   ) {
     const img = new Image();
-    img.crossOrigin = "Anonymous"; // Ensure cross-origin is handled
+    img.crossOrigin = "Anonymous"; 
 
     img.onload = () => {
       const logoWidth = img.naturalWidth || img.width;
@@ -310,12 +310,12 @@ export class Gallery
           TitleLogo: {
             scale: 1,
             texture: {
-              src: "", // Clear the texture
+              src: "", 
             },
           },
           Title: {
             text: {
-              text: title, // Fallback to title text
+              text: title,
             },
           },
         },

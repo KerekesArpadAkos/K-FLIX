@@ -80,7 +80,7 @@ export class Carousel extends Lightning.Component<CarouselTemplateSpec> {
   }
 
   set listWidth(width: number) {
-    this.List.w = width; // Use 'this.tag("List")' to access the List component
+    this.List.w = width; 
   }
 
   async loadMovies() {

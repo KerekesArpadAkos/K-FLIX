@@ -77,7 +77,6 @@ export class UtilityButton
   }
 
   set buttonType(type: string) {
-    // Add setter for buttonType
     this._buttonType = type;
   }
 

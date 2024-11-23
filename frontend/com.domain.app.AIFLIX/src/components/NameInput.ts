@@ -19,7 +19,7 @@ export default class NameInput
   static override _template() {
     return {
       rect: true,
-      w: 229, // Adjust width as needed
+      w: 229, 
       h: 55,
       color: COLORS.GREY_DARK,
       shader: {
@@ -39,7 +39,6 @@ export default class NameInput
           w: 218,
           h: 32,
           rect: true,
-          //   color: COLORS.GREY_DARK,
           text: {
             text: "Enter Name...",
             fontSize: 25,

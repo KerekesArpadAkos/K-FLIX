@@ -23,18 +23,17 @@ export class Button
   > {
     return {
       Background: {
-        w: this.bindProp("w"), // Bind width dynamically
-        h: this.bindProp("h"), // Bind height dynamically
-        rect: true,
+        w: this.bindProp("w"),
+        h: this.bindProp("h"), 
         color: this.bindProp("backgroundColor"),
         shader: {
           type: Lightning.shaders.RoundedRectangle,
           radius: 6,
-          stroke: 0, // Start without stroke
+          stroke: 0, 
         },
         Text: {
-          x: (w) => w / 2, // Center horizontally
-          y: (h) => h / 2 + 2, // Center vertically
+          x: (w) => w / 2,
+          y: (h) => h / 2 + 2, 
           mount: 0.5,
           text: {
             text: this.bindProp("buttonText"),
@@ -69,7 +68,7 @@ export class Button
       shader: {
         type: Lightning.shaders.RoundedRectangle,
         radius: 6,
-        stroke: 0, // Remove stroke on unfocus
+        stroke: 0,
       },
     });
   }

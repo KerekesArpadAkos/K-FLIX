@@ -138,10 +138,8 @@ export default class SearchPage
     });
   }
   private _updateSearchInput(text: string) {
-    // Update the SearchInput component
     this.tag("SearchInput")?.setText(text);
 
-    // Optionally, trigger a search with the recognized text
     this._onSearch(text);
   }
   get Label() {

@@ -6,7 +6,6 @@ import { PlayerUIButton } from "./Button";
 import { KEYS } from "../../static/constants/Keys";
 import { getPressedKey } from "../../static/constants/Keys";
 
-// useful constants
 const timeY = 810;
 const font = "Bold";
 
@@ -44,7 +43,6 @@ export class PlayerUI
   private hideUITimerID?: ReturnType<typeof setTimeout>;
   private readonly hideUIDelay = 5000;
 
-  // animations for show
   private playBtnShowAnimation: any;
   private prevBtnShowAnimation: any;
   private nextBtnShowAnimation: any;
@@ -56,7 +54,6 @@ export class PlayerUI
   private currentTimeShowAnimation: any;
   private titleWrapperShowAnimation: any;
 
-  // animations for hide
   private playBtnHideAnimation: any;
   private prevBtnHideAnimation: any;
   private nextBtnHideAnimation: any;
@@ -807,7 +804,6 @@ export class PlayerUI
     ];
   }
 
-  // could be useful later
   updatePlayButtonToPause() {
     this.PlayButton?.patch({
       src: Utils.asset("images/logos/pause.png"),

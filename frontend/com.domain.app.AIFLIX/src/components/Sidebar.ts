@@ -19,11 +19,11 @@ class SidebarItemComponent extends Lightning.Component {
       color: COLORS.TRANSPARENT,
       Icon: {
         type: Lightning.Component,
-        src: "", // Set dynamically
+        src: "",
         w: 70,
         h: 70,
         x: 35,
-        y: 15, // Adjusted y-position for Icon
+        y: 15,
         color: COLORS.WHITE,
       },
       Label: {
@@ -33,9 +33,9 @@ class SidebarItemComponent extends Lightning.Component {
           fontSize: SCREEN_SIZES.DEFAULT_BTN_FONT_SIZE,
           textColor: COLORS.WHITE,
         },
-        x: 144, // Adjusted x-position for Label
+        x: 144, 
         mountY: 0.5,
-        y: 50, // Adjusted y-position for Label to align with Icon
+        y: 50, 
       },
     };
   }
@@ -98,7 +98,7 @@ export class Sidebar extends Lightning.Component {
             fontSize: SCREEN_SIZES.DEFAULT_BTN_FONT_SIZE,
             textColor: COLORS.WHITE,
           },
-          x: 114, // Adjusted relative position
+          x: 114, 
           y: 20,
           visible: false,
         },

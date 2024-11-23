@@ -11,7 +11,7 @@ import {
   where,
   getDocs,
 } from "firebase/firestore";
-import { app, auth, db } from "../services/firebaseService"; // Import Firebase app instance
+import { app, auth, db, setGlobalUserId } from "../services/firebaseService";
 
 interface LoginPageTemplateSpec extends Lightning.Component.TemplateSpec {
   Name: object;
@@ -29,7 +29,6 @@ interface LoginPageTemplateSpec extends Lightning.Component.TemplateSpec {
     RegisterButton: typeof Button;
   };
   LandscapeKeyboard: typeof LandscapeKeyboard;
-  // LoadingPage: typeof LoadingPage;
 }
 
 export default class LoginPage extends Lightning.Component<LoginPageTemplateSpec> {
@@ -215,9 +214,7 @@ export default class LoginPage extends Lightning.Component<LoginPageTemplateSpec
           upFromKeyboard: true,
         },
       },
-      // LoadingPage: {
-      //   type: LoadingPage,
-      // },
+
     };
   }
 
@@ -370,14 +367,12 @@ export default class LoginPage extends Lightning.Component<LoginPageTemplateSpec
           const email = this.EmailLabel?.text?.text || "";
           const password = this.PasswordLabel?.text?.text || "";
 
-          // Step 1: Check if the email exists in Firestore
           const usersRef = collection(db, "users");
           const q = query(usersRef, where("email", "==", email));
 
           getDocs(q)
             .then((querySnapshot) => {
               if (querySnapshot.empty) {
-                // Email does not exist in Firestore
                 if (this.WrongEmailMessage) {
                   this.WrongEmailMessage.visible = true;
                   this.errorEmailContainer();
@@ -386,15 +381,14 @@ export default class LoginPage extends Lightning.Component<LoginPageTemplateSpec
                   this.WrongPasswordMessage.visible = false;
                 }
               } else {
-                // Email exists, attempt to sign in with Firebase Authentication
                 signInWithEmailAndPassword(auth, email, password)
                   .then((userCredential) => {
                     const user = userCredential.user;
                     const userId = user.uid;
+                    setGlobalUserId(userId);
+                    console.log("User ID set globally:", userId);
                     console.log("Successfully signed in!");
-                    console.log("User ID from loginPage:", userId);
-
-                    // Hide error messages
+                    
                     if (this.WrongEmailMessage) {
                       this.WrongEmailMessage.visible = false;
                     }
@@ -402,23 +396,19 @@ export default class LoginPage extends Lightning.Component<LoginPageTemplateSpec
                       this.WrongPasswordMessage.visible = false;
                     }
 
-                    // Navigate to ProfileSelection and pass the userId as a parameter
                     Router.navigate("profileselection", { userId: userId });
                   })
                   .catch((error) => {
                     console.error("Error during login process:", error.message);
 
-                    // Hide both error messages initially
                     if (this.WrongEmailMessage)
                       this.WrongEmailMessage.visible = false;
                     if (this.WrongPasswordMessage)
                       this.WrongPasswordMessage.visible = false;
 
-                    // Check for Firebase-specific error codes
                     switch (error.code) {
                       case "auth/user-not-found":
                         console.log("User not found.");
-                        // Show email error message and highlight email container
                         if (this.WrongEmailMessage) {
                           this.WrongEmailMessage.visible = true;
                         }
@@ -426,9 +416,8 @@ export default class LoginPage extends Lightning.Component<LoginPageTemplateSpec
                         break;
 
                       case "auth/wrong-password":
-                      case "auth/invalid-credential": // Treat invalid credential as wrong password
+                      case "auth/invalid-credential":
                         console.log("Incorrect password.");
-                        // Show password error message and highlight password container
                         if (this.WrongPasswordMessage) {
                           this.WrongPasswordMessage.visible = true;
                         }
@@ -444,7 +433,6 @@ export default class LoginPage extends Lightning.Component<LoginPageTemplateSpec
             })
             .catch((error) => {
               console.error("Error during login process:", error);
-              // Handle any unexpected errors here
             });
         }
       },

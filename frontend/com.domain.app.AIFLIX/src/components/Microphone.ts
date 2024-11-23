@@ -66,7 +66,6 @@ export class Microphone
     return this.tag("Icon") as Lightning.Component;
   }
   override _init() {
-    // Initialize the speech recognition object
     const SpeechRecognition =
       (window as any).SpeechRecognition ||
       (window as any).webkitSpeechRecognition;
@@ -75,13 +74,10 @@ export class Microphone
       return;
     }
     this.recognition = new SpeechRecognition();
-
-    // Set recognition properties
     this.recognition.lang = "en-US";
     this.recognition.interimResults = false;
     this.recognition.maxAlternatives = 1;
 
-    // Set up event handlers
     this.recognition.onresult = this.onResult.bind(this);
     this.recognition.onspeechend = this.onSpeechEnd.bind(this);
     this.recognition.onerror = this.onError.bind(this);
@@ -92,7 +88,6 @@ export class Microphone
     eventBus.emit("focusDefaultKeyboard");
   }
   override _handleEnter() {
-    // Start speech recognition
     if (this.recognition) {
       if (this.Label) {
         this.Label.visible = true;
@@ -103,21 +98,17 @@ export class Microphone
   }
 
   private onStart() {
-    // Speech recognition has started
     console.log("Speech recognition started.");
   }
 
   private onResult(event: any) {
-    // Get the recognized text
     const transcript = event.results[0][0].transcript;
     console.log("Recognized text:", transcript);
-    // Save the recognized text in a string property
     this.recognizedText = transcript;
     eventBus.emit("recognizedText", this.recognizedText);
   }
 
   private onSpeechEnd() {
-    // Stop recognition
     if (this.recognition) {
       if (this.Label) {
         this.Label.visible = false;
@@ -134,7 +125,6 @@ export class Microphone
   override _getFocused() {
     return this;
   }
-  // Optionally, you can add focus styling
   override _focus() {
     const background = this.tag("Background");
     if (background) {

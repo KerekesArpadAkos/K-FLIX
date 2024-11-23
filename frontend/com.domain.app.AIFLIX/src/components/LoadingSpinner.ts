@@ -1,4 +1,3 @@
-// LoadingSpinner.js
 import { Lightning, Utils } from "@lightningjs/sdk";
 
 export default class LoadingSpinner extends Lightning.Component {

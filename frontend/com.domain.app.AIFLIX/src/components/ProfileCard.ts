@@ -20,7 +20,7 @@ export default class ProfileCard extends Lightning.Component<ProfileCardTemplate
           ref: "ProfileImage",
           w: 220,
           h: 220,
-          src: "", //user will select a profile image
+          src: "",
         },
         ProfileName: {
           ref: "ProfileName",
@@ -51,7 +51,6 @@ export default class ProfileCard extends Lightning.Component<ProfileCardTemplate
     return this.Card?.getByRef("ProfileName");
   }
 
-  //implement setters for ProfileImage and ProfileName
 
   set profileImage(value: string) {
     if (this.ProfileImage) this.ProfileImage.patch({ src: value });

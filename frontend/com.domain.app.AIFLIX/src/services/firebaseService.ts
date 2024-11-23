@@ -107,3 +107,22 @@ export const addProfile = async (userId: string) => {
   };
   await addDoc(profilesRef, newProfile);
 };
+
+let globalUserId: string | null = null;
+let globalProfileId: string | null = null;
+
+export const setGlobalUserId = (userId: string) => {
+  globalUserId = userId;
+};
+
+export const setGlobalProfileId = (profileId: string) => {
+  globalProfileId = profileId;
+};
+
+export const getGlobalUserId = (): string | null => {
+  return globalUserId;
+};
+
+export const getGlobalProfileId = (): string | null => {
+  return globalProfileId;
+};

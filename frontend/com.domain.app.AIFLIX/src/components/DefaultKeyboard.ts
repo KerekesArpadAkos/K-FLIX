@@ -97,16 +97,14 @@ export default class DefaultKeyboard extends Lightning.Component {
     });
   }
   override _focus() {
-    // Update the focus visuals when the keyboard gains focus
     this._updateFocus();
   }
 
   override _unfocus() {
-    // Reset key colors when the keyboard loses focus
     this.children.forEach((row) => {
       row.children.forEach((button) => {
         button.patch({
-          color: COLORS.GREY_DARK, // Default key color
+          color: COLORS.GREY_DARK,
         });
       });
     });
@@ -120,7 +118,7 @@ export default class DefaultKeyboard extends Lightning.Component {
   focusDown() {
     if (this._rowIndex === this.children.length - 1) {
       eventBus.emit("focusMicrophone");
-      return; // If on the last row ("ENTER"), do nothing on further down presses
+      return; 
     }
 
     this._rowIndex = Math.min(this._rowIndex + 1, this.children.length - 1);
@@ -146,7 +144,6 @@ export default class DefaultKeyboard extends Lightning.Component {
   }
   focusUp() {
     if (this._rowIndex === 0) {
-      // this._updateFocus();
       eventBus.emit("focusBackButton");
       return;
     }

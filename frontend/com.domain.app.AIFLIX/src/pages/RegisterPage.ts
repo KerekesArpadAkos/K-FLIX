@@ -18,7 +18,7 @@ import {
   doc,
   serverTimestamp,
 } from "firebase/firestore";
-import { app, auth, db, registerUser } from "../services/firebaseService"; // Import Firebase app instance
+import { app, auth, db, registerUser, setGlobalUserId } from "../services/firebaseService"; // Import Firebase app instance
 
 interface RegisterPageTemplateSpec extends Lightning.Component.TemplateSpec {
   Name: object;
@@ -242,7 +242,7 @@ export default class RegisterPage extends Lightning.Component<RegisterPageTempla
           w: 461,
           h: 30,
           text: {
-            text: "Already have an account? Sign in!", // if user has an account: Already registered! Sign in!
+            text: "Already have an account? Sign in!",
             fontSize: 25,
             fontFace: "Regular",
             textColor: COLORS.WHITE,
@@ -372,7 +372,6 @@ export default class RegisterPage extends Lightning.Component<RegisterPageTempla
     });
   }
 
-  // Handle key press events from the keyboard
   onKeyPress(char: string) {
     let label;
     if (this._currentInputField === "Email") {
@@ -393,14 +392,11 @@ export default class RegisterPage extends Lightning.Component<RegisterPageTempla
         currentText = "";
       }
       if (char === "BS") {
-        // Handle backspace
         currentText = currentText.slice(0, -1);
       } else if (char === "OK" && this._currentInputField === "Password2") {
-        // Hide keyboard on OK
         if (this.LandscapeKeyboard) {
           this.LandscapeKeyboard.visible = false;
         }
-        // Unfocus from current container and move to next
         this._unfocusCurrentInput();
         this._setState("RegisterButton");
       }else if ( char === "OK" && this._currentInputField === "Email") {
@@ -416,7 +412,6 @@ export default class RegisterPage extends Lightning.Component<RegisterPageTempla
     }
   }
 
-  // Handle up navigation from the keyboard
   upFromKeyboard() {
     if (this._currentInputField === "Password2") {
       this._unfocusCurrentInput();
@@ -425,13 +420,11 @@ export default class RegisterPage extends Lightning.Component<RegisterPageTempla
       this._unfocusCurrentInput();
       this._setState("EmailContainer");
     } else if (this._currentInputField === "Email") {
-      // Move to RegisterButton
       this._unfocusCurrentInput();
       this._setState("RegisterButton");
     }
   }
 
-  // Unfocus the current input field
   private _unfocusCurrentInput() {
     if (this._currentInputField === "Email") {
       this.EmailContainer?.patch({
@@ -467,7 +460,6 @@ export default class RegisterPage extends Lightning.Component<RegisterPageTempla
     this._currentInputField = null;
   }
 
-  // Define component states
   static override _states() {
     return [
       class EmailContainer extends this {
@@ -571,7 +563,6 @@ export default class RegisterPage extends Lightning.Component<RegisterPageTempla
 
           console.log("Registering with:", { email, password1, password2 });
 
-          // Clear previous error messages
           if (this.WeakPasswordMessage)
             this.WeakPasswordMessage.visible = false;
           if (this.DontMatchPasswordMessage)
@@ -579,7 +570,6 @@ export default class RegisterPage extends Lightning.Component<RegisterPageTempla
           if (this.AccountAlreadyRegisteredMessage)
             this.AccountAlreadyRegisteredMessage.visible = false;
 
-          // Basic validation
           if (password1.length < 6) {
             if (this.WeakPasswordMessage) {
               this.WeakPasswordMessage.visible = true;
@@ -596,19 +586,18 @@ export default class RegisterPage extends Lightning.Component<RegisterPageTempla
             return;
           }
 
-          // Attempt registration
           registerUser(email, password1)
             .then((result) => {
               if (result.success && result.user) {
                 const userId = result.user.uid;
 
                 console.log("Successfully registered!");
-                console.log("User ID from RegisterPage:", userId);
+                setGlobalUserId(userId);
+                console.log("User ID set globally:", userId);
+                
 
-                // Navigate to ProfileSelection and pass the userId as a parameter
                 Router.navigate("profileselection", { userId: userId });
               } else if (result.error) {
-                // this.handleRegistrationErrors(result.error);
               }
             })
             .catch((error) => {
@@ -616,7 +605,6 @@ export default class RegisterPage extends Lightning.Component<RegisterPageTempla
                 "Unhandled promise rejection during registration:",
                 error
               );
-              // Optionally, display a generic error message to the user
             });
         }
       },

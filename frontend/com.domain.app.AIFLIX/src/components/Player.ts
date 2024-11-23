@@ -24,7 +24,6 @@ export class Player extends Lightning.Component {
     VideoPlayer.size(w, h);
   }
 
-  // call this with the video URL to setup the playback
   initializePlayback(url: string) {
     this._videoURL = url;
 
@@ -33,17 +32,14 @@ export class Player extends Lightning.Component {
     }
   }
 
-  // Stops the video that is currently playing, and restarts it from the beginning.
   reload() {
     VideoPlayer.reload();
   }
 
-  // Unsets the source of the video player and then hides the video player.
   close() {
     VideoPlayer.close();
   }
 
-  // Unsets the source of the video player (without hiding it).
   clear() {
     VideoPlayer.clear();
   }
@@ -56,7 +52,6 @@ export class Player extends Lightning.Component {
     VideoPlayer.play();
   }
 
-  // Pauses or plays the video player, depending on its current state.
   playPause() {
     VideoPlayer.playPause();
   }
@@ -69,13 +64,11 @@ export class Player extends Lightning.Component {
     }
   }
 
-  // Sets the current time of the video player to the specified time in seconds.
   seek(seconds: number) {
     VideoPlayer.seek(seconds);
   }
 
-  // Jumps a specified number of seconds forward or backward from the video's current time.
-  // A positive value will have it jump forwards and a negative value will have it jump backward.
+
   skip(seconds: number) {
     VideoPlayer.skip(seconds);
   }

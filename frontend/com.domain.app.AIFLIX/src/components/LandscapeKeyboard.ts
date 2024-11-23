@@ -96,7 +96,6 @@ export class LandscapeKeyboard extends Lightning.Component<LandscapeKeyboardTemp
       this._currentRow--;
       this._updateFocus();
     } else {
-      // If at the top row, signal to the parent component
       this.signal("upFromKeyboard");
     }
   }
@@ -110,7 +109,6 @@ export class LandscapeKeyboard extends Lightning.Component<LandscapeKeyboardTemp
 
   override _handleEnter() {
     const char = this._keyboardLayout?.[this._currentRow]?.[this._currentCol];
-    // Handle special keys
     if (char === "BS") {
       this.signal("onKeyPress", "BS");
     } else if (char === "OK") {
