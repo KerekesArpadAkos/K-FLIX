@@ -108,7 +108,11 @@ export class SplashScreen extends Lightning.Component {
     await delay(3500);
     await this.Logo.setSmooth("alpha", 0, { duration: 1 });
 
-    Router.navigate("welcome");
+    if(!localStorage.getItem("userId") || !localStorage.getItem("profileId")) {
+      Router.navigate("welcome");
+    }else{
+      Router.navigate("home");
+    }
   }
 }
 

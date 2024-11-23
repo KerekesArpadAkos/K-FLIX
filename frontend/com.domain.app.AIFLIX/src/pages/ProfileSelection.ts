@@ -185,7 +185,7 @@ export default class ProfileSelection extends Lightning.Component {
                         console.log("Navigating to Home with:", { userId: this._userId, profileId });
 
                         setGlobalProfileId(profileId); 
-
+                        localStorage.setItem("profileId", profileId);
                         Router.navigate("home");
                     } else {
                         console.error("Profile not found for the selected name:", profileName);

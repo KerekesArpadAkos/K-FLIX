@@ -386,6 +386,7 @@ export default class LoginPage extends Lightning.Component<LoginPageTemplateSpec
                     const user = userCredential.user;
                     const userId = user.uid;
                     setGlobalUserId(userId);
+                    localStorage.setItem("userId", userId);
                     console.log("User ID set globally:", userId);
                     console.log("Successfully signed in!");
                     
