@@ -11,7 +11,7 @@ import {
   where,
   getDocs,
 } from "firebase/firestore";
-import { app, auth, db } from "../services/firebaseService"; // Import Firebase app instance
+import { app, auth, db, setGlobalUserId } from "../services/firebaseService";
 
 interface LoginPageTemplateSpec extends Lightning.Component.TemplateSpec {
   Name: object;
@@ -214,6 +214,7 @@ export default class LoginPage extends Lightning.Component<LoginPageTemplateSpec
           upFromKeyboard: true,
         },
       },
+
     };
   }
 
@@ -283,7 +284,6 @@ export default class LoginPage extends Lightning.Component<LoginPageTemplateSpec
     });
   }
 
-  // Handle key press events from the keyboard
   onKeyPress(char: string) {
     let label;
     if (this._currentInputField === "Email") {
@@ -298,18 +298,14 @@ export default class LoginPage extends Lightning.Component<LoginPageTemplateSpec
         currentText = "";
       }
       if (char === "BS") {
-        // Handle backspace
         currentText = currentText.slice(0, -1);
       } else if (char === "OK" && this._currentInputField === "Password") {
-        // Hide keyboard on OK
         if (this.LandscapeKeyboard) {
           this.LandscapeKeyboard.visible = false;
         }
-        // Unfocus from current container and move to LoginButton
         this._unfocusCurrentInput();
         this._setState("LoginButton");
       } else if (char === "OK" && this._currentInputField === "Email") {
-        // Unfocus from current container and move to LoginButton
         this._unfocusCurrentInput();
         this._setState("PasswordContainer");
       } else {
@@ -319,16 +315,13 @@ export default class LoginPage extends Lightning.Component<LoginPageTemplateSpec
     }
   }
 
-  // Handle up navigation from the keyboard
   upFromKeyboard() {
     if (this._currentInputField === "Password") {
-      // Move to EmailContainer
       this._unfocusCurrentInput();
       this._setState("EmailContainer");
     } else if (this._currentInputField === "Email") {
-      // Move to RegisterButton
       this._unfocusCurrentInput();
-      this._setState("RegisterButton");
+      this._setState("LoginButton");
     }
   }
 
@@ -374,14 +367,12 @@ export default class LoginPage extends Lightning.Component<LoginPageTemplateSpec
           const email = this.EmailLabel?.text?.text || "";
           const password = this.PasswordLabel?.text?.text || "";
 
-          // Step 1: Check if the email exists in Firestore
-          const usersRef = collection(db, "user");
+          const usersRef = collection(db, "users");
           const q = query(usersRef, where("email", "==", email));
 
           getDocs(q)
             .then((querySnapshot) => {
               if (querySnapshot.empty) {
-                // Email does not exist in Firestore
                 if (this.WrongEmailMessage) {
                   this.WrongEmailMessage.visible = true;
                   this.errorEmailContainer();
@@ -390,45 +381,44 @@ export default class LoginPage extends Lightning.Component<LoginPageTemplateSpec
                   this.WrongPasswordMessage.visible = false;
                 }
               } else {
-                // Email exists, attempt to sign in with Firebase Authentication
                 signInWithEmailAndPassword(auth, email, password)
-                  .then(() => {
+                  .then((userCredential) => {
+                    const user = userCredential.user;
+                    const userId = user.uid;
+                    setGlobalUserId(userId);
+                    console.log("User ID set globally:", userId);
                     console.log("Successfully signed in!");
+                    
                     if (this.WrongEmailMessage) {
                       this.WrongEmailMessage.visible = false;
                     }
                     if (this.WrongPasswordMessage) {
                       this.WrongPasswordMessage.visible = false;
                     }
-                    // Router.navigate("home"); // Or any other route
+
+                    Router.navigate("profileselection", { userId: userId });
                   })
                   .catch((error) => {
                     console.error("Error during login process:", error.message);
 
-                    // Hide both error messages initially
                     if (this.WrongEmailMessage)
                       this.WrongEmailMessage.visible = false;
                     if (this.WrongPasswordMessage)
                       this.WrongPasswordMessage.visible = false;
 
-                    // Check for Firebase-specific error codes
                     switch (error.code) {
                       case "auth/user-not-found":
                         console.log("User not found.");
-                        // Show email error message and highlight email container
                         if (this.WrongEmailMessage) {
-                          this.errorEmailContainer;
                           this.WrongEmailMessage.visible = true;
                         }
                         this.errorEmailContainer();
                         break;
 
                       case "auth/wrong-password":
-                      case "auth/invalid-credential": // Treat invalid credential as wrong password
+                      case "auth/invalid-credential":
                         console.log("Incorrect password.");
-                        // Show password error message and highlight password container
                         if (this.WrongPasswordMessage) {
-                          this.errorPasswordContainer();
                           this.WrongPasswordMessage.visible = true;
                         }
                         this.errorPasswordContainer();
@@ -443,7 +433,6 @@ export default class LoginPage extends Lightning.Component<LoginPageTemplateSpec
             })
             .catch((error) => {
               console.error("Error during login process:", error);
-              // Handle any unexpected errors here
             });
         }
       },

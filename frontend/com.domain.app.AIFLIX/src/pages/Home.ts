@@ -12,6 +12,7 @@ import { convertItemToGallery } from "../utils/formatters/itemMapper";
 import PinOverlay from "../components/PinOverlay";
 import eventBus from "../components/EventBus";
 import lng from "@lightningjs/sdk/src/Lightning";
+import { getGlobalUserId, getGlobalProfileId } from "../services/firebaseService";
 
 interface HomePageTemplateSpec extends Lightning.Component.TemplateSpec {
   Image: object;
@@ -25,6 +26,9 @@ export class Home
   extends Lightning.Component<HomePageTemplateSpec>
   implements Lightning.Component.ImplementTemplateSpec<HomePageTemplateSpec>
 {
+
+  private _userId: string | null = null;
+  private _profileId: string | null = null;
   static override _template(): Lightning.Component.Template<HomePageTemplateSpec> {
     return {
       w: SCREEN_SIZES.WIDTH,
@@ -32,7 +36,7 @@ export class Home
       Image: {
         w: SCREEN_SIZES.WIDTH,
         h: SCREEN_SIZES.HEIGHT,
-        visible: false, // Initially hidden
+        visible: false,
         zIndex: 6,
         texture: {
           type: lng.textures.ImageTexture,
@@ -65,7 +69,8 @@ export class Home
       },
     };
   }
-
+  
+  
   get Image() {
     return this.getByRef("Image");
   }
@@ -87,7 +92,6 @@ export class Home
 
   override _firstEnable() {
     console.log("Home firstEnable");
-    // Setup event listeners once
     eventBus.on("showPinOverlay", this.showPinOverlay.bind(this));
     eventBus.on("pinCorrect", this.hidePinOverlay.bind(this));
     eventBus.on("accessDenied", this.handleAccessDenied.bind(this));
@@ -96,17 +100,24 @@ export class Home
       this.setStateOnDetailButton.bind(this)
     );
 
-    Router.focusPage(); // Make sure the page is focused properly
+    Router.focusPage(); 
   }
 
-  override _init() {
-    console.log("Home init");
-    this.addGallery();
-  }
-
-  // Runs every time the component is activated (enabled and in focus)
   override _active() {
-    console.log("Home active");
+    console.warn("Home active");
+
+    this._userId = getGlobalUserId();
+    this._profileId = getGlobalProfileId();
+
+    if (!this._userId || !this._profileId) {
+      console.error("Missing userId or profileId. Redirecting to login...");
+      Router.navigate("signin");
+      return;
+    }
+
+    console.warn(
+      `User ID: ${this._userId}, Profile ID: ${this._profileId} - Home loaded`
+    );
     setTimeout(() => {
       this.checkRoute();
     }, 100);

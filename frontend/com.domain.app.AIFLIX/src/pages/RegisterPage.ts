@@ -18,9 +18,9 @@ import {
   doc,
   serverTimestamp,
 } from "firebase/firestore";
-import { app, auth, db } from "../services/firebaseService"; // Import Firebase app instance
+import { app, auth, db, registerUser, setGlobalUserId } from "../services/firebaseService"; // Import Firebase app instance
 
-interface LoginPageTemplateSpec extends Lightning.Component.TemplateSpec {
+interface RegisterPageTemplateSpec extends Lightning.Component.TemplateSpec {
   Name: object;
   Container: {
     EmailContainer: {
@@ -42,7 +42,7 @@ interface LoginPageTemplateSpec extends Lightning.Component.TemplateSpec {
   LandscapeKeyboard: typeof LandscapeKeyboard;
 }
 
-export default class LoginPage extends Lightning.Component<LoginPageTemplateSpec> {
+export default class RegisterPage extends Lightning.Component<RegisterPageTemplateSpec> {
   private _currentInputField:
     | "Email"
     | "Password"
@@ -50,7 +50,7 @@ export default class LoginPage extends Lightning.Component<LoginPageTemplateSpec
     | "Password2"
     | null = null;
 
-  static override _template(): Lightning.Component.Template<LoginPageTemplateSpec> {
+  static override _template(): Lightning.Component.Template<RegisterPageTemplateSpec> {
     return {
       rect: true,
       w: SCREEN_SIZES.WIDTH,
@@ -242,7 +242,7 @@ export default class LoginPage extends Lightning.Component<LoginPageTemplateSpec
           w: 461,
           h: 30,
           text: {
-            text: "Already have an account? Sign in!", // if user has an account: Already registered! Sign in!
+            text: "Already have an account? Sign in!",
             fontSize: 25,
             fontFace: "Regular",
             textColor: COLORS.WHITE,
@@ -372,7 +372,6 @@ export default class LoginPage extends Lightning.Component<LoginPageTemplateSpec
     });
   }
 
-  // Handle key press events from the keyboard
   onKeyPress(char: string) {
     let label;
     if (this._currentInputField === "Email") {
@@ -393,47 +392,39 @@ export default class LoginPage extends Lightning.Component<LoginPageTemplateSpec
         currentText = "";
       }
       if (char === "BS") {
-        // Handle backspace
         currentText = currentText.slice(0, -1);
-      } else if (char === "OK") {
-        // Hide keyboard on OK
+      } else if (char === "OK" && this._currentInputField === "Password2") {
         if (this.LandscapeKeyboard) {
           this.LandscapeKeyboard.visible = false;
         }
-        // Unfocus from current container and move to next
         this._unfocusCurrentInput();
-        if (this._currentInputField === "Email") {
-          this._setState("PasswordContainer1");
-        } else if (this._currentInputField === "Password1") {
-          this._setState("PasswordContainer2");
-        } else if (this._currentInputField === "Password2") {
-          this._setState("RegisterButton");
-        }
-      } else {
+        this._setState("RegisterButton");
+      }else if ( char === "OK" && this._currentInputField === "Email") {
+        this._unfocusCurrentInput();
+        this._setState("PasswordContainer1");
+      } else if (char === "OK" && this._currentInputField === "Password1") {
+        this._unfocusCurrentInput();
+        this._setState("PasswordContainer2");
+      }  else {
         currentText += char;
       }
       label.patch({ text: { text: currentText } });
     }
   }
 
-  // Handle up navigation from the keyboard
   upFromKeyboard() {
     if (this._currentInputField === "Password2") {
-      // Move to PasswordContainer1
       this._unfocusCurrentInput();
       this._setState("PasswordContainer1");
     } else if (this._currentInputField === "Password1") {
-      // Move to EmailContainer
       this._unfocusCurrentInput();
       this._setState("EmailContainer");
     } else if (this._currentInputField === "Email") {
-      // Move to RegisterButton
       this._unfocusCurrentInput();
       this._setState("RegisterButton");
     }
   }
 
-  // Unfocus the current input field
   private _unfocusCurrentInput() {
     if (this._currentInputField === "Email") {
       this.EmailContainer?.patch({
@@ -469,7 +460,6 @@ export default class LoginPage extends Lightning.Component<LoginPageTemplateSpec
     this._currentInputField = null;
   }
 
-  // Define component states
   static override _states() {
     return [
       class EmailContainer extends this {
@@ -492,6 +482,10 @@ export default class LoginPage extends Lightning.Component<LoginPageTemplateSpec
           this._unfocusCurrentInput();
         }
         override _handleDown() {
+          this._unfocus();
+          this._setState("PasswordContainer1");
+        }
+        override _handleEnter() {
           this._unfocus();
           this._setState("PasswordContainer1");
         }
@@ -567,7 +561,8 @@ export default class LoginPage extends Lightning.Component<LoginPageTemplateSpec
           const password1 = this.PasswordLabel1?.text?.text || "";
           const password2 = this.PasswordLabel2?.text?.text || "";
 
-          // Clear previous error messages
+          console.log("Registering with:", { email, password1, password2 });
+
           if (this.WeakPasswordMessage)
             this.WeakPasswordMessage.visible = false;
           if (this.DontMatchPasswordMessage)
@@ -575,85 +570,41 @@ export default class LoginPage extends Lightning.Component<LoginPageTemplateSpec
           if (this.AccountAlreadyRegisteredMessage)
             this.AccountAlreadyRegisteredMessage.visible = false;
 
-          // Simple validation
           if (password1.length < 6) {
             if (this.WeakPasswordMessage) {
               this.WeakPasswordMessage.visible = true;
-              this.errorPasswordContainer1();
             }
+            this.errorPasswordContainer1();
             return;
           }
 
           if (password1 !== password2) {
             if (this.DontMatchPasswordMessage) {
               this.DontMatchPasswordMessage.visible = true;
-              this.errorPasswordContainer2();
             }
+            this.errorPasswordContainer2();
             return;
           }
 
-          // Create user with Firebase Authentication
-          createUserWithEmailAndPassword(auth, email, password1)
-            .then((userCredential) => {
-              // Signed in
-              const user = userCredential.user;
-              console.log("User registered:", user.uid);
+          registerUser(email, password1)
+            .then((result) => {
+              if (result.success && result.user) {
+                const userId = result.user.uid;
 
-              // Store user data in Firestore
-              setDoc(doc(db, "user", user.uid), {
-                email: email,
-                createdAt: serverTimestamp(),
-                // Add additional user data here if needed
-              })
-                .then(() => {
-                  console.log("User data saved in Firestore");
-                  // Navigate to home or login page
-                  Router.navigate("home");
-                })
-                .catch((error) => {
-                  console.error("Error writing user data to Firestore:", error);
-                  // Handle error
-                });
+                console.log("Successfully registered!");
+                setGlobalUserId(userId);
+                console.log("User ID set globally:", userId);
+                
+
+                Router.navigate("profileselection", { userId: userId });
+              } else if (result.error) {
+              }
             })
             .catch((error) => {
-              console.error("Error during registration:", error);
-
-              // Handle Firebase registration errors
-              if (error.code === "auth/email-already-in-use") {
-                if (this.AccountAlreadyRegisteredMessage) {
-                  if (
-                    this.AccountAlreadyRegisteredMessage &&
-                    this.AccountAlreadyRegisteredMessage.text
-                  ) {
-                    this.AccountAlreadyRegisteredMessage.text.text =
-                      "Already registered! Sign in!";
-                    this.AccountAlreadyRegisteredMessage.visible = true;
-                    this.AccountAlreadyRegisteredMessage.patch({
-                      x: 15,
-                      y: 557,
-                      w: 461,
-                      h: 30,
-                      text: {
-                        text: "Already registered! Sign in!",
-                        fontSize: 25,
-                        fontFace: "Regular",
-                        textColor: COLORS.GREEN_FOCUS,
-                        textAlign: "center",
-                      },
-                    });
-                  }
-                }
-                // this.errorEmailContainer();
-              } else if (error.code === "auth/invalid-email") {
-                // Invalid email format
-                if (this.WrongEmailMessage) {
-                  this.WrongEmailMessage.visible = true;
-                }
-                this.errorEmailContainer();
-              } else {
-                // Other errors
-                console.error("Registration error:", error.message);
-              }
+              console.error(
+                "Unhandled promise rejection during registration:",
+                error
+              );
             });
         }
       },
