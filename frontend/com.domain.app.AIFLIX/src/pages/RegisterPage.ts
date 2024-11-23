@@ -406,7 +406,7 @@ export default class RegisterPage extends Lightning.Component<RegisterPageTempla
       }else if ( char === "OK" && this._currentInputField === "Email") {
         this._unfocusCurrentInput();
         this._setState("PasswordContainer1");
-      } else if (this._currentInputField === "Password1") {
+      } else if (char === "OK" && this._currentInputField === "Password1") {
         this._unfocusCurrentInput();
         this._setState("PasswordContainer2");
       }  else {
@@ -419,11 +419,9 @@ export default class RegisterPage extends Lightning.Component<RegisterPageTempla
   // Handle up navigation from the keyboard
   upFromKeyboard() {
     if (this._currentInputField === "Password2") {
-      // Move to PasswordContainer1
       this._unfocusCurrentInput();
       this._setState("PasswordContainer1");
     } else if (this._currentInputField === "Password1") {
-      // Move to EmailContainer
       this._unfocusCurrentInput();
       this._setState("EmailContainer");
     } else if (this._currentInputField === "Email") {

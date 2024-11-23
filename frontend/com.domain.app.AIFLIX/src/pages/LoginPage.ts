@@ -283,7 +283,6 @@ export default class LoginPage extends Lightning.Component<LoginPageTemplateSpec
     });
   }
 
-  // Handle key press events from the keyboard
   onKeyPress(char: string) {
     let label;
     if (this._currentInputField === "Email") {
@@ -298,18 +297,14 @@ export default class LoginPage extends Lightning.Component<LoginPageTemplateSpec
         currentText = "";
       }
       if (char === "BS") {
-        // Handle backspace
         currentText = currentText.slice(0, -1);
       } else if (char === "OK" && this._currentInputField === "Password") {
-        // Hide keyboard on OK
         if (this.LandscapeKeyboard) {
           this.LandscapeKeyboard.visible = false;
         }
-        // Unfocus from current container and move to LoginButton
         this._unfocusCurrentInput();
         this._setState("LoginButton");
       } else if (char === "OK" && this._currentInputField === "Email") {
-        // Unfocus from current container and move to LoginButton
         this._unfocusCurrentInput();
         this._setState("PasswordContainer");
       } else {
@@ -319,16 +314,13 @@ export default class LoginPage extends Lightning.Component<LoginPageTemplateSpec
     }
   }
 
-  // Handle up navigation from the keyboard
   upFromKeyboard() {
     if (this._currentInputField === "Password") {
-      // Move to EmailContainer
       this._unfocusCurrentInput();
       this._setState("EmailContainer");
     } else if (this._currentInputField === "Email") {
-      // Move to RegisterButton
       this._unfocusCurrentInput();
-      this._setState("RegisterButton");
+      this._setState("LoginButton");
     }
   }
 
