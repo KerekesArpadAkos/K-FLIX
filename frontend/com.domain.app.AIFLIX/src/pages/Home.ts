@@ -16,7 +16,7 @@ import { getGlobalUserId, getGlobalProfileId } from "../services/firebaseService
 
 interface HomePageTemplateSpec extends Lightning.Component.TemplateSpec {
   Image: object;
-  // BackgroundImage: object;
+  BackgroundImage: object;
   Gallery: typeof Gallery;
   VerticalList: typeof VerticalList;
   PinOverlay: typeof PinOverlay;
@@ -43,14 +43,15 @@ export class Home
           src: Utils.asset("images/defaultSkeleton.png"),
         },
       },
-      // BackgroundImage: {
-      //   zIndex: 2,
-      //   texture: lng.Tools.getSvgTexture(
-      //     Utils.asset("images/background.svg"),
-      //     SCREEN_SIZES.WIDTH,
-      //     SCREEN_SIZES.HEIGHT
-      //   ),
-      // },
+      BackgroundImage: {
+        zIndex: 5,
+        texture: lng.Tools.getSvgTexture(
+          Utils.asset("images/background.svg"),
+          SCREEN_SIZES.WIDTH,
+          SCREEN_SIZES.HEIGHT
+        ),
+        visible: false,
+      },
       Gallery: {
         type: Gallery,
       },
@@ -75,9 +76,9 @@ export class Home
     return this.getByRef("Image");
   }
 
-  // get BackgroundImage() {
-  //   return this.getByRef("BackgroundImage");
-  // }
+  get BackgroundImage() {
+    return this.getByRef("BackgroundImage");
+  }
   get PinOverlay() {
     return this.getByRef("PinOverlay") as PinOverlay;
   }
@@ -108,6 +109,7 @@ export class Home
   }
 
   override _active() {
+    this.addDefaultSkeletonAnimation();
     setTimeout(() => {
       this.checkRoute();
     }, 100);
@@ -148,42 +150,42 @@ export class Home
     }
   }
 
-  // addDefaultSkeletonAnimation() {
-  //   const skeleton = this.Image;
-  //   const backgroundImage = this.BackgroundImage;
+  addDefaultSkeletonAnimation() {
+    const skeleton = this.Image;
+    const backgroundImage = this.BackgroundImage;
 
-  //   const animationDuration = 1;
-  //   const fadeAlphaStart = 0.5;
-  //   const fadeAlphaEnd = 1;
-  //   const displayDuration = 1000;
+    const animationDuration = 1;
+    const fadeAlphaStart = 0.5;
+    const fadeAlphaEnd = 1;
+    const displayDuration = 1000;
 
-  //   if (!skeleton || !backgroundImage) {
-  //     console.error("loadingImage or BackgroundImage is not found.");
-  //     return;
-  //   }
+    if (!skeleton || !backgroundImage) {
+      console.error("loadingImage or BackgroundImage is not found.");
+      return;
+    }
 
-  //   backgroundImage.patch({ visible: true, alpha: 1 });
-  //   skeleton.patch({ visible: true, alpha: fadeAlphaStart });
+    backgroundImage.patch({ visible: true, alpha: 1 });
+    skeleton.patch({ visible: true, alpha: fadeAlphaStart });
 
-  //   const pulseAnimation = skeleton.animation({
-  //     duration: animationDuration,
-  //     repeat: -1,
-  //     actions: [
-  //       {
-  //         p: "alpha",
-  //         v: { 0: fadeAlphaStart, 0.5: fadeAlphaEnd, 1: fadeAlphaStart },
-  //       },
-  //     ],
-  //   });
+    const pulseAnimation = skeleton.animation({
+      duration: animationDuration,
+      repeat: -1,
+      actions: [
+        {
+          p: "alpha",
+          v: { 0: fadeAlphaStart, 0.5: fadeAlphaEnd, 1: fadeAlphaStart },
+        },
+      ],
+    });
 
-  //   pulseAnimation.start();
+    pulseAnimation.start();
 
-  //   setTimeout(() => {
-  //     pulseAnimation.stop();
-  //     skeleton.patch({ visible: false });
-  //     backgroundImage.patch({ visible: false });
-  //   }, displayDuration);
-  // }
+    setTimeout(() => {
+      pulseAnimation.stop();
+      skeleton.patch({ visible: false });
+      backgroundImage.patch({ visible: false });
+    }, displayDuration);
+  }
 
   async addGallery() {
     const popularMovieDetails = await movieService.getMostPopularMovieDetails();
