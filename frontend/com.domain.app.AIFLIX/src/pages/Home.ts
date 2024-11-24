@@ -507,17 +507,27 @@ export class Home
         }
       },
       class Gallery extends this {
+        private _alreadyFocused = false; 
+      
         override _getFocused() {
-          console.warn("Gallery focused");
+          if (!this._alreadyFocused) {
+            console.warn("Gallery focused");
+            this._alreadyFocused = true; 
+          }
           return this.Gallery;
         }
-
+      
         override _handleLeft() {
           Router.focusWidget("Sidebar");
         }
-
+      
         override _handleDown() {
+          this._alreadyFocused = false; 
           this._setState("VerticalList");
+        }
+      
+        override _handleUp() {
+          this._alreadyFocused = false; 
         }
       },
       class PinOverlayFocus extends this {
