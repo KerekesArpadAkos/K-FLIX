@@ -27,7 +27,7 @@ export default class DefaultKeyboard extends Lightning.Component {
       color: COLORS.BACKGROUND,
       flex: {
         direction: "column" as const,
-        alignItems: "center" as const,
+        alignItems: "flex-start" as const,
         justifyContent: "space-around" as const,
       },
       shader: {
@@ -42,8 +42,12 @@ export default class DefaultKeyboard extends Lightning.Component {
         },
         children: row.map((key) => {
           let width = 50;
+          let mrgL = 27.5;
+          let mrgR = 27.5;
           if (key === "SPACE" || key === "BACK") {
             width = 160;
+            mrgL =  27.5;
+            mrgR = 137.5;
           } else if (key === "ENTER") {
             width = 325;
           }
@@ -58,7 +62,8 @@ export default class DefaultKeyboard extends Lightning.Component {
             fontSize: 36,
             backgroundColor: COLORS.GREY_DARK,
             flexItem: {
-              margin: 2.5,
+              marginLeft:mrgL,
+              marginRight:mrgR
             },
           };
         }),
