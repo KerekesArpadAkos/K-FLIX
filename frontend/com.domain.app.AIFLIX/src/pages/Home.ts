@@ -50,6 +50,7 @@ export class Home
           SCREEN_SIZES.WIDTH,
           SCREEN_SIZES.HEIGHT
         ),
+        visible: false,
       },
       Gallery: {
         type: Gallery,
@@ -90,6 +91,10 @@ export class Home
     return this.getByRef("VerticalList") as VerticalList;
   }
 
+  override _init() {
+    this.addGallery();
+  }
+
   override _firstEnable() {
     console.log("Home firstEnable");
     eventBus.on("showPinOverlay", this.showPinOverlay.bind(this));
@@ -104,10 +109,14 @@ export class Home
   }
 
   override _active() {
+    this.addDefaultSkeletonAnimation();
+    setTimeout(() => {
+      this.checkRoute();
+    }, 100);
     console.warn("Home active");
 
-    this._userId = getGlobalUserId();
-    this._profileId = getGlobalProfileId();
+    this._userId = getGlobalUserId() || localStorage.getItem("userId");
+    this._profileId = getGlobalProfileId() || localStorage.getItem("profileId");
 
     if (!this._userId || !this._profileId) {
       console.error("Missing userId or profileId. Redirecting to login...");
@@ -118,16 +127,14 @@ export class Home
     console.warn(
       `User ID: ${this._userId}, Profile ID: ${this._profileId} - Home loaded`
     );
-    setTimeout(() => {
-      this.checkRoute();
-    }, 100);
+
     this._setState("Gallery");
   }
 
   async checkRoute() {
     const activeHash = Router.getActiveHash();
 
-    this.addDefaultSkeletonAnimation();
+    // this.addDefaultSkeletonAnimation();
 
     if (activeHash === "home") {
       const carousels = await this.createHomeCarousels();
@@ -502,16 +509,27 @@ export class Home
         }
       },
       class Gallery extends this {
+        private _alreadyFocused = false; 
+      
         override _getFocused() {
+          if (!this._alreadyFocused) {
+            console.warn("Gallery focused");
+            this._alreadyFocused = true; 
+          }
           return this.Gallery;
         }
-
+      
         override _handleLeft() {
           Router.focusWidget("Sidebar");
         }
-
+      
         override _handleDown() {
+          this._alreadyFocused = false; 
           this._setState("VerticalList");
+        }
+      
+        override _handleUp() {
+          this._alreadyFocused = false; 
         }
       },
       class PinOverlayFocus extends this {

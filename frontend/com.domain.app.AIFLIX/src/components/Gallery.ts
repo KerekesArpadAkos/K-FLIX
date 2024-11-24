@@ -131,7 +131,7 @@ export class Gallery
             },
             DetailsBtn: {
               type: UtilityButton,
-              label: "+ Details",
+              label: "Details",
               buttonType: "details",
             },
             MoreDetails: {

@@ -16,7 +16,8 @@ export function convertItemsToCards(items: Item[] = []): CardItem[] {
       data: item,
       id: item.id,
       overview: item.overview,
-      adult: item.id % 2 == 0,
+      // adult: item.id % 2 == 0,
+      adult: false,
     };
   });
 }
@@ -29,7 +30,8 @@ export function convertItemToGallery(items: Item): GalleryItem {
     title: title || name || "",
     id: id,
     overview: overview || "",
-    adult: id % 2 == 0,
+    // adult: id % 2 == 0,
+    adult: false,
   };
 }
 

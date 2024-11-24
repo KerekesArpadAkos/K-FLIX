@@ -593,9 +593,9 @@ export default class RegisterPage extends Lightning.Component<RegisterPageTempla
 
                 console.log("Successfully registered!");
                 setGlobalUserId(userId);
+                localStorage.setItem("userId", userId);
                 console.log("User ID set globally:", userId);
                 
-
                 Router.navigate("profileselection", { userId: userId });
               } else if (result.error) {
               }

@@ -6,7 +6,6 @@ import eventBus from "./EventBus";
 export default class DefaultKeyboard extends Lightning.Component {
   _rowIndex = 0;
   _columnIndex = 0;
-  ok = 0;
 
   static override _template() {
     const keys: string[][] = [
@@ -21,14 +20,14 @@ export default class DefaultKeyboard extends Lightning.Component {
     ];
 
     return {
-      x: 199,
+      x: 174,
       y: 279,
       w: 325,
       h: 436,
       color: COLORS.BACKGROUND,
       flex: {
         direction: "column" as const,
-        alignItems: "center" as const,
+        alignItems: "flex-start" as const,
         justifyContent: "space-around" as const,
       },
       shader: {
@@ -43,8 +42,12 @@ export default class DefaultKeyboard extends Lightning.Component {
         },
         children: row.map((key) => {
           let width = 50;
+          let mrgL = 27.5;
+          let mrgR = 27.5;
           if (key === "SPACE" || key === "BACK") {
             width = 160;
+            mrgL =  27.5;
+            mrgR = 137.5;
           } else if (key === "ENTER") {
             width = 325;
           }
@@ -59,7 +62,8 @@ export default class DefaultKeyboard extends Lightning.Component {
             fontSize: 36,
             backgroundColor: COLORS.GREY_DARK,
             flexItem: {
-              margin: 2.5,
+              marginLeft:mrgL,
+              marginRight:mrgR
             },
           };
         }),
@@ -68,59 +72,37 @@ export default class DefaultKeyboard extends Lightning.Component {
   }
 
   override _init() {
-    this.ok = 0;
     this._updateFocus();
   }
 
   _getCurrentKey(): Lightning.Component | undefined {
-    const row = this.children[this._rowIndex] as
-      | Lightning.Component
-      | undefined;
-    return row
-      ? (row.children[this._columnIndex] as Lightning.Component | undefined)
-      : undefined;
+    const row = this.children[this._rowIndex] as Lightning.Component | undefined;
+    return row ? (row.children[this._columnIndex] as Lightning.Component | undefined) : undefined;
   }
 
   private _updateFocus() {
-    const isKeyboardFocused = this.hasFocus();
     this.children.forEach((row, rowIndex) => {
       row.children.forEach((button, colIndex) => {
         button.patch({
-          color:
-            isKeyboardFocused &&
-            rowIndex === this._rowIndex &&
-            colIndex === this._columnIndex
+          backgroundColor:
+            rowIndex === this._rowIndex && colIndex === this._columnIndex
               ? COLORS.GREEN_FOCUS
               : COLORS.GREY_DARK,
         });
       });
     });
   }
-  override _focus() {
-    // Update the focus visuals when the keyboard gains focus
-    this._updateFocus();
-  }
 
-  override _unfocus() {
-    // Reset key colors when the keyboard loses focus
-    this.children.forEach((row) => {
-      row.children.forEach((button) => {
-        button.patch({
-          color: COLORS.GREY_DARK, // Default key color
-        });
-      });
-    });
-  }
-  _setIndex(index: number) {
-    this._rowIndex = Math.floor(index / 6);
-    this._columnIndex = index % 6;
+  _setIndex(rowIndex: number, colIndex: number) {
+    this._rowIndex = rowIndex;
+    this._columnIndex = colIndex;
     this._updateFocus();
   }
 
   focusDown() {
     if (this._rowIndex === this.children.length - 1) {
       eventBus.emit("focusMicrophone");
-      return; // If on the last row ("ENTER"), do nothing on further down presses
+      return;
     }
 
     this._rowIndex = Math.min(this._rowIndex + 1, this.children.length - 1);
@@ -128,25 +110,9 @@ export default class DefaultKeyboard extends Lightning.Component {
     this._columnIndex = Math.min(this._columnIndex, row.children.length - 1);
     this._updateFocus();
   }
-  override _handleEnter() {
-    const currentKey = this._getCurrentKey();
-    if (currentKey) {
-      const buttonText = (currentKey as any).buttonText;
-      if (buttonText === "SPACE") {
-        eventBus.emit("inputTextUpdate", " ");
-      } else if (buttonText === "BACK") {
-        eventBus.emit("inputTextUpdate", "BACK");
-      } else if (buttonText === "ENTER") {
-        eventBus.emit("inputTextUpdate", "ENTER");
-        this.ok = 1;
-      } else {
-        eventBus.emit("inputTextUpdate", buttonText);
-      }
-    }
-  }
+
   focusUp() {
     if (this._rowIndex === 0) {
-      // this._updateFocus();
       eventBus.emit("focusBackButton");
       return;
     }
@@ -168,14 +134,7 @@ export default class DefaultKeyboard extends Lightning.Component {
 
   override _handleRight() {
     const row = this.children[this._rowIndex] as Lightning.Component;
-    if (
-      (this._columnIndex == 5 ||
-        this._rowIndex == 7 ||
-        (this._rowIndex == 0 && this._columnIndex == 1)) &&
-      this.ok === 1
-    ) {
-      eventBus.emit("focusCarousel");
-    } else if (this._columnIndex < row.children.length - 1) {
+    if (this._columnIndex < row.children.length - 1) {
       this._columnIndex++;
       this._updateFocus();
     }
@@ -189,12 +148,18 @@ export default class DefaultKeyboard extends Lightning.Component {
     this.focusDown();
   }
 
-  triggerEnter(): string | undefined {
+  override _handleEnter() {
     const currentKey = this._getCurrentKey();
     if (currentKey) {
       const buttonText = (currentKey as any).buttonText;
-      if (buttonText) {
-        return buttonText;
+      if (buttonText === "SPACE") {
+        eventBus.emit("inputTextUpdate", " ");
+      } else if (buttonText === "BACK") {
+        eventBus.emit("inputTextUpdate", "BACK");
+      } else if (buttonText === "ENTER") {
+        eventBus.emit("inputTextUpdate", "ENTER");
+      } else {
+        eventBus.emit("inputTextUpdate", buttonText);
       }
     }
   }
@@ -213,12 +178,10 @@ export default class DefaultKeyboard extends Lightning.Component {
 
     for (let i = 0; i < keys.length; i++) {
       const row = keys[i];
-      if (row !== undefined) {
+      if (row) {
         const colIndex = row.indexOf(key);
         if (colIndex !== -1) {
-          this._rowIndex = i;
-          this._columnIndex = colIndex;
-          this._updateFocus();
+          this._setIndex(i, colIndex);
           break;
         }
       }
