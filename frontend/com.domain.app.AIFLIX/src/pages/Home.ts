@@ -12,6 +12,7 @@ import { convertItemToGallery } from "../utils/formatters/itemMapper";
 import PinOverlay from "../components/PinOverlay";
 import eventBus from "../components/EventBus";
 import lng from "@lightningjs/sdk/src/Lightning";
+import { getGlobalUserId, getGlobalProfileId } from "../services/firebaseService";
 
 interface HomePageTemplateSpec extends Lightning.Component.TemplateSpec {
   Image: object;
@@ -25,6 +26,9 @@ export class Home
   extends Lightning.Component<HomePageTemplateSpec>
   implements Lightning.Component.ImplementTemplateSpec<HomePageTemplateSpec>
 {
+
+  private _userId: string | null = null;
+  private _profileId: string | null = null;
   static override _template(): Lightning.Component.Template<HomePageTemplateSpec> {
     return {
       w: SCREEN_SIZES.WIDTH,
@@ -32,7 +36,7 @@ export class Home
       Image: {
         w: SCREEN_SIZES.WIDTH,
         h: SCREEN_SIZES.HEIGHT,
-        visible: false, // Initially hidden
+        visible: false,
         zIndex: 6,
         texture: {
           type: lng.textures.ImageTexture,
@@ -46,6 +50,7 @@ export class Home
           SCREEN_SIZES.WIDTH,
           SCREEN_SIZES.HEIGHT
         ),
+        visible: false,
       },
       Gallery: {
         type: Gallery,
@@ -65,7 +70,8 @@ export class Home
       },
     };
   }
-
+  
+  
   get Image() {
     return this.getByRef("Image");
   }
@@ -85,9 +91,12 @@ export class Home
     return this.getByRef("VerticalList") as VerticalList;
   }
 
+  override _init() {
+    this.addGallery();
+  }
+
   override _firstEnable() {
     console.log("Home firstEnable");
-    // Setup event listeners once
     eventBus.on("showPinOverlay", this.showPinOverlay.bind(this));
     eventBus.on("pinCorrect", this.hidePinOverlay.bind(this));
     eventBus.on("accessDenied", this.handleAccessDenied.bind(this));
@@ -96,27 +105,36 @@ export class Home
       this.setStateOnDetailButton.bind(this)
     );
 
-    Router.focusPage(); // Make sure the page is focused properly
+    Router.focusPage(); 
   }
 
-  override _init() {
-    console.log("Home init");
-    this.addGallery();
-  }
-
-  // Runs every time the component is activated (enabled and in focus)
   override _active() {
-    console.log("Home active");
+    this.addDefaultSkeletonAnimation();
     setTimeout(() => {
       this.checkRoute();
     }, 100);
+    console.warn("Home active");
+
+    this._userId = getGlobalUserId() || localStorage.getItem("userId");
+    this._profileId = getGlobalProfileId() || localStorage.getItem("profileId");
+
+    if (!this._userId || !this._profileId) {
+      console.error("Missing userId or profileId. Redirecting to login...");
+      Router.navigate("signin");
+      return;
+    }
+
+    console.warn(
+      `User ID: ${this._userId}, Profile ID: ${this._profileId} - Home loaded`
+    );
+
     this._setState("Gallery");
   }
 
   async checkRoute() {
     const activeHash = Router.getActiveHash();
 
-    this.addDefaultSkeletonAnimation();
+    // this.addDefaultSkeletonAnimation();
 
     if (activeHash === "home") {
       const carousels = await this.createHomeCarousels();
@@ -491,16 +509,27 @@ export class Home
         }
       },
       class Gallery extends this {
+        private _alreadyFocused = false; 
+      
         override _getFocused() {
+          if (!this._alreadyFocused) {
+            console.warn("Gallery focused");
+            this._alreadyFocused = true; 
+          }
           return this.Gallery;
         }
-
+      
         override _handleLeft() {
           Router.focusWidget("Sidebar");
         }
-
+      
         override _handleDown() {
+          this._alreadyFocused = false; 
           this._setState("VerticalList");
+        }
+      
+        override _handleUp() {
+          this._alreadyFocused = false; 
         }
       },
       class PinOverlayFocus extends this {
