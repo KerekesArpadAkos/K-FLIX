@@ -90,6 +90,10 @@ export class Home
     return this.getByRef("VerticalList") as VerticalList;
   }
 
+  override _init() {
+    this.addGallery();
+  }
+
   override _firstEnable() {
     console.log("Home firstEnable");
     eventBus.on("showPinOverlay", this.showPinOverlay.bind(this));
@@ -104,6 +108,9 @@ export class Home
   }
 
   override _active() {
+    setTimeout(() => {
+      this.checkRoute();
+    }, 100);
     console.warn("Home active");
 
     this._userId = getGlobalUserId() || localStorage.getItem("userId");
@@ -118,9 +125,7 @@ export class Home
     console.warn(
       `User ID: ${this._userId}, Profile ID: ${this._profileId} - Home loaded`
     );
-    setTimeout(() => {
-      this.checkRoute();
-    }, 100);
+
     this._setState("Gallery");
   }
 
@@ -503,6 +508,7 @@ export class Home
       },
       class Gallery extends this {
         override _getFocused() {
+          console.warn("Gallery focused");
           return this.Gallery;
         }
 
