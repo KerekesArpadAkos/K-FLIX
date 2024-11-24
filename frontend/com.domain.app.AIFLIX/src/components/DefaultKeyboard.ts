@@ -20,7 +20,7 @@ export default class DefaultKeyboard extends Lightning.Component {
     ];
 
     return {
-      x: 199,
+      x: 174,
       y: 279,
       w: 325,
       h: 436,
