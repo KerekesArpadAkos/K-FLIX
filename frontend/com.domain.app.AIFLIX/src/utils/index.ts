@@ -1,4 +1,4 @@
-import API_KEY from "../../.env/.key";
+import API_KEY from "../../.envi/.key";
 import { SCREEN_SIZES } from "../../static/constants/ScreenSizes";
 import { BASE_URL, URLS } from "../../static/constants/URLS";
 let baseImageUrl: string;
