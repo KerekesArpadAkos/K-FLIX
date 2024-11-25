@@ -1,7 +1,6 @@
 import { Lightning, Router, Utils } from "@lightningjs/sdk";
 import { COLORS } from "../../static/constants/Colors";
 import { SCREEN_SIZES } from "../../static/constants/ScreenSizes";
-import { getGlobalProfileName, getGlobalProfilePicture } from "src/services/firebaseService";
 
 interface SidebarItem {
   name: string;
@@ -100,7 +99,7 @@ export class Sidebar extends Lightning.Component {
             textColor: COLORS.WHITE,
           },
           x: 114, // Adjusted relative position
-          y: 20,
+          y: 15,
           visible: false,
         },
       },
@@ -167,6 +166,10 @@ export class Sidebar extends Lightning.Component {
   }
 
   override _enable() {
+    this.tag("Profile").patch({
+      src: Utils.asset(`${localStorage.getItem("profileImage")}`),
+    });
+
     this._applyUnfocusedPatch();
   }
 
@@ -177,17 +180,13 @@ export class Sidebar extends Lightning.Component {
       color: COLORS.BLACK,
     });
 
-    this.tag("SidebarItems").children.forEach((child: SidebarItemComponent) => {
-      child.showLabel(true);
+    this.tag("Profile").tag("GuestLabel").patch({
+      text: { text: `${localStorage.getItem("profileName")}` },
+      visible: true,
     });
 
-    this.tag("Profile").patch({
-      src: Utils.asset(`${getGlobalProfilePicture()}`),
-    });
-    
-    this.tag("Profile").tag("GuestLabel").patch({
-      text: { text: `${getGlobalProfileName()}` },
-      visible: true,
+    this.tag("SidebarItems").children.forEach((child: SidebarItemComponent) => {
+      child.showLabel(true);
     });
 
     this.tag("Image").patch({

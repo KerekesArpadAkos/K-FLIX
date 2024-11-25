@@ -110,25 +110,6 @@ export const addProfile = async (userId: string) => {
 
 let globalUserId: string | null = null;
 let globalProfileId: string | null = null;
-let globalProfilePicture: string | null = null;
-let globalProfileName: string | null = null;
-
-
-export const setGlobalProfilePicture = (profilePicture: string) => {
-  globalProfilePicture = profilePicture;
-};
-
-export const setGlobalProfileName = (profileName: string) => {
-  globalProfileName = profileName;
-};
-
-export const getGlobalProfilePicture = (): string | null => {
-  return globalProfilePicture;
-};
-
-export const getGlobalProfileName = (): string | null => {
-  return globalProfileName;
-};
 
 export const setGlobalUserId = (userId: string) => {
   globalUserId = userId;

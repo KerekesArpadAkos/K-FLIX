@@ -4,7 +4,7 @@ import { COLORS } from "static/constants/Colors";
 import { SCREEN_SIZES } from "static/constants/ScreenSizes";
 import { fetchProfiles, addProfile } from "../services/firebaseService";
 import { getAuth } from "firebase/auth";
-import { setGlobalUserId, setGlobalProfileId, setGlobalProfilePicture, setGlobalProfileName } from "../services/firebaseService";
+import { setGlobalUserId, setGlobalProfileId } from "../services/firebaseService";
 
 export default class ProfileSelection extends Lightning.Component {
   private _focusIndex = 0;
@@ -195,11 +195,11 @@ export default class ProfileSelection extends Lightning.Component {
 
               // Set global variables for profileId, profileName, and profileImage
               setGlobalProfileId(profileId);
-              setGlobalProfileName(profileName);
-              setGlobalProfilePicture(profileImage);
 
               // Store values in localStorage as well
               localStorage.setItem("profileId", profileId);
+              localStorage.setItem("profileName", profileName);
+              localStorage.setItem("profileImage", profileImage);
 
               // Navigate to home
               Router.navigate("home");
