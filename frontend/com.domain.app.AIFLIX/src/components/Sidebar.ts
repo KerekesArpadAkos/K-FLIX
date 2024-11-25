@@ -98,7 +98,7 @@ export class Sidebar extends Lightning.Component {
             fontSize: SCREEN_SIZES.DEFAULT_BTN_FONT_SIZE,
             textColor: COLORS.WHITE,
           },
-          x: 114, // Adjusted relative position
+          x: 114, 
           y: 15,
           visible: false,
         },

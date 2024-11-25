@@ -6,6 +6,7 @@ import eventBus from "./EventBus";
 export default class DefaultKeyboard extends Lightning.Component {
   _rowIndex = 0;
   _columnIndex = 0;
+  ok = 0;
 
   static override _template() {
     const keys: string[][] = [
@@ -72,6 +73,7 @@ export default class DefaultKeyboard extends Lightning.Component {
   }
 
   override _init() {
+    this.ok = 0;
     this._updateFocus();
   }
 
@@ -134,7 +136,14 @@ export default class DefaultKeyboard extends Lightning.Component {
 
   override _handleRight() {
     const row = this.children[this._rowIndex] as Lightning.Component;
-    if (this._columnIndex < row.children.length - 1) {
+    if (
+      (this._columnIndex == 5 ||
+        this._rowIndex == 7 ||
+        (this._rowIndex == 0 && this._columnIndex == 1)) &&
+      this.ok === 1
+    ) {
+      eventBus.emit("focusCarousel");
+    } else if (this._columnIndex < row.children.length - 1) {
       this._columnIndex++;
       this._updateFocus();
     }
@@ -158,6 +167,7 @@ export default class DefaultKeyboard extends Lightning.Component {
         eventBus.emit("inputTextUpdate", "BACK");
       } else if (buttonText === "ENTER") {
         eventBus.emit("inputTextUpdate", "ENTER");
+        this.ok = 1;
       } else {
         eventBus.emit("inputTextUpdate", buttonText);
       }
