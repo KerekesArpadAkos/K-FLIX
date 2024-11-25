@@ -98,8 +98,8 @@ export class Sidebar extends Lightning.Component {
             fontSize: SCREEN_SIZES.DEFAULT_BTN_FONT_SIZE,
             textColor: COLORS.WHITE,
           },
-          x: 114, // Adjusted relative position
-          y: 20,
+          x: 114, 
+          y: 15,
           visible: false,
         },
       },
@@ -166,6 +166,10 @@ export class Sidebar extends Lightning.Component {
   }
 
   override _enable() {
+    this.tag("Profile").patch({
+      src: Utils.asset(`${localStorage.getItem("profileImage")}`),
+    });
+
     this._applyUnfocusedPatch();
   }
 
@@ -176,12 +180,13 @@ export class Sidebar extends Lightning.Component {
       color: COLORS.BLACK,
     });
 
-    this.tag("SidebarItems").children.forEach((child: SidebarItemComponent) => {
-      child.showLabel(true);
+    this.tag("Profile").tag("GuestLabel").patch({
+      text: { text: `${localStorage.getItem("profileName")}` },
+      visible: true,
     });
 
-    this.tag("Profile").tag("GuestLabel").patch({
-      visible: true,
+    this.tag("SidebarItems").children.forEach((child: SidebarItemComponent) => {
+      child.showLabel(true);
     });
 
     this.tag("Image").patch({
