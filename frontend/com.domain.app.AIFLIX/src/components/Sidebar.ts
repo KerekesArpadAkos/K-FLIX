@@ -1,6 +1,7 @@
 import { Lightning, Router, Utils } from "@lightningjs/sdk";
 import { COLORS } from "../../static/constants/Colors";
 import { SCREEN_SIZES } from "../../static/constants/ScreenSizes";
+import { getGlobalProfileName, getGlobalProfilePicture } from "src/services/firebaseService";
 
 interface SidebarItem {
   name: string;
@@ -180,7 +181,12 @@ export class Sidebar extends Lightning.Component {
       child.showLabel(true);
     });
 
+    this.tag("Profile").patch({
+      src: Utils.asset(`${getGlobalProfilePicture()}`),
+    });
+    
     this.tag("Profile").tag("GuestLabel").patch({
+      text: { text: `${getGlobalProfileName()}` },
       visible: true,
     });
 

@@ -4,12 +4,12 @@ import { COLORS } from "static/constants/Colors";
 import { SCREEN_SIZES } from "static/constants/ScreenSizes";
 import { fetchProfiles, addProfile } from "../services/firebaseService";
 import { getAuth } from "firebase/auth";
-import { setGlobalUserId, setGlobalProfileId } from "../services/firebaseService";
+import { setGlobalUserId, setGlobalProfileId, setGlobalProfilePicture, setGlobalProfileName } from "../services/firebaseService";
 
 export default class ProfileSelection extends Lightning.Component {
   private _focusIndex = 0;
   private _userId: string | null = null;
-  private _profiles: any[] = []
+  private _profiles: any[] = [];
   
   static override _template() {
     return {
@@ -96,6 +96,7 @@ export default class ProfileSelection extends Lightning.Component {
         profile.image || "images/profiles/profile1.png"
       ),
       profileName: profile.name,
+      profileId: profile.id, // Storing profile ID for further use
     }));
 
     if (profileCards.length <= 4) {
@@ -164,42 +165,57 @@ export default class ProfileSelection extends Lightning.Component {
       this._applyFocus();
     }
   }
+
   override _handleEnter() {
     const focusedCard = this.Container.children[this._focusIndex];
     if (focusedCard && focusedCard.tag && focusedCard.tag("ProfileName")) {
-        const profileName = focusedCard.tag("ProfileName").text.text;
+      const profileName = focusedCard.tag("ProfileName").text.text;
 
-        if (profileName === "Add Profile") {
-            if (this._userId) {
-                Router.navigate(`createprofile/${this._userId}`);
-            } else {
-                console.error("User ID is null. Cannot navigate to create profile.");
-            }
+      if (profileName === "Add Profile") {
+        if (this._userId) {
+          Router.navigate(`createprofile/${this._userId}`);
         } else {
-            fetchProfiles(this._userId!)
-                .then((profiles) => {
-                    const selectedProfile = profiles.find((profile: any) => profile.name === profileName);
-                    
-                    if (selectedProfile) {
-                        const profileId = selectedProfile.id; 
-                        console.log("Navigating to Home with:", { userId: this._userId, profileId });
-
-                        setGlobalProfileId(profileId); 
-                        localStorage.setItem("profileId", profileId);
-                        Router.navigate("home");
-                    } else {
-                        console.error("Profile not found for the selected name:", profileName);
-                    }
-                })
-                .catch((error) => {
-                    console.error("Error fetching profiles for navigation:", error);
-                });
+          console.error("User ID is null. Cannot navigate to create profile.");
         }
-    }
-}
+      } else {
+        // Fetch profiles to identify the selected profile
+        fetchProfiles(this._userId!)
+          .then((profiles) => {
+            const selectedProfile = profiles.find(
+              (profile: any) => profile.name === profileName
+            );
 
-  
-  
+            if (selectedProfile) {
+              const profileId = selectedProfile.id;
+              const profileImage = selectedProfile.image;
+              console.log("Navigating to Home with:", {
+                userId: this._userId,
+                profileId,
+              });
+
+              // Set global variables for profileId, profileName, and profileImage
+              setGlobalProfileId(profileId);
+              setGlobalProfileName(profileName);
+              setGlobalProfilePicture(profileImage);
+
+              // Store values in localStorage as well
+              localStorage.setItem("profileId", profileId);
+
+              // Navigate to home
+              Router.navigate("home");
+            } else {
+              console.error(
+                "Profile not found for the selected name:",
+                profileName
+              );
+            }
+          })
+          .catch((error) => {
+            console.error("Error fetching profiles for navigation:", error);
+          });
+      }
+    }
+  }
 
   override _getFocused() {
     return this.Container.children[this._focusIndex];
