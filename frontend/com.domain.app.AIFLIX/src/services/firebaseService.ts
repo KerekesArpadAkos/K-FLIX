@@ -16,54 +16,65 @@ import {
   setDoc,
   serverTimestamp,
 } from "firebase/firestore";
-import { firebaseConfig } from "./firebaseConfig";
+import { firebaseConfig,CONFIG } from "./firebaseConfig";
 
-// Firebase configuration
-// const firebaseConfig = {
-//   apiKey: process.env.FIREBASE_API_KEY,
-//   authDomain: process.env.FIREBASE_AUTH_DOMAIN,
-//   projectId: process.env.FIREBASE_PROJECT_ID,
-//   storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
-//   messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID,
-//   appId: process.env.FIREBASE_APP_ID,
-// };
-
-// Initialize Firebase
 export const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const db = getFirestore(app);
+import axios from 'axios';
 
-// Register a new user
 export const registerUser = async (email: string, password: string) => {
   try {
-    // Create user with Firebase Authentication
-    const userCredential = await createUserWithEmailAndPassword(
-      auth,
-      email,
-      password
-    );
+    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
     const user = userCredential.user;
 
-    // Add user data to the existing 'users' collection in Firestore with an empty 'profiles' array
     await setDoc(doc(db, "users", user.uid), {
       email: user.email,
       createdAt: serverTimestamp(),
-      profiles: [], // Initialize with an empty array
-      // Add other user-specific fields here if necessary
+      profiles: [], 
     });
 
     console.log("User registered successfully:", user.uid);
 
+    await axios.post(`${CONFIG.API_BASE_URL}/api/auth/send-email`, {
+      to: email,
+      subject: 'Welcome to AIFLIX!',
+      text: 'Thank you for registering with AIFLIX! We hope you enjoy our services.',
+      html: `
+        <div style="font-family: Arial, sans-serif; line-height: 1.5; color: #333;">
+          <h1 style="color: #e50914;">Welcome to AIFLIX!</h1>
+          <p>Thank you for registering with us. We are thrilled to have you as part of our growing community of movie lovers!</p>
+          <p>Here's what you can do next:</p>
+          <ul>
+            <li>Explore our extensive collection of movies and TV shows.</li>
+            <li>Create and manage personalized profiles for you and your family.</li>
+            <li>Enjoy a seamless streaming experience with no ads.</li>
+          </ul>
+          <p>If you have any questions or need help, feel free to contact our support team at any time.</p>
+          <br>
+          <p>Happy watching!</p>
+          <p>The <strong>AIFLIX Team</strong></p>
+          <hr>
+          <footer style="font-size: 12px; color: #777;">
+            <p>You received this email because you signed up for AIFLIX. If this wasn't you, please contact our support.</p>
+          </footer>
+        </div>
+      `,
+    });
+
     return { success: true, user };
   } catch (error: any) {
-    console.error("Registration Error:", error);
-
-    // Return error details for handling in the registration handler
-    return { success: false, error };
+    if (error.code === 'auth/email-already-in-use') {
+      console.error('This email is already in use.');
+      return { success: false, error: 'This email is already registered. Please log in instead.' };
+    } else {
+      console.error("Registration Error:", error);
+      return { success: false, error: error.message };
+    }
   }
 };
 
-// Login an existing user
+
 export const loginUser = async (email: string, password: string) => {
   try {
     const userCredential = await signInWithEmailAndPassword(
@@ -86,7 +97,6 @@ export const fetchProfiles = async (userId: string) => {
 
     if (userDocSnap.exists()) {
       const userData = userDocSnap.data();
-      // Check if profiles array exists and return it
       console.log("User data:", userData);
       return userData.profiles || [];
     } else {
@@ -103,7 +113,7 @@ export const addProfile = async (userId: string) => {
   const profilesRef = collection(db, "users", userId, "profiles");
   const newProfile = {
     name: "Added User",
-    image: "images/profile2.png", // Dummy image for new profiles
+    image: "images/profile2.png",
   };
   await addDoc(profilesRef, newProfile);
 };

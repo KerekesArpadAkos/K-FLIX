@@ -18,7 +18,7 @@ import {
   doc,
   serverTimestamp,
 } from "firebase/firestore";
-import { app, auth, db, registerUser, setGlobalUserId } from "../services/firebaseService"; // Import Firebase app instance
+import { app, auth, db, registerUser, setGlobalUserId } from "../services/firebaseService";
 
 interface RegisterPageTemplateSpec extends Lightning.Component.TemplateSpec {
   Name: object;
