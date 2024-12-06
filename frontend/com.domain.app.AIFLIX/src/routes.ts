@@ -12,6 +12,7 @@ import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import ProfileSelection from "./pages/ProfileSelection";
 import CreateProfile from "./pages/CreateProfile";
+import {LogoutPage} from "./pages/LogoutPage";
 
 interface PageInstance extends Router.PageInstance {
   loadData: (id: number, isMovie: boolean) => Promise<void>;
@@ -102,6 +103,10 @@ const routes: Router.Config["routes"] = [
     path: "search",
     component: SearchPage as Router.PageConstructor<Router.PageInstance>,
     widgets: ["sidebar"],
+  },
+  {
+    path: "logout",
+    component: LogoutPage as unknown as Router.PageConstructor<Router.PageInstance>,
   },
 ];
 

@@ -72,6 +72,7 @@ export class Sidebar extends Lightning.Component {
       { name: "Movies", icon: "images/movies.png", route: "movies" },
       { name: "Series", icon: "images/series.png", route: "series" },
       { name: "Settings", icon: "images/settings.png", route: "settings" },
+      { name: "Logout", icon: "images/logout.png", route: "logout" },
     ];
   }
 
@@ -141,7 +142,13 @@ export class Sidebar extends Lightning.Component {
 
   override _handleEnter() {
     const selectedItem = this.sidebarConfig[this._focusIndex];
-    if (selectedItem) Router.navigate(selectedItem.route);
+    if(selectedItem){
+      if (selectedItem.name === "Logout") {
+        Router.navigate(selectedItem.route, { pageRoute: Router.getActiveHash() });
+      } else{ 
+        Router.navigate(selectedItem.route)
+      }
+  };
     Router.focusPage();
   }
 
