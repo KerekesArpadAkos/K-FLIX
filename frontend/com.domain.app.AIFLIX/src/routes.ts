@@ -40,11 +40,11 @@ const routes: Router.Config["routes"] = [
     component: RegisterPage as Router.PageConstructor<Router.PageInstance>,
   },
   {
-    path: "profileselection",
+    path: "profile",
     component: ProfileSelection as Router.PageConstructor<Router.PageInstance>,
   },
   {
-    path: "profileselection/:userId?",
+    path: "profile/:userId?",
     component: ProfileSelection as Router.PageConstructor<Router.PageInstance>,
   },  
   {

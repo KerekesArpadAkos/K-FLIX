@@ -413,7 +413,7 @@ export default class LoginPage extends Lightning.Component<LoginPageTemplateSpec
                         this.WrongPasswordMessage.visible = false;
                       }
                 
-                      Router.navigate("profileselection", { userId: userId });
+                      Router.navigate("profile", { userId: userId });
                     }).catch((error) => {
                       console.error("Error fetching access token:", error);
                     });

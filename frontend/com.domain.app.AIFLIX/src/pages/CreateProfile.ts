@@ -267,7 +267,7 @@ export default class CreateProfile extends Lightning.Component {
         image: selectedProfileImagePath,
       });
 
-      Router.navigate("profileselection");
+      Router.navigate("profile");
     } catch (error) {
       console.error("Error saving profile to Firebase:", error);
     }

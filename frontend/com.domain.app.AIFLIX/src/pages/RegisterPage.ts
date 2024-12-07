@@ -612,7 +612,7 @@
                     });
                   }
                   
-                  Router.navigate("profileselection", { userId: userId });
+                  Router.navigate("profile", { userId: userId });
                 } else if (result.error) {
                 }
               })
