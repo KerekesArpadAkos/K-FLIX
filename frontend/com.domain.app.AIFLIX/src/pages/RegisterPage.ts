@@ -612,7 +612,8 @@
                     });
                   }
                   
-                  Router.navigate("profile", { userId: userId });
+                  Router.navigate("chooseprofileimage", { userId: userId });
+                  // Router.navigate("profile", { userId: userId });
                 } else if (result.error) {
                 }
               })

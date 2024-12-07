@@ -9,3 +9,4 @@ releases
 .env
 .envi
 firebaseConfig.ts
+openAiConfig.ts

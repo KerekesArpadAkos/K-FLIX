@@ -13,6 +13,8 @@ import RegisterPage from "./pages/RegisterPage";
 import ProfileSelection from "./pages/ProfileSelection";
 import CreateProfile from "./pages/CreateProfile";
 import {LogoutPage} from "./pages/LogoutPage";
+import {ChooseProfileImage} from "./components/ChooseProfileImage";
+import ChooseAvatarPage from "./pages/ChooseAvatarPage";
 
 interface PageInstance extends Router.PageInstance {
   loadData: (id: number, isMovie: boolean) => Promise<void>;
@@ -38,6 +40,14 @@ const routes: Router.Config["routes"] = [
   {
     path: "signup",
     component: RegisterPage as Router.PageConstructor<Router.PageInstance>,
+  },
+  {
+    path: "chooseprofileimage",
+    component: ChooseProfileImage as Router.PageConstructor<Router.PageInstance>,
+  },
+  {
+    path: "chooseavatar/:userId",
+    component: ChooseAvatarPage as Router.PageConstructor<Router.PageInstance>,
   },
   {
     path: "profile",
