@@ -97,7 +97,8 @@ export class LogoutPage
             localStorage.removeItem("profileName");
             localStorage.removeItem("profileImage");
             //and here i also have to remove the token, but first i have to rename the token
-            Router.navigate("signin");
+            localStorage.removeItem("access_token");
+            Router.navigate("welcome");
           }
         },
         class CancelButton extends this {
@@ -108,7 +109,6 @@ export class LogoutPage
             this._setState("ConfirmButton");
           }
           override _handleEnter() {
-            //here i shall navigate back to that page where i have entered logout button
             Router.navigate(`${this._previousPageRoute}`);
           }
         },
