@@ -1,35 +1,17 @@
-import OpenAI from "openai";
-import { openAiConfig } from "src/services/openAiConfig";
-// Set your OpenAI API key
-const openAiKey = openAiConfig.apiKey; // Replace with your actual API key
+export async function generateImageFromPrompt(prompt: string) {
+  const baseUrl = 'https://image.pollinations.ai/prompt/';
+  const width = 400;
+  const height = 400;
 
-// Initialize OpenAI API
-const openai = new OpenAI({
-  apiKey: openAiKey,
-  dangerouslyAllowBrowser: true,
-});
-
-/**
- * Function to generate an image using OpenAI's DALL-E model
- * @param prompt - Text prompt for the image generation
- * @returns The URL of the generated image
- */
-export async function generateImageFromPrompt(prompt: string): Promise<string | null> {
   try {
-    // Call OpenAI's API to generate an image
-    const response = await openai.images.generate({
-      prompt: prompt,
-      n: 1, // Number of images to generate
-      size: "512x512", // Image resolution
-    });
+      // Construct the URL with prompt and dimensions
+      const url = `${baseUrl}${encodeURIComponent(prompt)}?width=${width}&height=${height}`;
+      console.log('Generated Image URL:', url);
 
-    // Extract the URL of the generated image
-    const imageUrl = response.data[0]?.url;
-    console.log("Generated Image URL:", imageUrl);
-
-    return imageUrl || null;
+      // Return the image URL (you can optionally test if it's accessible)
+      return url;
   } catch (error) {
-    console.error("Error generating image:", error);
-    return null;
+      console.error('Error:', error);
+      throw error;
   }
 }

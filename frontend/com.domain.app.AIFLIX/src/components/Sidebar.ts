@@ -19,7 +19,9 @@ class SidebarItemComponent extends Lightning.Component {
       color: COLORS.TRANSPARENT,
       Icon: {
         type: Lightning.Component,
-        src: "", // Set dynamically
+        texture: {
+          type: Lightning.textures.ImageTexture,
+        },
         w: 70,
         h: 70,
         x: 35,
@@ -42,8 +44,28 @@ class SidebarItemComponent extends Lightning.Component {
 
   set itemData(data: SidebarItem) {
     this._data = data;
-    this.tag("Icon").src = Utils.asset(data.icon);
+    this.setIcon(data.icon);
     this.tag("Label").text = data.name;
+  }
+
+  private setIcon(icon: string) {
+    if (icon.startsWith("http://") || icon.startsWith("https://")) {
+      // Use remote image as texture
+      this.tag("Icon").patch({
+        texture: {
+          type: Lightning.textures.ImageTexture,
+          src: icon,
+        },
+      });
+    } else {
+      // Use local image asset
+      this.tag("Icon").patch({
+        texture: {
+          type: Lightning.textures.ImageTexture,
+          src: Utils.asset(icon),
+        },
+      });
+    }
   }
 
   override _focus() {
@@ -111,9 +133,17 @@ export class Sidebar extends Lightning.Component {
   }
 
   refreshSidebarProfile() {
+    const profileName = localStorage.getItem("profileName") || "Guest";
+    const profileImage = localStorage.getItem("profileImage") || "images/guest.png";
+    const icon = profileImage.startsWith("http://") || profileImage.startsWith("https://")
+      ? profileImage
+      : Utils.asset(profileImage);
+
     this.tag("SidebarItems").children[0].itemData = {
-      name: localStorage.getItem("profileName") || "Guest",
-      icon: localStorage.getItem("profileImage") || "images/guest.png",    }
+      name: profileName,
+      icon: icon,
+      route: "profile",
+    };
   }
 
   override _getFocused() {

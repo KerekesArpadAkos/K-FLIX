@@ -20,7 +20,9 @@ export default class ProfileCard extends Lightning.Component<ProfileCardTemplate
           ref: "ProfileImage",
           w: 220,
           h: 220,
-          src: "",
+          texture: {
+            type: Lightning.textures.ImageTexture,
+          },
         },
         ProfileName: {
           ref: "ProfileName",
@@ -28,7 +30,7 @@ export default class ProfileCard extends Lightning.Component<ProfileCardTemplate
           h: 40,
           y: 240,
           text: {
-            text: "Jennifer",
+            text: "Profile Name",
             fontSize: 30,
             fontFace: "Regular",
             textColor: COLORS.WHITE,
@@ -51,13 +53,29 @@ export default class ProfileCard extends Lightning.Component<ProfileCardTemplate
     return this.Card?.getByRef("ProfileName");
   }
 
-
   set profileImage(value: string) {
-    if (this.ProfileImage) this.ProfileImage.patch({ src: value });
+    if (value.startsWith("http://") || value.startsWith("https://")) {
+      // Remote image
+      this.ProfileImage?.patch({
+        texture: {
+          type: Lightning.textures.ImageTexture,
+          src: value,
+        },
+      });
+    } else {
+      // Local image
+      this.ProfileImage?.patch({
+        texture: {
+          type: Lightning.textures.ImageTexture,
+          src: Utils.asset(value),
+        },
+      });
+    }
   }
 
   set profileName(value: string) {
-    if (this.ProfileName && this.ProfileName.text)
+    if (this.ProfileName && this.ProfileName.text) {
       this.ProfileName.patch({ text: value });
+    }
   }
 }
