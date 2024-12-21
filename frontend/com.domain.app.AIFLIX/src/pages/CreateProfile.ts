@@ -106,19 +106,6 @@ export default class CreateProfile extends Lightning.Component {
           },
         },
       },
-      GenerateAvatar: {
-        x: 80,
-        y: 1010,
-        w: 1760,
-        h: 50,
-        text: {
-          text: "Generate Avatar",
-          fontSize: 40,
-          textColor: COLORS.WHITE,
-          fontFace: "Regular",
-          textAlign: "left",
-        },
-      },
     };
   }
 
@@ -136,10 +123,6 @@ export default class CreateProfile extends Lightning.Component {
   get ChooseAvatar() {
     return this.getByRef("ChooseAvatar");
   }
-  get GenerateAvatar() {
-    return this.getByRef("GenerateAvatar");
-  }
-
   override _init() {
     this._setState("ProfilesContainer");
   }
@@ -177,7 +160,6 @@ export default class CreateProfile extends Lightning.Component {
     this.Title.patch({ alpha: 0.5 });
     this.ChooseAvatar.patch({ alpha: 0.5 });
     this.Container.patch({ alpha: 0.5 });
-    this.GenerateAvatar.patch({ alpha: 0.5 });
     this.color = COLORS.BLACK_OPACITY_70;
   }
 
@@ -185,7 +167,6 @@ export default class CreateProfile extends Lightning.Component {
     this.Title.patch({ alpha: 1 });
     this.ChooseAvatar.patch({ alpha: 1 });
     this.Container.patch({ alpha: 1 });
-    this.GenerateAvatar.patch({ alpha: 1 });
     this.color = COLORS.BACKGROUND;
   }
 
@@ -267,7 +248,7 @@ export default class CreateProfile extends Lightning.Component {
         image: selectedProfileImagePath,
       });
 
-      Router.navigate("profileselection");
+      Router.navigate("profile");
     } catch (error) {
       console.error("Error saving profile to Firebase:", error);
     }

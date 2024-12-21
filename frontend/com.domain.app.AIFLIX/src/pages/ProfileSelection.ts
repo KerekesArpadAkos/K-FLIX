@@ -4,13 +4,12 @@ import { COLORS } from "static/constants/Colors";
 import { SCREEN_SIZES } from "static/constants/ScreenSizes";
 import { fetchProfiles, addProfile } from "../services/firebaseService";
 import { getAuth } from "firebase/auth";
-import { setGlobalUserId, setGlobalProfileId } from "../services/firebaseService";
 
 export default class ProfileSelection extends Lightning.Component {
   private _focusIndex = 0;
   private _userId: string | null = null;
   private _profiles: any[] = [];
-  
+
   static override _template() {
     return {
       w: SCREEN_SIZES.WIDTH,
@@ -74,11 +73,9 @@ export default class ProfileSelection extends Lightning.Component {
 
   async loadProfiles() {
     try {
-      console.log("logged in user:", this._userId);
       if (this._userId) {
         const profiles = await fetchProfiles(this._userId);
         this.displayProfiles(profiles);
-        console.log("Profiles loaded:", profiles);
       } else {
         console.error("User ID is null.");
       }
@@ -87,16 +84,22 @@ export default class ProfileSelection extends Lightning.Component {
     }
   }
 
+  private getImageSrc(image: string): string {
+    if (image.startsWith("http://") || image.startsWith("https://")) {
+      return image; // Remote URL
+    } else {
+      return Utils.asset(image); // Local asset
+    }
+  }
+
   displayProfiles(profiles: any) {
     const profileCards = profiles.map((profile: any) => ({
       y: -130,
       x: -110,
       type: ProfileCard,
-      profileImage: Utils.asset(
-        profile.image || "images/profiles/profile1.png"
-      ),
+      profileImage: this.getImageSrc(profile.image || "images/profiles/profile1.png"),
       profileName: profile.name,
-      profileId: profile.id, // Storing profile ID for further use
+      profileId: profile.id,
     }));
 
     if (profileCards.length <= 4) {
@@ -115,13 +118,12 @@ export default class ProfileSelection extends Lightning.Component {
 
   async handleAddProfile() {
     try {
-      console.log("Adding profile...");
       if (this._userId) {
         await addProfile(this._userId);
+        await this.loadProfiles();
       } else {
         console.error("User ID is null.");
       }
-      await this.loadProfiles(); 
     } catch (error) {
       console.error("Error adding profile:", error);
     }
@@ -193,8 +195,6 @@ export default class ProfileSelection extends Lightning.Component {
                 profileId,
               });
 
-              // Set global variables for profileId, profileName, and profileImage
-              setGlobalProfileId(profileId);
 
               // Store values in localStorage as well
               localStorage.setItem("profileId", profileId);

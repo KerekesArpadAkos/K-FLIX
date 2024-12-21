@@ -12,6 +12,9 @@ import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import ProfileSelection from "./pages/ProfileSelection";
 import CreateProfile from "./pages/CreateProfile";
+import {LogoutPage} from "./pages/LogoutPage";
+import {ChooseProfileImage} from "./components/ChooseProfileImage";
+import ChooseAvatarPage from "./pages/ChooseAvatarPage";
 
 interface PageInstance extends Router.PageInstance {
   loadData: (id: number, isMovie: boolean) => Promise<void>;
@@ -39,11 +42,19 @@ const routes: Router.Config["routes"] = [
     component: RegisterPage as Router.PageConstructor<Router.PageInstance>,
   },
   {
-    path: "profileselection",
+    path: "chooseprofileimage",
+    component: ChooseProfileImage as Router.PageConstructor<Router.PageInstance>,
+  },
+  {
+    path: "chooseavatar/:userId",
+    component: ChooseAvatarPage as Router.PageConstructor<Router.PageInstance>,
+  },
+  {
+    path: "profile",
     component: ProfileSelection as Router.PageConstructor<Router.PageInstance>,
   },
   {
-    path: "profileselection/:userId?",
+    path: "profile/:userId?",
     component: ProfileSelection as Router.PageConstructor<Router.PageInstance>,
   },  
   {
@@ -102,6 +113,10 @@ const routes: Router.Config["routes"] = [
     path: "search",
     component: SearchPage as Router.PageConstructor<Router.PageInstance>,
     widgets: ["sidebar"],
+  },
+  {
+    path: "logout",
+    component: LogoutPage as unknown as Router.PageConstructor<Router.PageInstance>,
   },
 ];
 

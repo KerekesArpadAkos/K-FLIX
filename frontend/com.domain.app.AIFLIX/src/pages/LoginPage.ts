@@ -384,20 +384,40 @@ export default class LoginPage extends Lightning.Component<LoginPageTemplateSpec
                 signInWithEmailAndPassword(auth, email, password)
                   .then((userCredential) => {
                     const user = userCredential.user;
+                    console.warn("User:", user);
                     const userId = user.uid;
-                    setGlobalUserId(userId);
-                    localStorage.setItem("userId", userId);
-                    console.log("User ID set globally:", userId);
-                    console.log("Successfully signed in!");
-                    
-                    if (this.WrongEmailMessage) {
-                      this.WrongEmailMessage.visible = false;
-                    }
-                    if (this.WrongPasswordMessage) {
-                      this.WrongPasswordMessage.visible = false;
-                    }
-
-                    Router.navigate("profileselection", { userId: userId });
+                    user.getIdToken().then((accessToken) => {
+                      localStorage.setItem("access_token", accessToken); // Save access token
+                      localStorage.setItem("userId", userId); // Save userId
+                
+                      console.log("User ID set globally:", userId);
+                      console.log("Access Token saved:", accessToken);
+                      console.log("Successfully signed in!");
+                
+                      setGlobalUserId(userId);
+                      if (this.EmailLabel) {
+                        this.EmailLabel.patch({
+                          text: { text: "Email" },
+                        });
+                      }
+                      if (this.PasswordLabel) {
+                        this.PasswordLabel.patch({
+                          text: { text: "Password" },
+                        });
+                      }
+                
+                      if (this.WrongEmailMessage) {
+                        this.WrongEmailMessage.visible = false;
+                      }
+                      if (this.WrongPasswordMessage) {
+                        this.WrongPasswordMessage.visible = false;
+                      }
+                
+                      Router.navigate("chooseprofileimage", { userId: userId });
+                      // Router.navigate("profile", { userId: userId });
+                    }).catch((error) => {
+                      console.error("Error fetching access token:", error);
+                    });
                   })
                   .catch((error) => {
                     console.error("Error during login process:", error.message);
