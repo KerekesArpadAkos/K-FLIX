@@ -348,6 +348,7 @@ export default class ChooseAvatarPage
           return this.AvatarImage as unknown as Lightning.Component;
         }
         override _handleEnter() {
+          this.setBlur();
           console.log("Avatar image clicked, opening overlay...");
           // Copy the generated avatar image to the overlay
           if (this.ProfileImage && this.AvatarImage) {
@@ -365,8 +366,9 @@ export default class ChooseAvatarPage
           this._setState("ProfileOverlayFocus");
         }
         // Provide a fallback for arrow movements if you want:
-        override _handleDown() {
+        override _handleBack() {
           // e.g., focus something else if needed
+          this.removeBlur();
         }
       },
       class ProfileOverlayFocus extends this {
