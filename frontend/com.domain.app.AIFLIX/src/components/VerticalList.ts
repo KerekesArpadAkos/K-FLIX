@@ -8,8 +8,6 @@ interface VerticalListTemplateSpec extends Lightning.Component.TemplateSpec {
 
 export class VerticalList extends Lightning.Component<VerticalListTemplateSpec> {
   currentIndex = 0;
-  private _hasFocusedGallery = false;
-
   static override _template() {
     return {
       w: 1780,
@@ -133,26 +131,21 @@ export class VerticalList extends Lightning.Component<VerticalListTemplateSpec> 
             if (Router.getActiveHash() !== "search") {
               this.repositionWrapper();
             }
-            if (!this._hasFocusedGallery) {
-              this._hasFocusedGallery = true;
               const focused: Card = (
                 list.getElement(this.currentIndex) as Carousel
               )._getFocused() as Card;
 
               this.signal("$onFocusGallery", focused);
+              return list.getElement(this.currentIndex);
             }
-            return list.getElement(this.currentIndex);
-          }
           return null;
         }
         override _handleDown() {
-          console.log("down");
           const list = this.List;
 
           if (this.currentIndex < list.length - 1) {
             this.currentIndex++;
             list.setIndex(this.currentIndex);
-            this._hasFocusedGallery = false;
           }
         }
       },
