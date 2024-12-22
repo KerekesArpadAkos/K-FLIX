@@ -168,6 +168,10 @@ export default class ProfileSelection extends Lightning.Component {
     }
   }
 
+  override _handleDown() {
+    Router.navigate("deleteprofile", { userId: this._userId, profileId: localStorage.getItem("profileId") || "" });
+  }
+
   override _handleEnter() {
     const focusedCard = this.Container.children[this._focusIndex];
     if (focusedCard && focusedCard.tag && focusedCard.tag("ProfileName")) {
