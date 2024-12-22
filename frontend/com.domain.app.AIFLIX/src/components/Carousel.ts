@@ -154,7 +154,7 @@ export class Carousel extends Lightning.Component<CarouselTemplateSpec> {
           return null;
         }
 
-        override _handleLeftRelease() {
+        override _handleLeft() {
           if (this.currentIndex > 0) {
             this.currentIndex--;
             this.List?.setIndex(this.currentIndex);
@@ -168,7 +168,7 @@ export class Carousel extends Lightning.Component<CarouselTemplateSpec> {
           }
         }
 
-        override _handleRightRelease() {
+        override _handleRight() {
           const list = this.List as ListComponentType;
           if (list && this.currentIndex < list.length - 1) {
             this.currentIndex++;
