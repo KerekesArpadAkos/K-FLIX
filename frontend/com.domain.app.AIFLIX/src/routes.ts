@@ -15,6 +15,7 @@ import CreateProfile from "./pages/CreateProfile";
 import {LogoutPage} from "./pages/LogoutPage";
 import {ChooseProfileImage} from "./components/ChooseProfileImage";
 import ChooseAvatarPage from "./pages/ChooseAvatarPage";
+import { DeleteProfilePage } from "./pages/DeleteProfilePage";
 
 interface PageInstance extends Router.PageInstance {
   loadData: (id: number, isMovie: boolean) => Promise<void>;
@@ -60,6 +61,10 @@ const routes: Router.Config["routes"] = [
   {
     path: "createprofile/:userId",
     component: CreateProfile as Router.PageConstructor<Router.PageInstance>,
+  },
+  {
+    path: "deleteprofile",
+    component: DeleteProfilePage as Router.PageConstructor<Router.PageInstance>,
   },
   {
     path: "home",
