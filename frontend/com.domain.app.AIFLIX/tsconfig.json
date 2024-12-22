@@ -1,25 +1,34 @@
 {
   "compilerOptions": {
-    "outDir": "build-ts",
-    "target": "ES2019",
-    "lib": ["ES2019", "DOM", "ESNext"],
-    "types": ["@types/node", "jest"],
-    "moduleResolution": "node",
-    "strict": true,
-    "noUncheckedIndexedAccess": true,
-    "noImplicitOverride": true,
-    "esModuleInterop": true, // Enable interoperability between CommonJS and ES modules
-    "skipLibCheck": true, // Skip type checking of declaration files (speeds up compilation)
-    "forceConsistentCasingInFileNames": true, // Ensure consistent casing in imports
-    "allowSyntheticDefaultImports": true, // Allow default imports from modules with no default export
-    "module": "ESNext", // Use ESNext module syntax (e.g., for dynamic imports)
-    "resolveJsonModule": true, // Allow importing .json files
-    "isolatedModules": true, // Ensure each file is treated as an isolated module
-    "baseUrl": "./", // Set base URL for resolving paths
+    "outDir": "build-ts", // Output directory for compiled files
+    "target": "ES2020", // Use ES2020 for better modern JavaScript features
+    "lib": ["ES2020", "DOM", "DOM.Iterable", "ESNext"], // Include ES2020, DOM, and future JavaScript features
+    "types": ["@types/node", "jest"], // Include type definitions for Node.js and Jest
+    "moduleResolution": "node", // Use Node.js module resolution
+    "module": "ESNext", // Use ESNext module syntax
+    "strict": true, // Enable all strict type checking options
+    "noUncheckedIndexedAccess": true, // Ensure safe indexing
+    "noImplicitOverride": true, // Ensure explicit override of inherited methods
+    "esModuleInterop": true, // Enable interoperability with CommonJS and ES modules
+    "skipLibCheck": true, // Skip type checking of declaration files for faster builds
+    "forceConsistentCasingInFileNames": true, // Prevent import path casing issues
+    "allowSyntheticDefaultImports": true, // Allow default imports for modules without default export
+    "resolveJsonModule": true, // Enable importing JSON files
+    "isolatedModules": true, // Treat each file as a separate module
+    "baseUrl": "./", // Set the base URL for module resolution
     "paths": {
-      "@reduxjs/toolkit": ["node_modules/@reduxjs/toolkit"] // Ensure proper path resolution for redux types
-    }
+      "@reduxjs/toolkit": ["node_modules/@reduxjs/toolkit"] // Ensure proper path resolution for redux toolkit
+    },
+    "allowJs": true, // Allow JavaScript files to be compiled
+    "checkJs": false, // Disable type checking for JavaScript files
+    "jsx": "react-jsx", // Use React JSX runtime for React files
+    "experimentalDecorators": true, // Enable experimental support for decorators
+    "emitDecoratorMetadata": true // Emit metadata for decorators (useful for DI frameworks)
   },
-  "include": ["src/**/*.ts", "src/**/*.tsx"], // Include .tsx files if you are using React with TypeScript
-  "exclude": ["node_modules", "build-ts"] // Exclude unnecessary folders from compilation
+  "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.js", "src/**/*.jsx"], // Include TypeScript and JavaScript files
+  "exclude": ["node_modules", "build-ts", "**/*.test.ts", "**/*.test.tsx"], // Exclude tests and output directories
+  "ts-node": {
+    "transpileOnly": true, // Optimize for development by transpiling without type checking
+    "files": true // Load `.env` files if necessary
+  }
 }

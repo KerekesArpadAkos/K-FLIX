@@ -1,14 +1,15 @@
-import { Lightning, Router } from "@lightningjs/sdk";
-import { Button } from "./Button";
-import { COLORS } from "../../static/constants/Colors";
-import eventBus from "./EventBus";
+import { Lightning } from "@lightningjs/sdk";
+import { Button } from "./Button"; // Adjust this path
+import { COLORS } from "../../static/constants/Colors"; // Adjust path
+import eventBus from "./EventBus"; // Adjust path
 
-export default class DefaultKeyboard extends Lightning.Component {
-  _rowIndex = 0;
-  _columnIndex = 0;
-  ok = 0;
+export default class DefaultKeyboardForAvatar extends Lightning.Component {
+  private _rowIndex = 0;
+  private _columnIndex = 0;
+  private _okPressed = false; // If needed, to track 'ENTER' usage
 
   static override _template() {
+    // Define your keyboard layout here
     const keys: string[][] = [
       ["SPACE", "BACK"],
       ["a", "b", "c", "d", "e", "f"],
@@ -37,18 +38,19 @@ export default class DefaultKeyboard extends Lightning.Component {
       },
       children: keys.map((row, rowIndex) => ({
         flex: {
-          direction: "row" as const,
-          alignItems: "center" as const,
-          justifyContent: "center" as const,
+          direction: "row",
+          alignItems: "center",
+          justifyContent: "center",
         },
         children: row.map((key) => {
           let width = 50;
-          let mrgL = 27.5;
-          let mrgR = 27.5;
+          let marginLeft = 27.5;
+          let marginRight = 27.5;
+
           if (key === "SPACE" || key === "BACK") {
             width = 160;
-            mrgL =  27.5;
-            mrgR = 137.5;
+            marginLeft = 27.5;
+            marginRight = 137.5;
           } else if (key === "ENTER") {
             width = 325;
           }
@@ -63,8 +65,8 @@ export default class DefaultKeyboard extends Lightning.Component {
             fontSize: 36,
             backgroundColor: COLORS.GREY_DARK,
             flexItem: {
-              marginLeft:mrgL,
-              marginRight:mrgR
+              marginLeft,
+              marginRight,
             },
           };
         }),
@@ -73,15 +75,22 @@ export default class DefaultKeyboard extends Lightning.Component {
   }
 
   override _init() {
-    this.ok = 0;
+    this._okPressed = false;
     this._updateFocus();
   }
 
-  _getCurrentKey(): Lightning.Component | undefined {
+  /**
+   * Helper to get the current key being focused
+   */
+  private _getCurrentKey(): Lightning.Component | undefined {
     const row = this.children[this._rowIndex] as Lightning.Component | undefined;
-    return row ? (row.children[this._columnIndex] as Lightning.Component | undefined) : undefined;
+    if (!row) return undefined;
+    return row.children[this._columnIndex] as Lightning.Component | undefined;
   }
 
+  /**
+   * Apply the focus highlights based on _rowIndex / _columnIndex
+   */
   private _updateFocus() {
     this.children.forEach((row, rowIndex) => {
       row.children.forEach((button, colIndex) => {
@@ -95,14 +104,21 @@ export default class DefaultKeyboard extends Lightning.Component {
     });
   }
 
-  _setIndex(rowIndex: number, colIndex: number) {
+  /**
+   * Move focus to a specific (row, col)
+   */
+  private _setIndex(rowIndex: number, colIndex: number) {
     this._rowIndex = rowIndex;
     this._columnIndex = colIndex;
     this._updateFocus();
   }
 
-  focusDown() {
+  /**
+   * Move focus down to the next row
+   */
+  private _focusDown() {
     if (this._rowIndex === this.children.length - 1) {
+      // Example: if you want to move focus to the microphone after the last row
       eventBus.emit("focusMicrophone");
       return;
     }
@@ -113,9 +129,13 @@ export default class DefaultKeyboard extends Lightning.Component {
     this._updateFocus();
   }
 
-  focusUp() {
+  /**
+   * Move focus up to the previous row
+   */
+  private _focusUp() {
+    // Example: if you want to do something special at the top row, you can do it here.
     if (this._rowIndex === 0) {
-      eventBus.emit("focusBackButton");
+      // Possibly emit an event to focus something else if required
       return;
     }
 
@@ -125,56 +145,57 @@ export default class DefaultKeyboard extends Lightning.Component {
     this._updateFocus();
   }
 
+  /* -------------------------------------------------------------------------
+   * Key Handling
+   * -------------------------------------------------------------------------
+   */
+
   override _handleLeft() {
-    if (this._columnIndex === 0) {
-      Router.focusWidget("Sidebar");
-    } else {
+    // Simplified: just move left if possible
+    if (this._columnIndex > 0) {
       this._columnIndex--;
       this._updateFocus();
     }
   }
 
   override _handleRight() {
+    // Simplified: just move right if possible
     const row = this.children[this._rowIndex] as Lightning.Component;
-    if (
-      (this._columnIndex == 5 ||
-        this._rowIndex == 7 ||
-        (this._rowIndex == 0 && this._columnIndex == 1)) &&
-      this.ok === 1
-    ) {
-      eventBus.emit("focusCarousel");
-    } else if (this._columnIndex < row.children.length - 1) {
+    if (this._columnIndex < row.children.length - 1) {
       this._columnIndex++;
       this._updateFocus();
     }
   }
 
   override _handleUp() {
-    this.focusUp();
+    this._focusUp();
   }
 
   override _handleDown() {
-    this.focusDown();
+    this._focusDown();
   }
 
   override _handleEnter() {
     const currentKey = this._getCurrentKey();
-    if (currentKey) {
-      const buttonText = (currentKey as any).buttonText;
-      if (buttonText === "SPACE") {
-        eventBus.emit("inputTextUpdate", " ");
-      } else if (buttonText === "BACK") {
-        eventBus.emit("inputTextUpdate", "BACK");
-      } else if (buttonText === "ENTER") {
-        eventBus.emit("inputTextUpdate", "ENTER");
-        this.ok = 1;
-      } else {
-        eventBus.emit("inputTextUpdate", buttonText);
-      }
+    if (!currentKey) return;
+
+    const buttonText = (currentKey as any).buttonText;
+    if (buttonText === "SPACE") {
+      eventBus.emit("inputTextUpdate", " ");
+    } else if (buttonText === "BACK") {
+      eventBus.emit("inputTextUpdate", "BACK");
+    } else if (buttonText === "ENTER") {
+      eventBus.emit("inputTextUpdate", "ENTER");
+      this._okPressed = true;
+    } else {
+      eventBus.emit("inputTextUpdate", buttonText);
     }
   }
 
-  setKey(key: string) {
+  /**
+   * If you need to programmatically set the keyboard focus to a certain key
+   */
+  public setKey(key: string) {
     const keys: string[][] = [
       ["SPACE", "BACK"],
       ["a", "b", "c", "d", "e", "f"],
@@ -188,12 +209,11 @@ export default class DefaultKeyboard extends Lightning.Component {
 
     for (let i = 0; i < keys.length; i++) {
       const row = keys[i];
-      if (row) {
-        const colIndex = row.indexOf(key);
-        if (colIndex !== -1) {
-          this._setIndex(i, colIndex);
-          break;
-        }
+      if (!row) continue;
+      const colIndex = row.indexOf(key);
+      if (colIndex !== -1) {
+        this._setIndex(i, colIndex);
+        break;
       }
     }
   }

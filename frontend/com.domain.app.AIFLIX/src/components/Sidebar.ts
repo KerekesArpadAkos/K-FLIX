@@ -19,7 +19,9 @@ class SidebarItemComponent extends Lightning.Component {
       color: COLORS.TRANSPARENT,
       Icon: {
         type: Lightning.Component,
-        src: "", // Set dynamically
+        texture: {
+          type: Lightning.textures.ImageTexture,
+        },
         w: 70,
         h: 70,
         x: 35,
@@ -42,8 +44,28 @@ class SidebarItemComponent extends Lightning.Component {
 
   set itemData(data: SidebarItem) {
     this._data = data;
-    this.tag("Icon").src = Utils.asset(data.icon);
+    this.setIcon(data.icon);
     this.tag("Label").text = data.name;
+  }
+
+  private setIcon(icon: string) {
+    if (icon.startsWith("http://") || icon.startsWith("https://")) {
+      // Use remote image as texture
+      this.tag("Icon").patch({
+        texture: {
+          type: Lightning.textures.ImageTexture,
+          src: icon,
+        },
+      });
+    } else {
+      // Use local image asset
+      this.tag("Icon").patch({
+        texture: {
+          type: Lightning.textures.ImageTexture,
+          src: Utils.asset(icon),
+        },
+      });
+    }
   }
 
   override _focus() {
@@ -63,15 +85,17 @@ class SidebarItemComponent extends Lightning.Component {
 
 export class Sidebar extends Lightning.Component {
   private _focusIndex: number = 0;
-  private sidebarConfig: SidebarItem[] = Sidebar.getSidebarConfig();
+  private _isExpanded: boolean = false; // Track sidebar state
 
   static getSidebarConfig(): SidebarItem[] {
     return [
+      { name: localStorage.getItem("profileName") || "Guest", icon: `${localStorage.getItem("profileImage") || "images/guest.png"}`, route: "profile" },
       { name: "Search", icon: "images/search.png", route: "search" },
       { name: "Home", icon: "images/home.png", route: "home" },
       { name: "Movies", icon: "images/movies.png", route: "movies" },
       { name: "Series", icon: "images/series.png", route: "series" },
       { name: "Settings", icon: "images/settings.png", route: "settings" },
+      { name: "Logout", icon: "images/logout.png", route: "logout" },
     ];
   }
 
@@ -84,27 +108,8 @@ export class Sidebar extends Lightning.Component {
       color: COLORS.BLACK,
       shader: { type: Lightning.shaders.FadeOut, right: 0 },
       zIndex: 2,
-      Profile: {
-        src: Utils.asset("images/guest.png"),
-        x: 35,
-        y: 65,
-        w: 70,
-        h: 70,
-        GuestLabel: {
-          type: Lightning.Component,
-          text: {
-            text: "Guest",
-            fontStyle: "bold",
-            fontSize: SCREEN_SIZES.DEFAULT_BTN_FONT_SIZE,
-            textColor: COLORS.WHITE,
-          },
-          x: 114, // Adjusted relative position
-          y: 20,
-          visible: false,
-        },
-      },
       SidebarItems: {
-        y: 287,
+        y: 165,
         children: items.map((item, index) => ({
           type: SidebarItemComponent,
           name: item.name,
@@ -123,25 +128,48 @@ export class Sidebar extends Lightning.Component {
     };
   }
 
+  override _active() {
+    this.refreshSidebarProfile();
+  }
+
+  refreshSidebarProfile() {
+    const profileName = localStorage.getItem("profileName") || "Guest";
+    const profileImage = localStorage.getItem("profileImage") || "images/guest.png";
+    const icon = profileImage.startsWith("http://") || profileImage.startsWith("https://")
+      ? profileImage
+      : Utils.asset(profileImage);
+
+    this.tag("SidebarItems").children[0].itemData = {
+      name: profileName,
+      icon: icon,
+      route: "profile",
+    };
+  }
+
   override _getFocused() {
     return this.tag("SidebarItems").children[this._focusIndex];
   }
 
   override _handleDown() {
-    this._focusIndex = (this._focusIndex + 1) % this.sidebarConfig.length;
+    this._focusIndex = (this._focusIndex + 1) % Sidebar.getSidebarConfig().length;
     this._updateFocus();
   }
 
   override _handleUp() {
     this._focusIndex =
-      (this._focusIndex - 1 + this.sidebarConfig.length) %
-      this.sidebarConfig.length;
+      (this._focusIndex - 1 + Sidebar.getSidebarConfig().length) % Sidebar.getSidebarConfig().length;
     this._updateFocus();
   }
 
   override _handleEnter() {
-    const selectedItem = this.sidebarConfig[this._focusIndex];
-    if (selectedItem) Router.navigate(selectedItem.route);
+    const selectedItem = Sidebar.getSidebarConfig()[this._focusIndex];
+    if (selectedItem) {
+      if (selectedItem.name === "Logout") {
+        Router.navigate(selectedItem.route, { pageRoute: Router.getActiveHash() });
+      } else {
+        Router.navigate(selectedItem.route);
+      }
+    }
     Router.focusPage();
   }
 
@@ -166,22 +194,24 @@ export class Sidebar extends Lightning.Component {
   }
 
   override _enable() {
+    // Ensure all labels are hidden on initialization
+    this.tag("SidebarItems").children.forEach((child: SidebarItemComponent) => {
+      child.showLabel(false);
+    });
+
     this._applyUnfocusedPatch();
   }
 
   override _focus() {
     console.log("Focusing sidebar");
+    this._isExpanded = true; // Sidebar is now expanded
     this.patch({
       w: SCREEN_SIZES.SIDEBAR_WIDTH_OPEN,
       color: COLORS.BLACK,
     });
 
     this.tag("SidebarItems").children.forEach((child: SidebarItemComponent) => {
-      child.showLabel(true);
-    });
-
-    this.tag("Profile").tag("GuestLabel").patch({
-      visible: true,
+      child.showLabel(true); // Show labels when expanded
     });
 
     this.tag("Image").patch({
@@ -194,29 +224,41 @@ export class Sidebar extends Lightning.Component {
     this._updateFocus();
   }
 
-  override _unfocus() {
-    this._applyUnfocusedPatch();
-    this.tag("Profile").tag("GuestLabel").patch({
-      visible: false,
-    });
-  }
-
   private _applyUnfocusedPatch() {
     console.log("Unfocusing sidebar");
     this.patch({
       w: SCREEN_SIZES.SIDEBAR_WIDTH_CLOSED,
       color: COLORS.BLACK,
     });
-
+  
     this.tag("SidebarItems").children.forEach((child: SidebarItemComponent) => {
-      child.showLabel(false);
-      child.w = 285;
+      child.showLabel(false); // Hide labels when sidebar is collapsed
     });
-
+  
     this.tag("Image").patch({
       src: Utils.asset("images/AI.png"),
       h: 70,
       w: 70,
     });
   }
+
+  override _unfocus() {
+    console.log("Unfocusing sidebar");
+    this._isExpanded = false; // Sidebar is now collapsed
+    this.patch({
+      w: SCREEN_SIZES.SIDEBAR_WIDTH_CLOSED,
+      color: COLORS.BLACK,
+    });
+  
+    this.tag("SidebarItems").children.forEach((child: SidebarItemComponent) => {
+      child.showLabel(false); // Hide labels when collapsed
+    });
+  
+    this.tag("Image").patch({
+      src: Utils.asset("images/AI.png"),
+      h: 70,
+      w: 70,
+    });
+  }
+  
 }

@@ -75,10 +75,19 @@ export class Button
   }
 }
 
-export class PlayerUIButton extends Button {
+export class PlayerUIButton extends Lightning.Component {
+  static override _template() {
+    return {
+      Image: {
+        w: this.bindProp("w"),
+        h: this.bindProp("h"),
+        src: this.bindProp("src"),
+      },
+    };
+  }
+
   override _focus() {
-    this.patch({
-      color: COLORS.WHITE,
+    this.tag("Image").patch({
       shader: {
         type: Lightning.shaders.RoundedRectangle,
         radius: 10,
@@ -89,9 +98,9 @@ export class PlayerUIButton extends Button {
   }
 
   override _unfocus() {
-    this.patch({
-      color: COLORS.GREY_LIGHT,
+    this.tag("Image").patch({
       shader: null,
     });
   }
 }
+
