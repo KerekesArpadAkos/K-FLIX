@@ -109,6 +109,7 @@ export class Home
   }
 
   override _active() {
+    this.hidePinOverlay();
     this.addDefaultSkeletonAnimation();
     setTimeout(() => {
       this.checkRoute();
