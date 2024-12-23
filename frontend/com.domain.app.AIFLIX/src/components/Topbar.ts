@@ -38,7 +38,7 @@ export default class Topbar
         Label: {
           text: {
             text: "",
-            fontSize: 40,
+            fontSize: 30,
             textColor: COLORS.WHITE,
           },
           x: 75,
