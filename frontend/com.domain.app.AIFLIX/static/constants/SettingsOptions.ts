@@ -7,5 +7,5 @@ export const PARCON_OPTIONS = [
 
 export const LANGUAGE_OPTIONS = [
   { label: "English", ref: "EN" },
-  { label: "Hungarian (comming soon...)", ref: "HU" },
+  { label: "Hungarian (coming soon...)", ref: "HU" },
 ];
