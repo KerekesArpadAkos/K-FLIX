@@ -158,7 +158,7 @@ export class Home
     const animationDuration = 1;
     const fadeAlphaStart = 0.3;
     const fadeAlphaEnd = 1;
-    const displayDuration = 450;
+    const displayDuration = 700;
 
     if (!skeleton || !backgroundImage) {
       console.error("loadingImage or BackgroundImage is not found.");
