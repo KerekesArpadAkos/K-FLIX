@@ -42,12 +42,12 @@ export default class LoginPage extends Lightning.Component<LoginPageTemplateSpec
       color: COLORS.BACKGROUND,
 
       Name: {
-        x: 785,
+        x: 805,
         y: 31,
         text: {
           text: "AIFLIX",
           fontSize: 100,
-          fontFace: "Regular",
+          fontFace: "NetflixSans-Light",
           textColor: COLORS.WHITE,
         },
         zIndex: 1,
@@ -84,7 +84,7 @@ export default class LoginPage extends Lightning.Component<LoginPageTemplateSpec
             text: {
               text: "Email",
               fontSize: 25,
-              fontFace: "Regular",
+              fontFace: "NetflixSans-Light",
               textColor: COLORS.WHITE,
             },
             shader: {
@@ -103,7 +103,7 @@ export default class LoginPage extends Lightning.Component<LoginPageTemplateSpec
           text: {
             text: "Please enter a registered email address",
             fontSize: 20,
-            fontFace: "Regular",
+            fontFace: "NetflixSans-Light",
             textColor: COLORS.RED_ERROR,
           },
           visible: false,
@@ -132,7 +132,7 @@ export default class LoginPage extends Lightning.Component<LoginPageTemplateSpec
             text: {
               text: "Password",
               fontSize: 25,
-              fontFace: "Regular",
+              fontFace: "NetflixSans-Light",
               textColor: COLORS.WHITE,
             },
             shader: {
@@ -151,7 +151,7 @@ export default class LoginPage extends Lightning.Component<LoginPageTemplateSpec
           text: {
             text: "Wrong password",
             fontSize: 20,
-            fontFace: "Regular",
+            fontFace: "NetflixSans-Light",
             textColor: COLORS.RED_ERROR,
           },
           visible: false,
@@ -182,7 +182,7 @@ export default class LoginPage extends Lightning.Component<LoginPageTemplateSpec
           text: {
             text: "Don't have an account yet?",
             fontSize: 25,
-            fontFace: "Regular",
+            fontFace: "NetflixSans-Light",
             textColor: COLORS.WHITE,
             textAlign: "center",
           },

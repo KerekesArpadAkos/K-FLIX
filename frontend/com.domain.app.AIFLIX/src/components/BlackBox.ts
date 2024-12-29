@@ -19,6 +19,7 @@ class BlackBox extends Lightning.Component {
           text: "",
           fontSize: 48,
           textColor: 0xffffffff,
+          fontFace: "NetflixSans-Light",
         },
       },
     };

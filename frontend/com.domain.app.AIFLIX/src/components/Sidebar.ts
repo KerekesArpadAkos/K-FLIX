@@ -34,6 +34,7 @@ class SidebarItemComponent extends Lightning.Component {
           text: "",
           fontSize: SCREEN_SIZES.DEFAULT_BTN_FONT_SIZE,
           textColor: COLORS.WHITE,
+          fontFace: "NetflixSans-Medium",
         },
         x: 144, // Adjusted x-position for Label
         mountY: 0.5,

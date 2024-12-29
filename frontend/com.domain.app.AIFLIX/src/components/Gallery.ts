@@ -116,6 +116,7 @@ export class Gallery
               fontSize: 20,
               lineHeight: 20,
               textColor: COLORS.WHITE,
+              fontFace: "NetflixSans-Light",
             },
           },
           Buttons: {

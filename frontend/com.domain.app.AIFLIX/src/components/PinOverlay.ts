@@ -70,6 +70,7 @@ export class PinOverlay extends Lightning.Component<PinOverlayTemplateSpec> {
             text: PromptStates.EnterPin,
             fontSize: 48,
             textColor: COLORS.BLACK,
+            fontFace: "NetflixSans-Light",
           },
         },
         Overlay: {
@@ -104,6 +105,7 @@ export class PinOverlay extends Lightning.Component<PinOverlayTemplateSpec> {
             text: "Attempts left: 3",
             fontSize: 48,
             textColor: COLORS.BLACK,
+            fontFace: "NetflixSans-Light",
           },
         },
       },

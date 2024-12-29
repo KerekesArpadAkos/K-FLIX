@@ -65,7 +65,7 @@ export default class ChooseAvatarPage
           text: "Create Profile",
           fontSize: 100,
           textColor: COLORS.WHITE,
-          fontFace: "Regular",
+          fontFace: "NetflixSans-Light",
           textAlign: "center",
         },
       },

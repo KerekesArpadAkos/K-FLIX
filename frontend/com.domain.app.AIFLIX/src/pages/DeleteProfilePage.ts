@@ -32,7 +32,7 @@ export class DeleteProfilePage
         text: {
           text: "Are you sure you want to delete this profile?",
           fontSize: 80,
-          fontFace: "Regular",
+          fontFace: "NetflixSans-Medium",
           wordWrapWidth: 1323,
           textAlign: "center",
         },

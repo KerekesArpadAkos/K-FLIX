@@ -41,6 +41,7 @@ export default class SearchInput
             text: "Enter title here...",
             fontSize: 44,
             textColor: COLORS.WHITE,
+            fontFace: "NetflixSans-Light",
           },
         },
       },

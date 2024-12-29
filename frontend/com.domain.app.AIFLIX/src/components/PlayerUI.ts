@@ -7,8 +7,7 @@ import { KEYS } from "../../static/constants/Keys";
 import { getPressedKey } from "../../static/constants/Keys";
 
 // useful constants
-const timeY = 810;
-const font = "Bold";
+const timeY = 815;
 
 interface PlayerUITemplateSpec extends Lightning.Component.TemplateSpec {
   Background: object;
@@ -140,8 +139,8 @@ export class PlayerUI
         w: 200,
         h: 50,
         text: {
-          fontFace: font,
-          fontSize: 35,
+          fontSize: 30,
+          fontFace: "NetflixSans-Light",
         },
       },
       CurrentTime: {
@@ -151,28 +150,28 @@ export class PlayerUI
         w: 200,
         h: 50,
         text: {
-          fontFace: font,
-          fontSize: 35,
+          fontFace: "NetflixSans-Light",
+          fontSize: 30,
         },
       },
       TitleWrapper: {
         Title: {
           alpha: 1,
-          x: 230,
-          y: 90,
+          x: 148,
+          y: 10,
           w: 1060,
           text: {
-            fontFace: font,
+            fontFace: "NetflixSans-Medium",
             fontSize: 74,
           },
         },
         Release: {
           alpha: 1,
-          x: 230,
-          y: 250,
+          x: 150,
+          y: 170,
           w: 1060,
           text: {
-            fontFace: font,
+            fontFace: "NetflixSans-Light",
             fontSize: 40,
           },
         },

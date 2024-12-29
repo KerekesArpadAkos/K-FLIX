@@ -125,7 +125,7 @@ export class Carousel extends Lightning.Component<CarouselTemplateSpec> {
 
     this.patch({
       Title: {
-        text: { text: title },
+        text: { text: title, fontFace: "NetflixSans-Medium" },
       },
     });
 

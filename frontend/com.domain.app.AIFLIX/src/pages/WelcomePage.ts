@@ -34,7 +34,7 @@ export default class WelcomePage extends Lightning.Component<WelcomPageTemplateS
         text: {
           text: "AIFLIX",
           fontSize: 80,
-          fontFace: "Regular",
+          fontFace: "NetflixSans-Bold",
           textColor: COLORS.WHITE,
         },
       },
@@ -45,8 +45,8 @@ export default class WelcomePage extends Lightning.Component<WelcomPageTemplateS
         h: 93,
         text: {
           text: "Welcome to the Ultimate Movie Experience",
-          fontSize: 60,
-          fontFace: "Regular",
+          fontSize: 53,
+          fontFace: "NetflixSans-Medium",
           textColor: COLORS.WHITE,
         },
       },
@@ -58,7 +58,7 @@ export default class WelcomePage extends Lightning.Component<WelcomPageTemplateS
         text: {
           text: "Sign In or Sign Up to start your thrilling movie adventure!",
           fontSize: 30,
-          fontFace: "Regular",
+          fontFace: "NetflixSans-Regular",
           textColor: COLORS.WHITE,
         },
       },

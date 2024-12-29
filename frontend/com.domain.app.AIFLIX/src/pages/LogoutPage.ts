@@ -28,7 +28,7 @@ export class LogoutPage
           text: {
             text: "Are you sure you want to log out of your account?",
             fontSize: 80,
-            fontFace: "Regular",
+            fontFace: "NetflixSans-Medium",
             wordWrapWidth: 1323,
             textAlign: "center",
           },

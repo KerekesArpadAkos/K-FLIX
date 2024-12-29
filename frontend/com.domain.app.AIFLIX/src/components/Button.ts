@@ -42,6 +42,7 @@ export class Button
             textColor: this.bindProp("textColor"),
             textAlign: "center",
             fontStyle: "bold",
+            fontFace: "NetflixSans-Bold",
           },
           shader: {
             type: Lightning.shaders.RoundedRectangle,

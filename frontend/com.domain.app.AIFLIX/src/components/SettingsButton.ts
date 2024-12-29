@@ -26,7 +26,7 @@ export class SettingsButton
         text: {
           fontSize: 40,
           fontStyle: "normal",
-          fontFace: "system-ui",
+          fontFace: "NetflixSans-Light",
         },
       },
     };

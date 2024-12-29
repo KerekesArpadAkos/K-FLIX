@@ -77,6 +77,7 @@ export class SplashScreen extends Lightning.Component {
   }
 
   override async _init() {
+    await delay(500);
     await this.Name.setSmooth("alpha", 1, { duration: 1.3 });
     await this.Name.animation({
       duration: 1.3,

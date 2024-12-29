@@ -27,7 +27,7 @@ export class CastCard extends Lightning.Component<CastCardTemplateSpec> {
   static override _template(): Lightning.Component.Template<CastCardTemplateSpec> {
     return {
       w: imageWith + 10,
-      h: imageHeight + 20,
+      h: imageHeight + 40,
       rect: true,
       color: COLORS.BLACK_OPACITY_70,
       zIndex: 20,
@@ -47,7 +47,7 @@ export class CastCard extends Lightning.Component<CastCardTemplateSpec> {
         zIndex: 1,
         y: 5,
         w: imageWith,
-        h: imageHeight - 40,
+        h: imageHeight - 30,
         rect: true,
         shader: {
           type: Lightning.shaders.RoundedRectangle,
@@ -60,15 +60,17 @@ export class CastCard extends Lightning.Component<CastCardTemplateSpec> {
           y: 110,
           w: imageWith,
           h: 60,
+          rect: true,
           flex: {
             direction: "column",
             justifyContent: "center",
             alignItems: "center",
           },
           text: {
-            fontSize: 16,
+            fontSize: 20,
             textAlign: "center",
             textColor: COLORS.WHITE,
+            fontFace: "NetflixSans-Light",
           },
         },
         PlaceholderSvg: {

@@ -32,7 +32,7 @@ export default class ProfileCard extends Lightning.Component<ProfileCardTemplate
           text: {
             text: "Profile Name",
             fontSize: 30,
-            fontFace: "Regular",
+            fontFace: "NetflixSans-Light",
             textColor: COLORS.WHITE,
             fontStyle: "bold",
             textAlign: "center",
