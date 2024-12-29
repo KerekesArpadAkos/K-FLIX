@@ -47,7 +47,7 @@ export default class CreateProfile extends Lightning.Component {
           text: "Create Profile",
           fontSize: 100,
           textColor: COLORS.WHITE,
-          fontFace: "NetflixSans-Light",
+          fontFace: "NetflixSans-Medium",
           textAlign: "center",
         },
       },
