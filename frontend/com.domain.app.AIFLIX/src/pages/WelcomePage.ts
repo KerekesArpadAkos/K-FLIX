@@ -1,9 +1,11 @@
+import { Utils } from "@lightningjs/sdk";
 import { Lightning, Router } from "@lightningjs/sdk";
 import { Button } from "src/components/Button";
 import { COLORS } from "static/constants/Colors";
 import { SCREEN_SIZES } from "static/constants/ScreenSizes";
 
 interface WelcomPageTemplateSpec extends Lightning.Component.TemplateSpec {
+  Image: object;
   Name: object;
   WelcomeMessage: object;
   LoginAndRegisterMessage: object;
@@ -14,7 +16,13 @@ interface WelcomPageTemplateSpec extends Lightning.Component.TemplateSpec {
 export default class WelcomePage extends Lightning.Component<WelcomPageTemplateSpec> {
   static override _template(): Lightning.Component.Template<WelcomPageTemplateSpec> {
     return {
-      color: COLORS.BACKGROUND,
+      // color: COLORS.BACKGROUND,
+      Image:{
+        src: Utils.asset("images/background.png"),
+        w: SCREEN_SIZES.WIDTH,
+        h: SCREEN_SIZES.HEIGHT,
+        scale: 1.1
+      },
       rect: true,
       w: SCREEN_SIZES.WIDTH,
       h: SCREEN_SIZES.HEIGHT,
@@ -27,17 +35,19 @@ export default class WelcomePage extends Lightning.Component<WelcomPageTemplateS
           text: "AIFLIX",
           fontSize: 80,
           fontFace: "Regular",
+          textColor: COLORS.WHITE,
         },
       },
       WelcomeMessage: {
         x: 147,
         y: 418,
         w: 1086,
-        h: 63,
+        h: 93,
         text: {
           text: "Welcome to the Ultimate Movie Experience",
           fontSize: 60,
           fontFace: "Regular",
+          textColor: COLORS.WHITE,
         },
       },
       LoginAndRegisterMessage: {
@@ -49,6 +59,7 @@ export default class WelcomePage extends Lightning.Component<WelcomPageTemplateS
           text: "Sign In or Sign Up to start your thrilling movie adventure!",
           fontSize: 30,
           fontFace: "Regular",
+          textColor: COLORS.WHITE,
         },
       },
       LoginButton: {

@@ -15,4 +15,5 @@ export const COLORS = {
   BLACK_OPACITY_70: 0xb3000000,
   RAISIN_BLACK: 0xff1e1e24,
   BLUE_FOCUS: 0xff0071eb,
+  CYAN_TEXT: 0xff00d4ff,
 };
