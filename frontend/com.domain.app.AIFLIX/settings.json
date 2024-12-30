@@ -10,6 +10,6 @@
     "path": "./static",
     "log": true,
     "inspector": true,
-    "showFps": true
+    "showFps": false
   }
 }
