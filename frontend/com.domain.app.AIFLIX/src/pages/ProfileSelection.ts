@@ -24,7 +24,7 @@ export default class ProfileSelection extends Lightning.Component {
         text: {
           text: "Who's Watching?",
           fontSize: 100,
-          fontFace: "Regular",
+          fontFace: "NetflixSans-Medium",
           textColor: COLORS.WHITE,
           textAlign: "center",
         },

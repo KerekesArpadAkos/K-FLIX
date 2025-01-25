@@ -200,7 +200,7 @@ export class Card extends Lightning.Component<CardTemplateSpec> {
   }
 
   override _handleEnter() {
-    if (this._adult && localStorage.getItem("parcon") !== '"OFF"') {
+    if (this._adult && localStorage.getItem("parcon") !== 'OFF') {
       eventBus.emit("showPinOverlay", {
         movieId: this._id,
         isMovie: this._isMovieCard,

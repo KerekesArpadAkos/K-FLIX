@@ -29,7 +29,7 @@ export default class SettingsColumnItem
         text: {
           fontSize: 40,
           fontStyle: "normal",
-          fontFace: "system-ui",
+          fontFace: "NetflixSans-Light",
         },
       },
       SelectedIcon: {

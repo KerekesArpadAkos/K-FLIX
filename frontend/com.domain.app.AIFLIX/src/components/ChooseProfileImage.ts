@@ -28,7 +28,7 @@ export class ChooseProfileImage
           text: {
             text: "Would you like to generate a profile image with AI?",
             fontSize: 80,
-            fontFace: "Regular",
+            fontFace: "NetflixSans-Medium",
             wordWrapWidth: 1323,
             textAlign: "center",
           },

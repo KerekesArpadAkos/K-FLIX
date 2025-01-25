@@ -57,12 +57,12 @@
         h: SCREEN_SIZES.HEIGHT,
         color: COLORS.BACKGROUND,
         Name: {
-          x: 785,
+          x: 805,
           y: 31,
           text: {
             text: "AIFLIX",
             fontSize: 100,
-            fontFace: "Regular",
+            fontFace: "NetflixSans-Light",
             textColor: COLORS.WHITE,
           },
           zIndex: 1,
@@ -98,7 +98,7 @@
               text: {
                 text: "Email",
                 fontSize: 25,
-                fontFace: "Regular",
+                fontFace: "NetflixSans-Light",
                 textColor: COLORS.WHITE,
               },
               shader: {
@@ -117,7 +117,7 @@
             text: {
               text: "Invalid email address",
               fontSize: 20,
-              fontFace: "Regular",
+              fontFace: "NetflixSans-Light",
               textColor: COLORS.RED_ERROR,
             },
             visible: false,
@@ -146,7 +146,7 @@
               text: {
                 text: "Password",
                 fontSize: 25,
-                fontFace: "Regular",
+                fontFace: "NetflixSans-Light",
                 textColor: COLORS.WHITE,
               },
               shader: {
@@ -180,7 +180,7 @@
               text: {
                 text: "Confirm Password",
                 fontSize: 25,
-                fontFace: "Regular",
+                fontFace: "NetflixSans-Light",
                 textColor: COLORS.WHITE,
               },
               shader: {
@@ -199,7 +199,7 @@
             text: {
               text: "Please enter a strong password",
               fontSize: 20,
-              fontFace: "Regular",
+              fontFace: "NetflixSans-Light",
               textColor: COLORS.RED_ERROR,
             },
             visible: false,
@@ -213,7 +213,7 @@
             text: {
               text: "Password does not match",
               fontSize: 20,
-              fontFace: "Regular",
+              fontFace: "NetflixSans-Light",
               textColor: COLORS.RED_ERROR,
             },
             visible: false,
@@ -244,7 +244,7 @@
             text: {
               text: "Already have an account? Sign in!",
               fontSize: 25,
-              fontFace: "Regular",
+              fontFace: "NetflixSans-Light",
               textColor: COLORS.WHITE,
               textAlign: "center",
             },

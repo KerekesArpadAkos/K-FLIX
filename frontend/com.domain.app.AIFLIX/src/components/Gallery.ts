@@ -116,6 +116,7 @@ export class Gallery
               fontSize: 20,
               lineHeight: 20,
               textColor: COLORS.WHITE,
+              fontFace: "NetflixSans-Light",
             },
           },
           Buttons: {
@@ -126,7 +127,7 @@ export class Gallery
             },
             TrailerButton: {
               type: UtilityButton,
-              label: "Play Trailer",
+              label: "Play",
               buttonType: "player",
             },
             DetailsBtn: {
@@ -248,7 +249,7 @@ export class Gallery
           TrailerButton: {
             visible: !!showTrailers,
             id: id,
-            label: "Play Trailer",
+            label: "Play",
           },
           DetailsBtn: {
             visible: !!showBtn,

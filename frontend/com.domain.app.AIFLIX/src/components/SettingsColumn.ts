@@ -1,7 +1,5 @@
 import { Lightning, Utils } from "@lightningjs/sdk";
 import SettingsColumnItem from "./SettingsColumnItem";
-import { COLORS } from "../../static/constants/Colors";
-import eventBus from "./EventBus";
 
 interface SettingsColumnTemplateSpec extends Lightning.Component.TemplateSpec {
   Image: object;
@@ -33,6 +31,22 @@ export class SettingsColumn
       },
     };
   }
+  override _init() {
+    // Set default language to English if not already set
+    if (!localStorage.getItem("lang")) {
+      localStorage.setItem("lang", JSON.stringify("EN"));
+    }
+
+    // Set default Parcon option to OFF if not already set
+    if (!localStorage.getItem("parcon")) {
+      localStorage.setItem("parcon", JSON.stringify("OFF"));
+      //delete the password from localStorage
+      localStorage.removeItem("password");
+    }
+
+    this.index = 0;
+  }
+
   set items(items: { label: string; ref: string }[]) {
     const itemsTag = this.tag("Items");
     if (itemsTag) {
@@ -68,17 +82,30 @@ export class SettingsColumn
   }
 
   itemSelected(selectedItem: SettingsColumnItem) {
-    if (this.ref === "LanguageOptions") {
-      localStorage.setItem("lang", JSON.stringify(selectedItem.item?.ref));
-    } else if (this.ref === "ParconOptions") {
-      localStorage.setItem("parcon", JSON.stringify(selectedItem.item?.ref));
-    }
-
     const itemsTag = this.tag("Items");
     if (itemsTag) {
       (itemsTag.children as unknown as SettingsColumnItem[]).forEach(
         (item: SettingsColumnItem) => {
           item.updateSelectedState(item === selectedItem);
+        }
+      );
+    }
+  
+    if (this.ref === "LanguageOptions") {
+      localStorage.setItem("lang", JSON.stringify(selectedItem.item?.ref));
+    } 
+    // else if (this.ref === "ParconOptions") {
+    //   localStorage.setItem("parcon", JSON.stringify(selectedItem.item?.ref));
+    // }
+  }
+
+  setSelectedItem(ref: string) {
+    const itemsTag = this.tag("Items");
+    if (itemsTag) {
+      (itemsTag.children as unknown as SettingsColumnItem[]).forEach(
+        (item: SettingsColumnItem) => {
+          const isSelected = item.item?.ref === ref;
+          item.updateSelectedState(isSelected); // Update the selected state
         }
       );
     }

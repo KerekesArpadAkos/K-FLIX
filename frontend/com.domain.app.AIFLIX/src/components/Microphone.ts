@@ -52,6 +52,7 @@ export class Microphone
           text: "Listening...",
           fontSize: 40,
           textColor: COLORS.WHITE,
+          fontFace: "NetflixSans-Light",
         },
         visible: false,
         zIndex: 3,

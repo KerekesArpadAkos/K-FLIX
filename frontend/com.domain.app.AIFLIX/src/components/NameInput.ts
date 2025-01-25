@@ -44,6 +44,7 @@ export default class NameInput
             fontSize: 25,
             textColor: COLORS.WHITE,
             textAlign: "center",
+            fontFace: "NetflixSans-Light",
           },
         },
       },

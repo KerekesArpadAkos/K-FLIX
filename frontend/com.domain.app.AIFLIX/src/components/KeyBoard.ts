@@ -16,7 +16,7 @@ class Keyboard extends Lightning.Component {
       w: 330,
       h: 350,
       rect: true,
-      color: COLORS.GREY_LIGHT,
+      color: COLORS.GREY,
       flex: {
         direction: "column" as const,
         alignItems: "center" as const,
@@ -33,6 +33,11 @@ class Keyboard extends Lightning.Component {
           justifyContent: "space-around" as const,
         },
         children: row.map((key) => ({
+          flex: {
+            direction: "row" as const,
+            alignItems: "center" as const,
+            justifyContent: "space-around" as const,
+          },
           type: Button,
           w: 70,
           h: 70,
@@ -40,10 +45,10 @@ class Keyboard extends Lightning.Component {
           textX: 35,
           textY: 35,
           fontSize: 36,
-          backgroundColor: 0xff333333,
-          textColor: 0xffffffff,
+          backgroundColor: COLORS.BLACK,
+          textColor: COLORS.WHITE,
           flexItem: {
-            margin: 10,
+            marginLeft: 15,
           },
         })),
       })),
@@ -60,7 +65,7 @@ class Keyboard extends Lightning.Component {
       row.children.forEach((button, colIndex) => {
         button.patch({
           color:
-            rowIndex === this._rowIndex && colIndex === this._columnIndex ? 0xffaaaaaa : 0xff333333,
+            rowIndex === this._rowIndex && colIndex === this._columnIndex ? COLORS.GREY_LIGHT : COLORS.BLACK,
         });
       });
     });

@@ -62,18 +62,18 @@ export class KeyValue extends Lightning.Component<CardTemplateSpec> {
           text: {
             text: "Key",
             fontSize: 25,
-            fontStyle: "bold",
             textAlign: "left",
             textColor: COLORS.WHITE,
+            fontFace: "NetflixSans-Light",
           },
         },
         Value: {
           text: {
             text: "Value",
             fontSize: 25,
-            fontStyle: "bold",
             textAlign: "right",
             textColor: COLORS.WHITE,
+            fontFace: "NetflixSans-Light",
           },
         },
       },

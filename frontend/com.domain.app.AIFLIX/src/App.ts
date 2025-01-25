@@ -21,6 +21,15 @@ export class App extends Router.App {
     };
   }
 
+  static getFonts() {
+    return [
+      { family: "NetflixSans-Bold", url: Utils.asset("./fonts/NetflixSans-Bold.otf") },
+      { family: "NetflixSans-Regular", url: Utils.asset("./fonts/NetflixSans-Regular.otf") },
+      { family: "NetflixSans-Medium", url: Utils.asset("./fonts/NetflixSans-Medium.otf") },
+      { family: "NetflixSans-Light", url: Utils.asset("./fonts/NetflixSans-Light.otf") },
+    ];
+  }
+
   override _setup() {
     Router.startRouter(routes, this);
   }

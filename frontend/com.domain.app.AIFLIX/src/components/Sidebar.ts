@@ -34,6 +34,7 @@ class SidebarItemComponent extends Lightning.Component {
           text: "",
           fontSize: SCREEN_SIZES.DEFAULT_BTN_FONT_SIZE,
           textColor: COLORS.WHITE,
+          fontFace: "NetflixSans-Medium",
         },
         x: 144, // Adjusted x-position for Label
         mountY: 0.5,
@@ -204,6 +205,11 @@ export class Sidebar extends Lightning.Component {
 
   override _focus() {
     console.log("Focusing sidebar");
+    this.tag("Image").patch({
+      src: Utils.asset("images/logoName.png"),
+      h: 70,
+      w: 215,
+    });
     this._isExpanded = true; // Sidebar is now expanded
     this.patch({
       w: SCREEN_SIZES.SIDEBAR_WIDTH_OPEN,
@@ -214,11 +220,6 @@ export class Sidebar extends Lightning.Component {
       child.showLabel(true); // Show labels when expanded
     });
 
-    this.tag("Image").patch({
-      src: Utils.asset("images/logoName.png"),
-      h: 70,
-      w: 215,
-    });
 
     this._focusIndex = 0;
     this._updateFocus();

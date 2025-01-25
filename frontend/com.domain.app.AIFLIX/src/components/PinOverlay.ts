@@ -2,7 +2,6 @@ import { Lightning, Router } from "@lightningjs/sdk";
 import { COLORS } from "../../static/constants/Colors";
 import { SCREEN_SIZES } from "../../static/constants/ScreenSizes";
 import BlackBox from "./BlackBox";
-import Keyboard from "./KeyBoard";
 import eventBus from "./EventBus";
 import KEYS, { getPressedKey } from "../../static/constants/Keys";
 
@@ -32,7 +31,6 @@ export interface PinOverlayTemplateSpec
     };
     Attempts: object;
   };
-  Keyboard: typeof Keyboard;
 }
 
 export class PinOverlay extends Lightning.Component<PinOverlayTemplateSpec> {
@@ -54,7 +52,7 @@ export class PinOverlay extends Lightning.Component<PinOverlayTemplateSpec> {
         w: 800,
         h: 500,
         rect: true,
-        color: COLORS.GREY_LIGHT,
+        color: COLORS.GREY,
         mountX: 0.5,
         mountY: 0.5,
         x: 960,
@@ -71,7 +69,8 @@ export class PinOverlay extends Lightning.Component<PinOverlayTemplateSpec> {
           text: {
             text: PromptStates.EnterPin,
             fontSize: 48,
-            textColor: 0xffffffff,
+            textColor: COLORS.BLACK,
+            fontFace: "NetflixSans-Light",
           },
         },
         Overlay: {
@@ -82,7 +81,7 @@ export class PinOverlay extends Lightning.Component<PinOverlayTemplateSpec> {
           w: 600,
           h: 150,
           rect: true,
-          color: 0xff666666,
+          color: COLORS.GREY_DARK,
           shader: {
             type: Lightning.shaders.RoundedRectangle,
             radius: 20,
@@ -105,23 +104,9 @@ export class PinOverlay extends Lightning.Component<PinOverlayTemplateSpec> {
           text: {
             text: "Attempts left: 3",
             fontSize: 48,
-            textColor: 0xffffffff,
+            textColor: COLORS.BLACK,
+            fontFace: "NetflixSans-Light",
           },
-        },
-      },
-      Keyboard: {
-        type: Keyboard,
-        mountX: 0.5,
-        x: 960,
-        y: 860,
-        w: 630,
-        h: 180,
-        shader: {
-          type: Lightning.shaders.RoundedRectangle,
-          radius: 20,
-        },
-        signals: {
-          onKeyPress: true,
         },
       },
     };
@@ -140,83 +125,9 @@ export class PinOverlay extends Lightning.Component<PinOverlayTemplateSpec> {
     return this.tag("PinOverlay");
   }
 
-  get KeyBoard() {
-    return this.tag("Keyboard");
-  }
-
   static override _states() {
     return [
-      class KeyboardFocus extends this {
-        override $enter() {
-          this.KeyBoard?._setIndex(0);
-          this._highlightText();
-          this._highlightKey();
-        }
-
-        _highlightText() {
-          const pinOverlayText = this.PinOverlay?.tag("Text");
-          if (pinOverlayText && pinOverlayText.text) {
-            pinOverlayText.text.textColor = COLORS.GREY_LIGHT;
-          }
-        }
-
-        _highlightKey() {
-          const currentKeyComponent = this.KeyBoard?._getCurrentKey();
-          if (currentKeyComponent) {
-            currentKeyComponent.patch({ backgroundColor: 0xff333333 });
-          }
-        }
-
-        override _handleUp() {
-          if (this.KeyBoard?._rowIndex === 0) {
-            this._setState("PinOverlayFocus");
-          } else if (this.KeyBoard?._rowIndex === 1) {
-            this.KeyBoard.focusUp();
-          }
-        }
-
-        override _handleDown() {
-          this.KeyBoard?.focusDown();
-        }
-
-        override _handleLeft() {
-          this.KeyBoard?.focusPrevious();
-        }
-
-        override _handleRight() {
-          this.KeyBoard?.focusNext();
-        }
-
-        override _handleEnter() {
-          const key = this.KeyBoard?.triggerEnter();
-          if (key) {
-            if ((key <= "9" && key >= "0") || key === "DEL") {
-              this.onKeyPress(key);
-            } else if (key === "OK") {
-              super._handleEnter();
-            }
-          }
-        }
-
-        override _handleBack() {
-          this._setState("PinOverlayFocus");
-        }
-      },
       class PinOverlayFocus extends this {
-        override _focus() {
-          const pinOverlayText = this.PinOverlay?.tag("Text");
-          if (pinOverlayText && pinOverlayText.text) {
-            pinOverlayText.text.textColor = COLORS.GREY_LIGHT;
-          }
-        }
-
-        override _handleDown() {
-          const pinOverlayText = this.PinOverlay?.tag("Text");
-          if (pinOverlayText && pinOverlayText.text) {
-            pinOverlayText.text.textColor = COLORS.WHITE;
-          }
-          this._setState("KeyboardFocus");
-        }
 
         override _handleEnter() {
           if (this.pin.filter((p) => p !== "").length === 4) {
@@ -226,6 +137,7 @@ export class PinOverlay extends Lightning.Component<PinOverlayTemplateSpec> {
 
             if (!storedPin) {
               localStorage.setItem("password", enteredPin);
+              localStorage.setItem("parcon", "18");
               eventBus.emit("pinSet", { pin: enteredPin });
               this.hidePinOverlay();
               this.signal("focusSettingsPageParconButton", this);
@@ -344,16 +256,11 @@ export class PinOverlay extends Lightning.Component<PinOverlayTemplateSpec> {
                 eventBus.emit("setStateOnDetailButton", {});
               } else {
                 this.removeLastPin();
-                this.KeyBoard?.setKey("DEL");
               }
 
               break;
             case KEYS.VK_ENTER:
               this._handleEnter();
-              this.KeyBoard?.setKey("OK");
-              break;
-            case KEYS.VK_DOWN:
-              this._handleDown();
               break;
             default:
               this.handleNumericKeys(key);
@@ -368,7 +275,6 @@ export class PinOverlay extends Lightning.Component<PinOverlayTemplateSpec> {
             key <= KEYS.VK_9
           ) {
             this.updatePin(key.replace("VK_", ""));
-            this.KeyBoard?.setKey(key.replace("VK_", ""));
           }
         }
       },
@@ -452,7 +358,7 @@ export class PinOverlay extends Lightning.Component<PinOverlayTemplateSpec> {
     for (let i = 0; i < 4; i++) {
       const pinKey = `PinOverlay.Overlay.Pin${i}` as PinKeys;
       this.tag(pinKey)?.patch({
-        color: i === this.currentPinIndex ? 0xffffffff : 0xff333333,
+        color: i === this.currentPinIndex ? COLORS.BLACK : 0xff333333,
       });
     }
   }

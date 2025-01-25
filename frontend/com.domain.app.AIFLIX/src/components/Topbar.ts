@@ -38,12 +38,13 @@ export default class Topbar
         Label: {
           text: {
             text: "",
-            fontSize: 40,
+            fontSize: 50,
             textColor: COLORS.WHITE,
+            fontFace: "NetflixSans-Light",
           },
           x: 75,
-          w: 219,
-          h: 76,
+          // w: 219,
+          // h: 80,
           y: centeredY - 31,
         },
         CurrentTime: {
@@ -51,9 +52,10 @@ export default class Topbar
             text: "",
             fontSize: 50,
             textColor: COLORS.WHITE,
+            fontFace: "NetflixSans-Light",
           },
           x: 1372,
-          y: centeredY - 30,
+          y: centeredY - 31,
         },
       },
     };

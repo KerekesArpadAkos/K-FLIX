@@ -18,7 +18,7 @@ export class Text
   set props(props: { key: string }) {
     const { key } = props;
     this.Text.patch({
-      text: { text: key },
+      text: { text: key, fontFace: "NetflixSans-Light"},
     });
   }
 
