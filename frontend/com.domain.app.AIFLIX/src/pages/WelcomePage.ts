@@ -32,7 +32,7 @@ export default class WelcomePage extends Lightning.Component<WelcomPageTemplateS
         w: 404,
         h: 97,
         text: {
-          text: "AIFLIX",
+          text: "K-FLIX",
           fontSize: 80,
           fontFace: "NetflixSans-Bold",
           textColor: COLORS.WHITE,

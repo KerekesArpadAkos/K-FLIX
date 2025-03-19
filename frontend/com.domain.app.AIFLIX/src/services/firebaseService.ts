@@ -38,11 +38,11 @@ export const registerUser = async (email: string, password: string) => {
 
     await axios.post(`${CONFIG.API_BASE_URL}/api/auth/send-email`, {
       to: email,
-      subject: 'Welcome to AIFLIX!',
-      text: 'Thank you for registering with AIFLIX! We hope you enjoy our services.',
+      subject: 'Welcome to K-FLIX!',
+      text: 'Thank you for registering with K-FLIX! We hope you enjoy our services.',
       html: `
         <div style="font-family: Arial, sans-serif; line-height: 1.5; color: #333;">
-          <h1 style="color: #e50914;">Welcome to AIFLIX!</h1>
+          <h1 style="color: #e50914;">Welcome to K-FLIX!</h1>
           <p>Thank you for registering with us. We are thrilled to have you as part of our growing community of movie lovers!</p>
           <p>Here's what you can do next:</p>
           <ul>
@@ -53,10 +53,10 @@ export const registerUser = async (email: string, password: string) => {
           <p>If you have any questions or need help, feel free to contact our support team at any time.</p>
           <br>
           <p>Happy watching!</p>
-          <p>The <strong>AIFLIX Team</strong></p>
+          <p>The <strong>K-FLIX Team</strong></p>
           <hr>
           <footer style="font-size: 12px; color: #777;">
-            <p>You received this email because you signed up for AIFLIX. If this wasn't you, please contact our support.</p>
+            <p>You received this email because you signed up for K-FLIX. If this wasn't you, please contact our support.</p>
           </footer>
         </div>
       `,
