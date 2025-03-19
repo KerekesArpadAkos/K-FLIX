@@ -74,22 +74,6 @@ export const registerUser = async (email: string, password: string) => {
   }
 };
 
-
-export const loginUser = async (email: string, password: string) => {
-  try {
-    const userCredential = await signInWithEmailAndPassword(
-      auth,
-      email,
-      password
-    );
-    const token = await userCredential.user.getIdToken();
-    return token;
-  } catch (error) {
-    console.error("Login Error:", error);
-    throw error;
-  }
-};
-
 export const fetchProfiles = async (userId: string) => {
   try {
     const userDocRef = doc(db, "users", userId);
