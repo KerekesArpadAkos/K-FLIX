@@ -60,7 +60,7 @@
           x: 805,
           y: 31,
           text: {
-            text: "AIFLIX",
+            text: "K-FLIX",
             fontSize: 100,
             fontFace: "NetflixSans-Light",
             textColor: COLORS.WHITE,
