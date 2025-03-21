@@ -1,6 +1,6 @@
-# AIFLIX
+# K-FLIX
 
-## com.domain.app.AIFLIX
+## com.domain.app.K-FLIX
 
 ### Getting started
 

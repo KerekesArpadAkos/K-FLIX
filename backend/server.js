@@ -2,7 +2,6 @@ import express from "express";
 import cors from "cors";
 import bodyParser from "body-parser";
 import authRoutes from "./routes/authRoutes.js";
-import profileRoutes from "./routes/profileRoutes.js";
 import { CONFIG } from './config.js';
 
 const app = express();
@@ -23,7 +22,6 @@ app.get("/", (req, res) => {
 
 // Routes
 app.use("/api/auth", authRoutes);
-app.use("/api", profileRoutes);
 
 // Starting the server
 const PORT = CONFIG.PORT || 5000;

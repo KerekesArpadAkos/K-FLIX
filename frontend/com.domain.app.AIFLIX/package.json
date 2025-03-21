@@ -1,6 +1,6 @@
 {
-  "name": "com.domain.app.AIFLIX",
-  "description": "AIFLIX",
+  "name": "com.domain.app.K-FLIX",
+  "description": "K-FLIX",
   "type": "module",
   "scripts": {
     "prepare": "husky install",
